@@ -1,4 +1,11 @@
-import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import {
+  Link,
+  useRouter,
+  useRouterState,
+  useNavigate,
+  linkOptions,
+  type LinkProps,
+} from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Map,
@@ -46,49 +53,66 @@ import {
 import { useSession, signOut } from "@/lib/session";
 import { Button } from "@/components/ui/button";
 
-type Item = { title: string; url: string; icon: React.ComponentType<{ className?: string }> };
+// `link` carries typed router options so every destination is compile-checked.
+// Note the lab entries: there is no `/labs/rag` route — only `labs.$labId` — so
+// they must be expressed as a param, not a pre-joined string.
+type Item = {
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  link: LinkProps;
+};
+
+const lab = (labId: string) => linkOptions({ to: "/labs/$labId", params: { labId } });
 
 const overview: Item[] = [
-  { title: "Home Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Career Path Map", url: "/career-path", icon: Map },
-  { title: "Competency Heatmap", url: "/competencies", icon: Activity },
+  { title: "Home Dashboard", icon: LayoutDashboard, link: linkOptions({ to: "/" }) },
+  { title: "Career Path Map", icon: Map, link: linkOptions({ to: "/career-path" }) },
+  { title: "Competency Heatmap", icon: Activity, link: linkOptions({ to: "/competencies" }) },
 ];
 
 const learn: Item[] = [
-  { title: "Learn by Role", url: "/learn/role", icon: Users },
-  { title: "Learn by Platform", url: "/learn/platform", icon: Boxes },
-  { title: "Learn by Scenario", url: "/learn/scenario", icon: ClipboardList },
+  { title: "Learn by Role", icon: Users, link: linkOptions({ to: "/learn/role" }) },
+  { title: "Learn by Platform", icon: Boxes, link: linkOptions({ to: "/learn/platform" }) },
+  { title: "Learn by Scenario", icon: ClipboardList, link: linkOptions({ to: "/learn/scenario" }) },
 ];
 
 const simulators: Item[] = [
-  { title: "RAG + Ticket Agent (vertical slice)", url: "/scenarios/rag-ticket-agent", icon: Zap },
-  { title: "SaaS AI Onboarding", url: "/simulators/saas-onboarding", icon: Cloud },
-  { title: "In-House AI App", url: "/simulators/in-house-app", icon: Server },
-  { title: "AI Lab → Prod", url: "/simulators/env", icon: FlaskConical },
-  { title: "Go / No-Go", url: "/simulators/go-no-go", icon: CheckCircle2 },
-  { title: "Lab Engine", url: "/lab-engine", icon: Zap },
+  {
+    title: "RAG + Ticket Agent (vertical slice)",
+    icon: Zap,
+    link: linkOptions({ to: "/scenarios/rag-ticket-agent" }),
+  },
+  {
+    title: "SaaS AI Onboarding",
+    icon: Cloud,
+    link: linkOptions({ to: "/simulators/saas-onboarding" }),
+  },
+  { title: "In-House AI App", icon: Server, link: linkOptions({ to: "/simulators/in-house-app" }) },
+  { title: "AI Lab → Prod", icon: FlaskConical, link: linkOptions({ to: "/simulators/env" }) },
+  { title: "Go / No-Go", icon: CheckCircle2, link: linkOptions({ to: "/simulators/go-no-go" }) },
+  { title: "Lab Engine", icon: Zap, link: linkOptions({ to: "/lab-engine" }) },
 ];
 
 const labs: Item[] = [
-  { title: "RAG Architecture", url: "/labs/rag", icon: Database },
-  { title: "Agent Security", url: "/labs/agent", icon: Bot },
-  { title: "Connector Security", url: "/labs/connector", icon: Plug },
-  { title: "Zero Trust AI", url: "/labs/zero-trust", icon: ShieldCheck },
-  { title: "Privacy / PIA", url: "/labs/privacy", icon: Lock },
-  { title: "Legal / OGC", url: "/labs/legal", icon: Scale },
-  { title: "QRM / Risk", url: "/labs/qrm", icon: AlertTriangle },
-  { title: "Data Governance", url: "/labs/data-governance", icon: FolderTree },
-  { title: "IAM / Identity", url: "/labs/iam", icon: KeyRound },
-  { title: "DevSecOps / SSDLC", url: "/labs/devsecops", icon: GitBranch },
-  { title: "AI Engineering", url: "/labs/ai-engineering", icon: Cpu },
+  { title: "RAG Architecture", icon: Database, link: lab("rag") },
+  { title: "Agent Security", icon: Bot, link: lab("agent") },
+  { title: "Connector Security", icon: Plug, link: lab("connector") },
+  { title: "Zero Trust AI", icon: ShieldCheck, link: lab("zero-trust") },
+  { title: "Privacy / PIA", icon: Lock, link: lab("privacy") },
+  { title: "Legal / OGC", icon: Scale, link: lab("legal") },
+  { title: "QRM / Risk", icon: AlertTriangle, link: lab("qrm") },
+  { title: "Data Governance", icon: FolderTree, link: lab("data-governance") },
+  { title: "IAM / Identity", icon: KeyRound, link: lab("iam") },
+  { title: "DevSecOps / SSDLC", icon: GitBranch, link: lab("devsecops") },
+  { title: "AI Engineering", icon: Cpu, link: lab("ai-engineering") },
 ];
 
 const practice: Item[] = [
-  { title: "Flashcards", url: "/flashcards", icon: Flame },
-  { title: "Practice Exams", url: "/exams", icon: GraduationCap },
-  { title: "Artifact Builder", url: "/artifacts", icon: FileCog },
-  { title: "My Learning Notes", url: "/notes", icon: NotebookPen },
-  { title: "My Runs (cloud)", url: "/my-runs", icon: History },
+  { title: "Flashcards", icon: Flame, link: linkOptions({ to: "/flashcards" }) },
+  { title: "Practice Exams", icon: GraduationCap, link: linkOptions({ to: "/exams" }) },
+  { title: "Artifact Builder", icon: FileCog, link: linkOptions({ to: "/artifacts" }) },
+  { title: "My Learning Notes", icon: NotebookPen, link: linkOptions({ to: "/notes" }) },
+  { title: "My Runs (cloud)", icon: History, link: linkOptions({ to: "/my-runs" }) },
 ];
 
 function Group({
@@ -100,20 +124,24 @@ function Group({
   items: Item[];
   currentPath: string;
 }) {
+  const router = useRouter();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
+            // Resolve params into a real pathname; comparing against a raw `to`
+            // would never match for routes carrying a `$param`.
+            const href = router.buildLocation(item.link).pathname;
             const active =
-              item.url === "/"
+              href === "/"
                 ? currentPath === "/"
-                : currentPath === item.url || currentPath.startsWith(item.url + "/");
+                : currentPath === href || currentPath.startsWith(href + "/");
             return (
-              <SidebarMenuItem key={item.url}>
+              <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild isActive={active}>
-                  <Link to={item.url} className="flex items-center gap-2">
+                  <Link {...item.link} className="flex items-center gap-2">
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
                   </Link>
@@ -159,6 +187,9 @@ export function AppSidebar() {
 function AccountBlock() {
   const { user, loading } = useSession();
   const navigate = useNavigate();
+  // Capture where the learner is so sign-in returns them here, rather than
+  // dumping everyone on the home page.
+  const here = useRouterState({ select: (r) => r.location.href });
   if (loading) return <div className="px-2 py-2 text-xs text-muted-foreground">…</div>;
   if (!user) {
     return (
@@ -167,7 +198,7 @@ function AccountBlock() {
           size="sm"
           variant="outline"
           className="w-full"
-          onClick={() => navigate({ to: "/auth" })}
+          onClick={() => navigate({ to: "/auth", search: { next: here } })}
         >
           <LogIn className="mr-2 h-4 w-4" /> Sign in
         </Button>

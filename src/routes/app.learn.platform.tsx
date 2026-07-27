@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { platforms } from "@/content/platforms";
 import type { PlatformDef } from "@/content/types";
+import { DepthBadge } from "@/components/learning/DepthBadge";
 
 export const Route = createFileRoute("/app/learn/platform")({
   head: () => ({
@@ -52,9 +53,7 @@ export const Route = createFileRoute("/app/learn/platform")({
                         <CardHeader>
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-base">{p.name}</CardTitle>
-                            <Badge variant={p.depth === "deep" ? "default" : "secondary"}>
-                              {p.depth === "deep" ? "Deep" : "Scaffold"}
-                            </Badge>
+                            <DepthBadge depth={p.depth} />
                           </div>
                           <CardDescription className="line-clamp-2">{p.what}</CardDescription>
                         </CardHeader>

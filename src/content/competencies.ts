@@ -240,6 +240,32 @@ export const competencies: Competency[] = [
     "Version pinning, deprecation handling.",
   ),
   c("eng.cost_opt", "engineering", "Cost optimization", "Caching, routing, batch, distillation."),
+
+  // ── Added to receive evidence the engines already emit ─────────────────
+  c(
+    "arch.chunking",
+    "architecture",
+    "Chunking & metadata",
+    "Chunk sizing, overlap, and metadata design for retrieval quality.",
+  ),
+  c(
+    "sec.permission_trimming",
+    "security",
+    "Permission trimming",
+    "Query-time ACL enforcement so retrieval cannot cross user boundaries.",
+  ),
+  c(
+    "sec.kill_switch",
+    "security",
+    "Kill switch",
+    "Designing and exercising a containment control that actually halts an agent.",
+  ),
+  c(
+    "sec.blast_radius",
+    "security",
+    "Blast radius",
+    "Reasoning about how far a compromised component can reach.",
+  ),
 ];
 
 export const competenciesById = Object.fromEntries(competencies.map((x) => [x.id, x])) as Record<

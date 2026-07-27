@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/learning/Primitives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { roles } from "@/content/roles";
+import { DepthBadge } from "@/components/learning/DepthBadge";
 
 export const Route = createFileRoute("/app/learn/role")({
   head: () => ({
@@ -27,9 +28,7 @@ export const Route = createFileRoute("/app/learn/role")({
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>{r.name}</CardTitle>
-                  <Badge variant={r.depth === "deep" ? "default" : "secondary"}>
-                    {r.depth === "deep" ? "Deep" : "Scaffold"}
-                  </Badge>
+                  <DepthBadge depth={r.depth} />
                 </div>
                 <CardDescription>{r.short}</CardDescription>
               </CardHeader>

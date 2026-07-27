@@ -51,6 +51,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSession, signOut } from "@/lib/session";
+import { labsById } from "@/content/labs";
 import { Button } from "@/components/ui/button";
 
 // `link` carries typed router options so every destination is compile-checked.
@@ -60,9 +61,19 @@ type Item = {
   title: string;
   icon: React.ComponentType<{ className?: string }>;
   link: LinkProps;
+  /** Content is still an outline; the nav says so rather than letting a learner find out. */
+  inDevelopment?: boolean;
 };
 
-const lab = (labId: string) => linkOptions({ to: "/app/labs/$labId", params: { labId } });
+const lab = (labId: string): Item["link"] =>
+  linkOptions({ to: "/app/labs/$labId", params: { labId } });
+
+const labItem = (title: string, icon: Item["icon"], labId: string): Item => ({
+  title,
+  icon,
+  link: lab(labId),
+  inDevelopment: labsById[labId]?.depth === "scaffold",
+});
 
 const overview: Item[] = [
   { title: "Home Dashboard", icon: LayoutDashboard, link: linkOptions({ to: "/app" }) },
@@ -106,17 +117,17 @@ const simulators: Item[] = [
 ];
 
 const labs: Item[] = [
-  { title: "RAG Architecture", icon: Database, link: lab("rag") },
-  { title: "Agent Security", icon: Bot, link: lab("agent") },
-  { title: "Connector Security", icon: Plug, link: lab("connector") },
-  { title: "Zero Trust AI", icon: ShieldCheck, link: lab("zero-trust") },
-  { title: "Privacy / PIA", icon: Lock, link: lab("privacy") },
-  { title: "Legal / OGC", icon: Scale, link: lab("legal") },
-  { title: "QRM / Risk", icon: AlertTriangle, link: lab("qrm") },
-  { title: "Data Governance", icon: FolderTree, link: lab("data-governance") },
-  { title: "IAM / Identity", icon: KeyRound, link: lab("iam") },
-  { title: "DevSecOps / SSDLC", icon: GitBranch, link: lab("devsecops") },
-  { title: "AI Engineering", icon: Cpu, link: lab("ai-engineering") },
+  labItem("RAG Architecture", Database, "rag"),
+  labItem("Agent Security", Bot, "agent"),
+  labItem("Connector Security", Plug, "connector"),
+  labItem("Zero Trust AI", ShieldCheck, "zero-trust"),
+  labItem("Privacy / PIA", Lock, "privacy"),
+  labItem("Legal / OGC", Scale, "legal"),
+  labItem("QRM / Risk", AlertTriangle, "qrm"),
+  labItem("Data Governance", FolderTree, "data-governance"),
+  labItem("IAM / Identity", KeyRound, "iam"),
+  labItem("DevSecOps / SSDLC", GitBranch, "devsecops"),
+  labItem("AI Engineering", Cpu, "ai-engineering"),
 ];
 
 const practice: Item[] = [
@@ -157,7 +168,13 @@ function Group({
                 <SidebarMenuButton asChild isActive={active}>
                   <Link {...item.link} className="flex items-center gap-2">
                     <item.icon className="h-4 w-4" />
-                    <span>{item.title}</span>
+                    <span className="flex-1 truncate">{item.title}</span>
+                    {item.inDevelopment && (
+                      <span
+                        className="size-1.5 shrink-0 rounded-full bg-muted-foreground/40"
+                        title="Still in development"
+                      />
+                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

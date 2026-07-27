@@ -639,18 +639,18 @@ export function gradeSarAnswer(a: string, q: SarQuestion): number {
 // ---------- ENGINE 5 helpers: competency mapping ----------
 
 export const COMPETENCIES_TOUCHED = [
-  "rag.permission_trimming",
-  "rag.chunking",
-  "rag.prompt_injection_defence",
-  "agent.identity_model",
-  "agent.tool_scoping",
-  "agent.human_approval",
-  "iam.sso_mfa",
-  "iam.token_scope",
-  "network.egress_control",
-  "ops.observability",
-  "governance.data_classification",
-  "architecture.trust_boundaries",
+  "sec.permission_trimming",
+  "arch.chunking",
+  "sec.indirect_injection",
+  "arch.iam",
+  "sec.agent_tool_misuse",
+  "plr.hitl",
+  "plat.sso",
+  "sec.oauth",
+  "sec.network",
+  "arch.observability",
+  "gov.risk_classification",
+  "sec.zero_trust",
 ];
 
 // ---------- Self-tests (run in-app, no test runner needed) ----------

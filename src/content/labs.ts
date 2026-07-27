@@ -46,6 +46,7 @@ const saasOnboarding: LabDef = {
       id: "sso-scim-rbac",
       title: "SSO, SCIM, RBAC — the identity baseline",
       lesson: {
+        competencyIds: ["plat.sso", "plat.scim", "plat.rbac", "plat.saml"],
         simple:
           "SSO logs users in with the corporate identity provider. SCIM keeps the user list in sync. RBAC controls what each user can do inside the platform.",
         enterprise:
@@ -78,6 +79,7 @@ const saasOnboarding: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["plat.sso", "plat.rbac"],
           id: "q-sso-1",
           type: "choose-control",
           prompt:
@@ -99,6 +101,7 @@ const saasOnboarding: LabDef = {
       id: "features-connectors",
       title: "Feature and connector enablement",
       lesson: {
+        competencyIds: ["plat.feature_controls", "arch.connectors", "gov.capability_governance"],
         simple:
           "SaaS AI platforms ship with many features on by default. Some leak data. You must decide which to enable and for whom.",
         enterprise:
@@ -121,6 +124,7 @@ const saasOnboarding: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["plat.feature_controls", "arch.connectors"],
           id: "q-feat-1",
           type: "find-risk",
           prompt: "A vendor added a new memory feature default-on last release. Biggest risk?",
@@ -145,6 +149,7 @@ const saasOnboarding: LabDef = {
       id: "audit-logs-cost",
       title: "Audit logs, usage, cost",
       lesson: {
+        competencyIds: ["plat.audit_logs", "plat.finops", "plat.usage_analytics"],
         simple: "You cannot govern what you cannot see. Ship logs to SIEM. Watch cost.",
         enterprise:
           "Configure the platform's audit API (Compliance API, Purview, Admin API), stream to SIEM, build detections for suspicious activity, and wire cost telemetry into FinOps dashboards.",
@@ -157,6 +162,7 @@ const saasOnboarding: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["plat.audit_logs", "plat.finops"],
           id: "q-log-1",
           type: "mc",
           prompt: "Best first detection for a SaaS AI platform?",
@@ -176,6 +182,7 @@ const saasOnboarding: LabDef = {
       id: "offboarding",
       title: "Offboarding an AI power user",
       lesson: {
+        competencyIds: ["plat.offboarding", "gov.retirement", "gov.recertification"],
         simple:
           "When someone leaves, their GPTs, agents, and connectors must move to a group owner first.",
         enterprise:
@@ -192,6 +199,7 @@ const saasOnboarding: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["plat.offboarding", "gov.retirement"],
           id: "q-off-1",
           type: "owner",
           prompt: "Who runs the AI-asset transfer step?",
@@ -228,6 +236,7 @@ const agentLab: LabDef = {
       id: "what-is-an-agent",
       title: "What is an agent (and what changes because of it)",
       lesson: {
+        competencyIds: ["arch.agents", "arch.sequence"],
         simple:
           "An agent is an LLM that can call tools, plan multi-step actions, and sometimes act without a human in the loop for each step.",
         enterprise:
@@ -262,6 +271,7 @@ const agentLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["arch.agents"],
           id: "q-agent-1",
           type: "gate",
           prompt: "An agent has read+write to production Jira with no HITL. Go/No-Go?",
@@ -286,6 +296,7 @@ const agentLab: LabDef = {
       id: "identity-and-tools",
       title: "Identity, tools, and least privilege",
       lesson: {
+        competencyIds: ["arch.iam", "sec.agent_tool_misuse", "sec.oauth"],
         simple:
           "The agent should act as the user, not as an all-powerful service account. Only give it tools it truly needs.",
         enterprise:
@@ -311,6 +322,7 @@ const agentLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["arch.iam", "sec.agent_tool_misuse"],
           id: "q-agent-2",
           type: "choose-control",
           prompt: "Most important control on a support agent that can email customers?",
@@ -335,6 +347,7 @@ const agentLab: LabDef = {
       id: "kill-switch",
       title: "Kill switch and HITL patterns",
       lesson: {
+        competencyIds: ["sec.kill_switch", "sec.blast_radius", "sec.ir"],
         simple: "You must be able to stop the agent instantly and revoke its access.",
         enterprise:
           "A kill switch is a documented, tested control that (1) stops the agent runner, (2) revokes its tokens, (3) alerts owners. HITL is a design pattern where the agent proposes and a human approves state-changing actions.",
@@ -353,6 +366,7 @@ const agentLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["sec.kill_switch", "sec.blast_radius"],
           id: "q-agent-3",
           type: "mc",
           prompt: "What proves a kill switch works?",
@@ -388,6 +402,7 @@ const ragLab: LabDef = {
       id: "rag-basics",
       title: "What RAG is and why enterprises use it",
       lesson: {
+        competencyIds: ["arch.rag", "arch.chunking", "arch.dataflow"],
         simple:
           "RAG retrieves relevant documents from your data and passes them to the model so answers cite your content.",
         enterprise:
@@ -411,6 +426,7 @@ const ragLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["arch.rag", "arch.chunking"],
           id: "q-rag-1",
           type: "find-risk",
           prompt: "Where must permission trimming happen?",
@@ -435,6 +451,7 @@ const ragLab: LabDef = {
       id: "rag-security",
       title: "RAG security: direct + indirect prompt injection",
       lesson: {
+        competencyIds: ["sec.indirect_injection", "sec.permission_trimming", "sec.rag_poisoning"],
         simple:
           "Retrieved documents can carry attacker instructions the model may follow. Sanitize retrieved content and constrain what the model can do.",
         enterprise:
@@ -458,6 +475,7 @@ const ragLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["sec.indirect_injection", "sec.permission_trimming"],
           id: "q-rag-2",
           type: "choose-control",
           prompt: "Best single control against indirect prompt injection?",
@@ -482,6 +500,7 @@ const ragLab: LabDef = {
       id: "rag-lifecycle",
       title: "Vector lifecycle, evaluation, and governance",
       lesson: {
+        competencyIds: ["eng.retrieval_eval", "eng.groundedness", "arch.observability"],
         simple:
           "Vector stores are databases. They need retention, deletion, reindexing, and audit — like any other data store.",
         enterprise:
@@ -499,6 +518,7 @@ const ragLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["eng.retrieval_eval", "eng.groundedness"],
           id: "q-rag-3",
           type: "mc",
           prompt: "A user requests deletion of their profile. What must happen in the RAG index?",
@@ -530,6 +550,7 @@ const connectorLab: LabDef = {
       id: "connector-scopes",
       title: "OAuth scopes and least privilege",
       lesson: {
+        competencyIds: ["arch.connectors", "sec.oauth", "plr.subprocessors"],
         simple: "Every connector asks for permissions. Only grant what it needs.",
         enterprise:
           "The connector consent screen is a policy document. Review scopes line by line; reject any that read more than the described feature requires.",
@@ -552,6 +573,7 @@ const connectorLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["arch.connectors", "sec.oauth"],
           id: "q-conn-1",
           type: "find-risk",
           prompt:
@@ -575,6 +597,7 @@ const connectorLab: LabDef = {
       id: "connector-dlp",
       title: "DLP and lifecycle",
       lesson: {
+        competencyIds: ["sec.data_exfil", "plr.pii", "sec.monitoring"],
         simple:
           "Connectors move data. DLP must apply on that data path. Retire connectors when unused.",
         enterprise:
@@ -594,6 +617,7 @@ const connectorLab: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["sec.data_exfil", "plr.pii"],
           id: "q-conn-2",
           type: "owner",
           prompt: "Who signs off retiring a dormant connector?",
@@ -625,6 +649,7 @@ const zeroTrust: LabDef = {
       id: "zt-identity",
       title: "Identity in a Zero Trust AI world",
       lesson: {
+        competencyIds: ["sec.zero_trust", "arch.iam", "plat.security_groups"],
         simple: "Every request is authenticated, per-user, with least privilege.",
         enterprise:
           "AI apps must propagate user identity end-to-end (OBO), enforce conditional access, and never use god-mode service accounts.",
@@ -647,6 +672,7 @@ const zeroTrust: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["sec.zero_trust", "arch.iam"],
           id: "q-zt-1",
           type: "choose-control",
           prompt: "Best Zero Trust identity pattern for a RAG app?",
@@ -669,6 +695,7 @@ const zeroTrust: LabDef = {
       id: "zt-network",
       title: "Network, workload, and assume-breach",
       lesson: {
+        competencyIds: ["sec.network", "sec.zero_trust", "arch.resilience"],
         simple:
           "Keep AI endpoints private. Assume the app will be compromised — limit blast radius.",
         enterprise:
@@ -691,6 +718,7 @@ const zeroTrust: LabDef = {
       },
       quiz: [
         {
+          competencyIds: ["sec.network", "sec.zero_trust"],
           id: "q-zt-2",
           type: "gate",
           prompt: "Public model endpoint in production. Go/No-Go?",
@@ -722,6 +750,7 @@ const inhouseLab: LabDef = {
       id: "arch-overview",
       title: "Architecture: components and boundaries",
       lesson: {
+        competencyIds: ["arch.inhouse", "arch.dataflow", "arch.nfrs"],
         simple:
           "An in-house AI app has frontend, API, orchestrator, model, RAG, data sources, logs.",
         enterprise:

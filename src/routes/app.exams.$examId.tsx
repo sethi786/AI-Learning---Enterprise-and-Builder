@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PageHeader, Quiz } from "@/components/learning/Primitives";
 import { examsById } from "@/content/exams";
+import { rolesById } from "@/content/roles";
 import type { ExamDef } from "@/content/types";
 
 export const Route = createFileRoute("/app/exams/$examId")({
@@ -24,10 +25,13 @@ export const Route = createFileRoute("/app/exams/$examId")({
 
 function ExamDetailPage() {
   const { exam } = Route.useLoaderData() as { exam: ExamDef };
+  // Without a domain the Quiz records no mastery points, so exams counted for
+  // nothing. Attribute them to the primary domain of the role being examined.
+  const domain = rolesById[exam.roleId]?.masteryDomains[0];
   return (
     <div className="mx-auto max-w-3xl space-y-4">
       <PageHeader title={exam.name} subtitle={exam.description} />
-      <Quiz id={`exam:${exam.id}`} questions={exam.questions} />
+      <Quiz id={`exam:${exam.id}`} questions={exam.questions} domain={domain} />
     </div>
   );
 }

@@ -82,7 +82,7 @@ const ragLab: LabBlueprint = {
   name: "RAG Onboarding — Confidential Knowledge Base",
   tagline: "Stand up a RAG app for Legal without leaking privileged docs.",
   domain: "agent_rag_connector",
-  competencyIds: ["rag.chunking", "rag.metadata", "rag.acl", "sec.prompt-injection"],
+  competencyIds: ["arch.chunking", "arch.rag", "sec.permission_trimming", "sec.prompt_injection"],
   summary:
     "You are the AI Platform Admin bringing up a RAG assistant over a confidential Legal SharePoint site. Configure ingestion, ACLs, and query-time controls, then respond to injected failures.",
   config: [
@@ -320,7 +320,7 @@ const agentLab: LabBlueprint = {
   name: "Agent Kill-Switch Drill",
   tagline: "An autonomous agent goes off the rails. Contain it.",
   domain: "agent_rag_connector",
-  competencyIds: ["agent.tool-scoping", "agent.memory", "agent.kill-switch", "sec.blast-radius"],
+  competencyIds: ["sec.agent_tool_misuse", "arch.agents", "sec.kill_switch", "sec.blast_radius"],
   summary:
     "A Tier-2 support agent has tools for read/write on ticketing, email, and a payments API. Configure guardrails, then respond to injected failure and attack events.",
   config: [
@@ -535,7 +535,7 @@ const connectorLab: LabBlueprint = {
   name: "Connector OAuth Scope Review",
   tagline: "Approve a Google Workspace connector without over-scoping.",
   domain: "security",
-  competencyIds: ["connector.oauth-scopes", "iam.least-priv", "connector.consent"],
+  competencyIds: ["sec.oauth", "arch.iam", "arch.connectors"],
   summary:
     "A vendor requests a Google Workspace connector for an AI assistant. Review requested scopes, consent model, and token handling; respond to a live consent-phishing attempt.",
   config: [

@@ -4,6 +4,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
   const base: ScenarioDef["steps"] = [
     {
       id: "classify",
+      competencyIds: ["gov.risk_classification", "gov.intake"],
       title: "Classify project type",
       question: "What kind of AI request is this?",
       options: [
@@ -17,6 +18,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "reviewers",
+      competencyIds: ["gov.review_applicability", "gov.approval_workflow"],
       title: "Choose likely review teams",
       question: "Which reviewers must engage?",
       options: [
@@ -34,6 +36,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "architecture",
+      competencyIds: ["arch.dataflow", "arch.rag"],
       title: "Identify architecture",
       question: "What is the target pattern?",
       options: [
@@ -47,6 +50,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "data",
+      competencyIds: ["plr.pii", "gov.risk_classification"],
       title: "Identify data involved",
       question: "What is the data classification?",
       options: [
@@ -60,6 +64,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "security",
+      competencyIds: ["sec.threat_modeling", "sec.owasp_llm"],
       title: "Identify security risks",
       question: "Top security risk?",
       options: [
@@ -74,6 +79,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "privacy",
+      competencyIds: ["plr.minimization", "plr.purpose"],
       title: "Identify privacy risks",
       question: "Top privacy risk?",
       options: [
@@ -88,6 +94,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "legal",
+      competencyIds: ["plr.dpa", "plr.ip"],
       title: "Identify legal / QRM risks",
       question: "Top legal or QRM risk?",
       options: [
@@ -101,6 +108,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "datagov",
+      competencyIds: ["gov.registry", "plr.retention"],
       title: "Identify data governance risks",
       question: "Top data governance issue?",
       options: [
@@ -114,6 +122,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "iam",
+      competencyIds: ["arch.iam", "plat.rbac"],
       title: "Identify IAM risks",
       question: "Top IAM risk?",
       options: [
@@ -127,6 +136,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "devsecops",
+      competencyIds: ["sec.ssdlc", "eng.cicd"],
       title: "Identify DevSecOps risks",
       question: "Top DevSecOps gap?",
       options: [
@@ -140,6 +150,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "controls",
+      competencyIds: ["sec.monitoring", "sec.data_exfil"],
       title: "Recommend controls",
       question: "Pick the strongest control set",
       options: [
@@ -159,6 +170,7 @@ const stdSteps = (over: Partial<Record<string, Partial<ScenarioDef["steps"][numb
     },
     {
       id: "evidence",
+      competencyIds: ["gov.evidence_management", "gov.recertification"],
       title: "Recommend evidence",
       question: "Strongest evidence package?",
       options: [

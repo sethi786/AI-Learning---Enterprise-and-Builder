@@ -2,6 +2,13 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Self-hosted variable fonts. Installed from npm rather than loaded from a CDN
+   so the app keeps its zero-external-request posture and renders identically
+   offline. Geist is a grotesk built for product UI; Geist Mono carries the
+   terminal and log surfaces, which previously fell back to the browser default. */
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -19,6 +26,37 @@
  */
 
 @theme inline {
+  --font-sans:
+    "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Type scale. Previously nothing occupied the 20-28px band, so every card
+     title was 16px — the same size as body copy — and the page read as one
+     huge heading over a wall of small grey text. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-display-sm: 2.5rem;
+  --text-display-sm--line-height: 1.1;
+  --text-display-sm--letter-spacing: -0.02em;
+  --text-display: 3.25rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-display-lg: 4.25rem;
+  --text-display-lg--line-height: 0.98;
+  --text-display-lg--letter-spacing: -0.035em;
+
+  /* Elevation. There was one shadow on every surface, so a hero panel and a
+     nav item sat on the same plane. The inset top highlight is what separates
+     a hand-built card from a default one. */
+  --shadow-hairline: 0 0 0 1px rgb(15 23 42 / 0.04);
+  --shadow-card:
+    0 1px 2px -1px rgb(15 23 42 / 0.08), 0 4px 12px -4px rgb(15 23 42 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.6);
+  --shadow-raised:
+    0 2px 4px -2px rgb(15 23 42 / 0.1), 0 12px 32px -12px rgb(15 23 42 / 0.22),
+    inset 0 1px 0 rgb(255 255 255 / 0.7);
+  --shadow-glow: 0 0 0 1px rgb(59 130 246 / 0.15), 0 8px 32px -8px rgb(59 130 246 / 0.35);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -149,8 +187,62 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    /* Unsmoothed system text on white was a large part of the "cheap" feel. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Optical sizing: tighten only large type. `tracking-tight` was applied to
+     16px headings in 28 places, which just makes small text look cramped. */
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  /* Dark marketing surfaces. The previous "tinted" bands used bg-muted/20 — a
+     1.5% grey that renders as white, so the page was one flat white slab. */
+  .surface-dark {
+    background-color: oklch(0.16 0.03 264);
+    color: oklch(0.98 0.003 247);
+  }
+  .surface-dark-grid {
+    background-image:
+      linear-gradient(oklch(1 0 0 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .brand-radial {
+    background-image: radial-gradient(
+      60% 70% at 50% 0%,
+      oklch(0.55 0.18 255 / 0.28) 0%,
+      transparent 70%
+    );
+  }
+
+  /* Hover elevation. Deliberately no scroll-reveal: a scroll-driven opacity
+     animation leaves content invisible wherever the animation does not run
+     (print, screenshot, older engines), and losing the page is a far worse
+     trade than losing a fade. */
+  @media (prefers-reduced-motion: no-preference) {
+    .lift {
+      transition:
+        transform 0.18s cubic-bezier(0.2, 0, 0, 1),
+        box-shadow 0.18s cubic-bezier(0.2, 0, 0, 1),
+        border-color 0.18s ease;
+    }
+    .lift:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-raised);
+    }
   }
 }

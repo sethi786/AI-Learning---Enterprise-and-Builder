@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PathCard } from "@/components/site/PathCard";
 import { paths } from "@/content/paths";
 
-export const Route = createFileRoute("/_site/paths")({
+export const Route = createFileRoute("/_site/paths/")({
   head: () => ({
     meta: [
       { title: "Career paths — EAI Career Sim" },

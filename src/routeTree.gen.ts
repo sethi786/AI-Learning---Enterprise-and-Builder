@@ -14,7 +14,6 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
 import { Route as SiteAboutRouteImport } from './routes/_site.about'
-import { Route as SitePathsRouteImport } from './routes/_site.paths'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppArtifactsRouteImport } from './routes/app.artifacts'
 import { Route as AppCareerPathRouteImport } from './routes/app.career-path'
@@ -25,6 +24,7 @@ import { Route as AppLabEngineRouteImport } from './routes/app.lab-engine'
 import { Route as AppMyRunsRouteImport } from './routes/app.my-runs'
 import { Route as AppNotesRouteImport } from './routes/app.notes'
 import { Route as SiteForAudienceRouteImport } from './routes/_site.for.$audience'
+import { Route as SitePathsIndexRouteImport } from './routes/_site.paths.index'
 import { Route as SitePathsPathIdRouteImport } from './routes/_site.paths.$pathId'
 import { Route as AppArtifactsArtifactIdRouteImport } from './routes/app.artifacts.$artifactId'
 import { Route as AppExamsExamIdRouteImport } from './routes/app.exams.$examId'
@@ -65,11 +65,6 @@ const SiteIndexRoute = SiteIndexRouteImport.update({
 const SiteAboutRoute = SiteAboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => SiteRoute,
-} as any)
-const SitePathsRoute = SitePathsRouteImport.update({
-  id: '/paths',
-  path: '/paths',
   getParentRoute: () => SiteRoute,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -122,10 +117,15 @@ const SiteForAudienceRoute = SiteForAudienceRouteImport.update({
   path: '/for/$audience',
   getParentRoute: () => SiteRoute,
 } as any)
+const SitePathsIndexRoute = SitePathsIndexRouteImport.update({
+  id: '/paths/',
+  path: '/paths/',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SitePathsPathIdRoute = SitePathsPathIdRouteImport.update({
-  id: '/$pathId',
-  path: '/$pathId',
-  getParentRoute: () => SitePathsRoute,
+  id: '/paths/$pathId',
+  path: '/paths/$pathId',
+  getParentRoute: () => SiteRoute,
 } as any)
 const AppArtifactsArtifactIdRoute = AppArtifactsArtifactIdRouteImport.update({
   id: '/$artifactId',
@@ -215,7 +215,6 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/about': typeof SiteAboutRoute
-  '/paths': typeof SitePathsRouteWithChildren
   '/app/artifacts': typeof AppArtifactsRouteWithChildren
   '/app/career-path': typeof AppCareerPathRoute
   '/app/competencies': typeof AppCompetenciesRoute
@@ -243,11 +242,11 @@ export interface FileRoutesByFullPath {
   '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
   '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
   '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
+  '/paths/': typeof SitePathsIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/about': typeof SiteAboutRoute
-  '/paths': typeof SitePathsRouteWithChildren
   '/app/artifacts': typeof AppArtifactsRouteWithChildren
   '/app/career-path': typeof AppCareerPathRoute
   '/app/competencies': typeof AppCompetenciesRoute
@@ -276,6 +275,7 @@ export interface FileRoutesByTo {
   '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
   '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
   '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
+  '/paths': typeof SitePathsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -283,7 +283,6 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/_site/about': typeof SiteAboutRoute
-  '/_site/paths': typeof SitePathsRouteWithChildren
   '/app/artifacts': typeof AppArtifactsRouteWithChildren
   '/app/career-path': typeof AppCareerPathRoute
   '/app/competencies': typeof AppCompetenciesRoute
@@ -312,6 +311,7 @@ export interface FileRoutesById {
   '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
   '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
   '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
+  '/_site/paths/': typeof SitePathsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -320,7 +320,6 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/about'
-    | '/paths'
     | '/app/artifacts'
     | '/app/career-path'
     | '/app/competencies'
@@ -348,11 +347,11 @@ export interface FileRouteTypes {
     | '/app/simulators/go-no-go'
     | '/app/simulators/in-house-app'
     | '/app/simulators/saas-onboarding'
+    | '/paths/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
     | '/about'
-    | '/paths'
     | '/app/artifacts'
     | '/app/career-path'
     | '/app/competencies'
@@ -381,13 +380,13 @@ export interface FileRouteTypes {
     | '/app/simulators/go-no-go'
     | '/app/simulators/in-house-app'
     | '/app/simulators/saas-onboarding'
+    | '/paths'
   id:
     | '__root__'
     | '/_site'
     | '/app'
     | '/auth'
     | '/_site/about'
-    | '/_site/paths'
     | '/app/artifacts'
     | '/app/career-path'
     | '/app/competencies'
@@ -416,6 +415,7 @@ export interface FileRouteTypes {
     | '/app/simulators/go-no-go'
     | '/app/simulators/in-house-app'
     | '/app/simulators/saas-onboarding'
+    | '/_site/paths/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -459,13 +459,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof SiteAboutRouteImport
-      parentRoute: typeof SiteRoute
-    }
-    '/_site/paths': {
-      id: '/_site/paths'
-      path: '/paths'
-      fullPath: '/paths'
-      preLoaderRoute: typeof SitePathsRouteImport
       parentRoute: typeof SiteRoute
     }
     '/app/': {
@@ -538,12 +531,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteForAudienceRouteImport
       parentRoute: typeof SiteRoute
     }
+    '/_site/paths/': {
+      id: '/_site/paths/'
+      path: '/paths'
+      fullPath: '/paths/'
+      preLoaderRoute: typeof SitePathsIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/paths/$pathId': {
       id: '/_site/paths/$pathId'
-      path: '/$pathId'
+      path: '/paths/$pathId'
       fullPath: '/paths/$pathId'
       preLoaderRoute: typeof SitePathsPathIdRouteImport
-      parentRoute: typeof SitePathsRoute
+      parentRoute: typeof SiteRoute
     }
     '/app/artifacts/$artifactId': {
       id: '/app/artifacts/$artifactId'
@@ -660,30 +660,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface SitePathsRouteChildren {
-  SitePathsPathIdRoute: typeof SitePathsPathIdRoute
-}
-
-const SitePathsRouteChildren: SitePathsRouteChildren = {
-  SitePathsPathIdRoute: SitePathsPathIdRoute,
-}
-
-const SitePathsRouteWithChildren = SitePathsRoute._addFileChildren(
-  SitePathsRouteChildren,
-)
-
 interface SiteRouteChildren {
   SiteAboutRoute: typeof SiteAboutRoute
-  SitePathsRoute: typeof SitePathsRouteWithChildren
   SiteIndexRoute: typeof SiteIndexRoute
   SiteForAudienceRoute: typeof SiteForAudienceRoute
+  SitePathsPathIdRoute: typeof SitePathsPathIdRoute
+  SitePathsIndexRoute: typeof SitePathsIndexRoute
 }
 
 const SiteRouteChildren: SiteRouteChildren = {
   SiteAboutRoute: SiteAboutRoute,
-  SitePathsRoute: SitePathsRouteWithChildren,
   SiteIndexRoute: SiteIndexRoute,
   SiteForAudienceRoute: SiteForAudienceRoute,
+  SitePathsPathIdRoute: SitePathsPathIdRoute,
+  SitePathsIndexRoute: SitePathsIndexRoute,
 }
 
 const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)

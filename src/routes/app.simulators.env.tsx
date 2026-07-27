@@ -45,6 +45,8 @@ const stageLabel: Record<(typeof stages)[number], string> = {
 function Env() {
   const [picks, setPicks] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState(false);
+  const answered = cases.filter((c) => picks[c.id]).length;
+  const correct = cases.filter((c) => picks[c.id] === c.ideal).length;
   return (
     <div className="mx-auto max-w-4xl">
       <PageHeader
@@ -78,15 +80,66 @@ function Env() {
                 })}
               </div>
               {checked ? (
-                <p className="pt-2 text-xs text-muted-foreground">
+                // A <div>, not a <p>: Badge renders a div, and a div inside a p
+                // is invalid HTML that React reports as a hydration error.
+                <div className="flex items-center gap-1.5 pt-2 text-xs text-muted-foreground">
                   Ideal:{" "}
                   <Badge variant="outline">{stageLabel[c.ideal as (typeof stages)[number]]}</Badge>
-                </p>
+                </div>
               ) : null}
             </CardContent>
           </Card>
         ))}
-        <Button onClick={() => setChecked((v) => !v)}>{checked ? "Reset" : "Check answers"}</Button>
+        {checked && (
+          <Card
+            className={
+              correct === cases.length
+                ? "border-emerald-500/50 bg-emerald-500/5"
+                : "border-amber-500/50 bg-amber-500/5"
+            }
+          >
+            <CardHeader>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <CardTitle className="text-base">
+                    {correct === cases.length
+                      ? "All correct"
+                      : `${cases.length - correct} to revisit`}
+                  </CardTitle>
+                  <CardDescription>
+                    Environment choice is a risk decision: the control set has to match the data and
+                    the blast radius, not the deadline.
+                  </CardDescription>
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold tabular-nums">
+                    {correct}/{cases.length}
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        )}
+        <div className="flex gap-2">
+          <Button onClick={() => setChecked(true)} disabled={answered < cases.length}>
+            {answered < cases.length
+              ? `Answer all ${cases.length} cases (${answered}/${cases.length})`
+              : "Check answers"}
+          </Button>
+          {/* Reset used to only flip `checked`, leaving every previous pick
+              selected — so "Reset" visibly did nothing. */}
+          {(checked || answered > 0) && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                setPicks({});
+                setChecked(false);
+              }}
+            >
+              Reset
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { useCloudRun } from "@/lib/useCloudRun";
 import {
@@ -17,7 +17,7 @@ import {
   type LogEntry,
 } from "@/engines/ragTicketAgent";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
@@ -562,6 +562,34 @@ const NODE_PALETTE = [
   "private_endpoint",
 ] as const;
 
+/**
+ * Node palette for the architecture canvas, grouped by what the component *is*
+ * so a learner can read the topology at a glance: identity/control surfaces in
+ * violet, data stores in amber, compute in blue, network edges in slate.
+ * Literal colours because SVG `fill` cannot take a Tailwind class token.
+ */
+const NODE_TONE: Record<string, { fill: string; stroke: string; text: string; sub: string }> = {
+  default: { fill: "#f8fafc", stroke: "#94a3b8", text: "#0f172a", sub: "#64748b" },
+  user: { fill: "#f1f5f9", stroke: "#64748b", text: "#0f172a", sub: "#475569" },
+  idp: { fill: "#f5f3ff", stroke: "#8b5cf6", text: "#4c1d95", sub: "#6d28d9" },
+  approval: { fill: "#f5f3ff", stroke: "#8b5cf6", text: "#4c1d95", sub: "#6d28d9" },
+  secretvault: { fill: "#f5f3ff", stroke: "#8b5cf6", text: "#4c1d95", sub: "#6d28d9" },
+  model: { fill: "#eff6ff", stroke: "#3b82f6", text: "#1e3a8a", sub: "#1d4ed8" },
+  orchestrator: { fill: "#eff6ff", stroke: "#3b82f6", text: "#1e3a8a", sub: "#1d4ed8" },
+  agent: { fill: "#eff6ff", stroke: "#3b82f6", text: "#1e3a8a", sub: "#1d4ed8" },
+  backend: { fill: "#eff6ff", stroke: "#60a5fa", text: "#1e3a8a", sub: "#1d4ed8" },
+  frontend: { fill: "#eff6ff", stroke: "#60a5fa", text: "#1e3a8a", sub: "#1d4ed8" },
+  datasource: { fill: "#fffbeb", stroke: "#f59e0b", text: "#78350f", sub: "#b45309" },
+  vectorstore: { fill: "#fffbeb", stroke: "#f59e0b", text: "#78350f", sub: "#b45309" },
+  connector: { fill: "#fffbeb", stroke: "#f59e0b", text: "#78350f", sub: "#b45309" },
+  tool: { fill: "#fdf2f8", stroke: "#ec4899", text: "#831843", sub: "#be185d" },
+  gateway: { fill: "#ecfdf5", stroke: "#10b981", text: "#064e3b", sub: "#047857" },
+  firewall: { fill: "#ecfdf5", stroke: "#10b981", text: "#064e3b", sub: "#047857" },
+  private_endpoint: { fill: "#ecfdf5", stroke: "#10b981", text: "#064e3b", sub: "#047857" },
+  monitoring: { fill: "#f0f9ff", stroke: "#0ea5e9", text: "#0c4a6e", sub: "#0369a1" },
+  siem: { fill: "#f0f9ff", stroke: "#0ea5e9", text: "#0c4a6e", sub: "#0369a1" },
+};
+
 function StageCanvas({
   state,
   dispatch,
@@ -623,29 +651,38 @@ function StageCanvas({
               />
             );
           })}
-          {state.nodes.map((n) => (
-            <g key={n.id} transform={`translate(${n.x},${n.y})`}>
-              <rect
-                width={80}
-                height={40}
-                rx={6}
-                fill="hsl(var(--card))"
-                stroke="hsl(var(--border))"
-              />
-              <text x={40} y={18} textAnchor="middle" fontSize={9} fill="hsl(var(--foreground))">
-                {n.kind}
-              </text>
-              <text
-                x={40}
-                y={30}
-                textAnchor="middle"
-                fontSize={8}
-                fill="hsl(var(--muted-foreground))"
-              >
-                {n.label.slice(0, 14)}
-              </text>
-            </g>
-          ))}
+          {state.nodes.map((n) => {
+            const tone = NODE_TONE[n.kind] ?? NODE_TONE.default;
+            return (
+              <g key={n.id} transform={`translate(${n.x},${n.y})`}>
+                {/* Explicit colours, not `hsl(var(--token))`: the theme tokens are
+                    oklch, so wrapping them in hsl() is invalid CSS and the whole
+                    node used to fall back to solid black. */}
+                <rect
+                  width={92}
+                  height={44}
+                  rx={8}
+                  fill={tone.fill}
+                  stroke={tone.stroke}
+                  strokeWidth={1.25}
+                />
+                <rect width={92} height={3} rx={1.5} fill={tone.stroke} />
+                <text
+                  x={46}
+                  y={20}
+                  textAnchor="middle"
+                  fontSize={9}
+                  fontWeight={600}
+                  fill={tone.text}
+                >
+                  {n.kind.replace(/_/g, " ")}
+                </text>
+                <text x={46} y={33} textAnchor="middle" fontSize={8} fill={tone.sub}>
+                  {n.label.length > 15 ? n.label.slice(0, 14) + "…" : n.label}
+                </text>
+              </g>
+            );
+          })}
         </svg>
       </div>
       <div className="text-xs text-muted-foreground">
@@ -1461,6 +1498,7 @@ function StageSar({
 }) {
   const questions = useMemo(() => generateSarQuestions(state), [state]);
   const answers = state.sarAnswers ?? {};
+  const [result, setResult] = useState<RunResult | null>(null);
   const setAns = (id: string, v: string) =>
     dispatch({ type: "PATCH", patch: { sarAnswers: { ...answers, [id]: v } } });
   const submit = () => {
@@ -1497,9 +1535,30 @@ function StageSar({
       },
     });
     cloud.finish(status, finalScore, 100);
-    alert(
-      `Scenario complete.\nDiagnosis: ${dScore?.total ?? 0}/100\nSAR: ${sarScore}/${sarMax}\nWeighted total: ${finalScore}/100\nInjection resolved: ${resolved}\n${dScore?.notes.join("\n") ?? ""}`,
-    );
+    // Render the result on the page. This used to be a native alert(), which
+    // meant finishing a 16-stage simulation produced a browser popup and then
+    // an unchanged screen — no score, no breakdown, no next step.
+    setResult({
+      diagnosis: dScore?.total ?? 0,
+      sar: sarScore,
+      sarMax,
+      total: finalScore,
+      resolved,
+      status,
+      notes: dScore?.notes ?? [],
+      dimensions: dScore
+        ? [
+            { label: "Diagnosis", score: dScore.diagnosis, max: 20 },
+            { label: "Containment", score: dScore.containment, max: 15 },
+            { label: "Remediation", score: dScore.remediation, max: 15 },
+            { label: "Risk reasoning", score: dScore.riskReasoning, max: 10 },
+            { label: "Evidence selection", score: dScore.evidenceSelection, max: 10 },
+            { label: "Architecture", score: dScore.architecture, max: 15 },
+            { label: "Communication", score: dScore.communication, max: 10 },
+            { label: "Residual risk", score: dScore.residualRisk, max: 5 },
+          ]
+        : [],
+    });
   };
   return (
     <div className="space-y-3">
@@ -1521,8 +1580,109 @@ function StageSar({
           </div>
         </div>
       ))}
-      <Button onClick={submit}>Submit & score</Button>
+      <Button onClick={submit}>Submit &amp; score</Button>
+
+      {result && <ScenarioResult result={result} />}
     </div>
+  );
+}
+
+type RunResult = {
+  diagnosis: number;
+  sar: number;
+  sarMax: number;
+  total: number;
+  resolved: boolean;
+  status: "passed" | "failed";
+  notes: string[];
+  dimensions: { label: string; score: number; max: number }[];
+};
+
+/** End-of-run report: the payoff for a 16-stage simulation. */
+function ScenarioResult({ result }: { result: RunResult }) {
+  const passed = result.status === "passed";
+  return (
+    <Card
+      className={`mt-6 ${passed ? "border-emerald-500/50 bg-emerald-500/5" : "border-amber-500/50 bg-amber-500/5"}`}
+    >
+      <CardHeader>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <CardTitle className="text-xl">
+              {passed ? "Review passed" : "Review not passed"}
+            </CardTitle>
+            <CardDescription>
+              {result.resolved
+                ? "Your remediation actually resolves the injection when re-evaluated."
+                : "The injection is still exploitable against your final design."}
+            </CardDescription>
+          </div>
+          <div className="text-right">
+            <div className="text-4xl font-bold tabular-nums">{result.total}</div>
+            <div className="text-xs text-muted-foreground">weighted / 100</div>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-md border bg-background p-3">
+            <div className="text-xs text-muted-foreground">Diagnosis &amp; design (70%)</div>
+            <div className="text-lg font-semibold tabular-nums">{result.diagnosis} / 100</div>
+          </div>
+          <div className="rounded-md border bg-background p-3">
+            <div className="text-xs text-muted-foreground">SAR defence (30%)</div>
+            <div className="text-lg font-semibold tabular-nums">
+              {result.sar} / {result.sarMax}
+            </div>
+          </div>
+        </div>
+
+        {result.dimensions.length > 0 && (
+          <div>
+            <div className="mb-2 text-sm font-medium">Rubric breakdown</div>
+            <div className="space-y-2">
+              {result.dimensions.map((d) => (
+                <div key={d.label} className="flex items-center gap-3">
+                  <div className="w-40 shrink-0 text-xs text-muted-foreground">{d.label}</div>
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                    <div
+                      className={`h-full rounded-full ${d.score / d.max >= 0.6 ? "bg-emerald-500" : "bg-amber-500"}`}
+                      style={{ width: `${Math.max(2, (d.score / d.max) * 100)}%` }}
+                    />
+                  </div>
+                  <div className="w-12 shrink-0 text-right text-xs tabular-nums">
+                    {d.score}/{d.max}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {result.notes.length > 0 && (
+          <div>
+            <div className="mb-2 text-sm font-medium">What cost you marks</div>
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              {result.notes.map((n) => (
+                <li key={n}>{n}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-2 border-t pt-4">
+          <Button asChild size="sm">
+            <Link to="/app/my-runs">View this run</Link>
+          </Button>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/app/competencies">See competency impact</Link>
+          </Button>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/app/artifacts">Draft the SAR artifact</Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

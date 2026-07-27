@@ -7,17 +7,21 @@ import { getLabBlueprint } from "@/content/labEngine";
 import type { LabBlueprint } from "@/content/labEngine";
 
 export const Route = createFileRoute("/app/lab-engine/$labId")({
+  // Return plain, serializable data only. A LabBlueprint carries closures
+  // (`rubric[].check`, `artifact.build`), and loader results are dehydrated
+  // through the SSR serializer — passing the object through would strip the
+  // functions and blow up on first use. The component re-resolves it by id.
   loader: ({ params }) => {
     const blueprint = getLabBlueprint(params.labId);
     if (!blueprint) throw notFound();
-    return { blueprint };
+    return { labId: params.labId, name: blueprint.name, tagline: blueprint.tagline };
   },
   head: ({ loaderData }) =>
     loaderData
       ? {
           meta: [
-            { title: `${loaderData.blueprint.name} — Lab Engine` },
-            { name: "description", content: loaderData.blueprint.tagline },
+            { title: `${loaderData.name} — Lab Engine` },
+            { name: "description", content: loaderData.tagline },
           ],
         }
       : { meta: [{ title: "Lab Engine" }] },
@@ -34,7 +38,9 @@ export const Route = createFileRoute("/app/lab-engine/$labId")({
 });
 
 function LabEnginePage() {
-  const { blueprint } = Route.useLoaderData() as { blueprint: LabBlueprint };
+  const { labId } = Route.useLoaderData();
+  // Resolve the live object (with its closures intact) on the client.
+  const blueprint = getLabBlueprint(labId) as LabBlueprint;
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div>

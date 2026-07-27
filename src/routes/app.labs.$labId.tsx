@@ -54,7 +54,7 @@ function LabPage() {
       {lab.modules.map((m: LabModule, i: number) => {
         const scenario = m.scenarioId ? scenariosById[m.scenarioId] : undefined;
         return (
-          <div key={m.id} className="space-y-3">
+          <div key={m.id} id={m.id} className="scroll-mt-20 space-y-3">
             <div className="flex items-center gap-2">
               <Badge variant="outline">Module {i + 1}</Badge>
               <h2 className="text-lg font-semibold">{m.title}</h2>

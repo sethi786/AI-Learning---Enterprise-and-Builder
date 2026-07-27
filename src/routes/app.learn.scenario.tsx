@@ -15,7 +15,7 @@ export const Route = createFileRoute("/app/learn/scenario")({
     <div className="mx-auto max-w-5xl">
       <PageHeader
         title="Learn by Scenario"
-        subtitle="Every scenario runs through the 14-step review flow."
+        subtitle="Every scenario runs through the 12-step review flow."
       />
       <div className="grid gap-3 md:grid-cols-2">
         {scenarios.map((s) => (

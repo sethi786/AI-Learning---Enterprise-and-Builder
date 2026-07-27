@@ -497,7 +497,9 @@ export function ScenarioRunner({ scenario }: { scenario: ScenarioDef }) {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Badge>Score: {score}</Badge>
+              <Badge>
+                Score: {score} / {scenario.steps.length + 2}
+              </Badge>
               <CardTitle className="text-base">Ideal answer</CardTitle>
             </div>
           </CardHeader>

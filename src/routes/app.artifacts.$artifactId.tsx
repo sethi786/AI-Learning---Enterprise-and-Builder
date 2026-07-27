@@ -19,17 +19,23 @@ import { toast } from "sonner";
 import type { ArtifactTemplate } from "@/content/types";
 
 export const Route = createFileRoute("/app/artifacts/$artifactId")({
+  // Serializable data only — ArtifactTemplate carries a `markdown()` closure
+  // that cannot survive SSR dehydration. The component re-resolves by id.
   loader: ({ params }) => {
     const template = artifactsById[params.artifactId];
     if (!template) throw notFound();
-    return { template };
+    return {
+      artifactId: params.artifactId,
+      name: template.name,
+      description: template.description,
+    };
   },
   head: ({ loaderData }) =>
     loaderData
       ? {
           meta: [
-            { title: `${loaderData.template.name} — Artifact Builder` },
-            { name: "description", content: loaderData.template.description },
+            { title: `${loaderData.name} — Artifact Builder` },
+            { name: "description", content: loaderData.description },
           ],
         }
       : { meta: [{ title: "Artifact" }] },
@@ -38,7 +44,8 @@ export const Route = createFileRoute("/app/artifacts/$artifactId")({
 });
 
 function Editor() {
-  const { template } = Route.useLoaderData() as { template: ArtifactTemplate };
+  const { artifactId } = Route.useLoaderData();
+  const template = artifactsById[artifactId] as ArtifactTemplate;
   const [values, setValues] = useState<Record<string, string | string[]>>({});
   const [name, setName] = useState(`Draft ${new Date().toLocaleDateString()}`);
   const md = useMemo(() => template.markdown(values), [values, template]);

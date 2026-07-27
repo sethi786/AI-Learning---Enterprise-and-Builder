@@ -25,7 +25,7 @@ function ScenarioDetailPage() {
   const { scenario } = Route.useLoaderData();
   return (
     <div className="mx-auto max-w-4xl">
-      <PageHeader title="Scenario" subtitle="Work the 14-step review, then commit to a decision." />
+      <PageHeader title="Scenario" subtitle="Work the review, then commit to a decision." />
       <ScenarioRunner scenario={scenario} />
     </div>
   );

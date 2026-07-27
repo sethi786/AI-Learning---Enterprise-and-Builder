@@ -88,7 +88,7 @@ function AuthPage() {
     <div className="mx-auto grid min-h-[70vh] max-w-md place-items-center">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Sign in to the Assurance Platform</CardTitle>
+          <CardTitle>Sign in to EAI Career Sim</CardTitle>
           <CardDescription>
             Runs, evidence, decisions and audit events persist to your account. Practice only — do
             not enter real client data or production secrets.

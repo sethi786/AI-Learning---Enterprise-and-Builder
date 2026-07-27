@@ -6,6 +6,20 @@ import { useProgress } from "@/lib/progress";
 import { STATUS_COLOR, STATUS_LABEL, emptyRecord } from "@/lib/competency";
 import type { CompetencyStatus } from "@/content/types";
 
+/**
+ * Cell colours for the heat grid — a single ramp from "untouched" to
+ * "mastered", with reinforcement deliberately breaking the ramp in amber so a
+ * decayed skill stands out rather than reading as mid-progress.
+ */
+const HEAT: Record<CompetencyStatus, string> = {
+  not_introduced: "border-border bg-muted",
+  introduced: "border-sky-500/30 bg-sky-500/25",
+  practiced: "border-sky-500/50 bg-sky-500/55",
+  demonstrated: "border-emerald-500/50 bg-emerald-500/60",
+  mastered: "border-emerald-600/60 bg-emerald-600",
+  needs_reinforcement: "border-amber-500/60 bg-amber-500/70",
+};
+
 export const Route = createFileRoute("/app/competencies")({
   head: () => ({
     meta: [
@@ -59,39 +73,57 @@ function CompetenciesPage() {
         ))}
       </div>
 
+      {/* An actual heat grid. This page is called a heatmap but rendered 82
+          identical white cards with a grey pill — no colour encoding at all,
+          and 9,000px tall on mobile. Dense cells make the whole picture
+          readable at a glance, which is the entire point. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+        <span className="font-medium text-foreground">Legend</span>
+        {(Object.keys(counts) as CompetencyStatus[]).map((s) => (
+          <span key={s} className="inline-flex items-center gap-1.5">
+            <span className={`size-3 rounded-sm border ${HEAT[s]}`} />
+            {STATUS_LABEL[s]}
+          </span>
+        ))}
+      </div>
+
       {competencyCategories.map((cat) => {
         const items = competencies.filter((c) => c.category === cat.id);
+        const reached = items.filter(
+          (c) => (p.competencies[c.id]?.status ?? "not_introduced") !== "not_introduced",
+        ).length;
         return (
           <Card key={cat.id}>
-            <CardHeader>
-              <CardTitle className="text-base">{cat.label}</CardTitle>
-              <CardDescription>{items.length} competencies</CardDescription>
+            <CardHeader className="pb-3">
+              <div className="flex items-end justify-between gap-4">
+                <div>
+                  <CardTitle className="text-base">{cat.label}</CardTitle>
+                  <CardDescription>
+                    {reached} of {items.length} started
+                  </CardDescription>
+                </div>
+                <div className="text-sm font-medium tabular-nums text-muted-foreground">
+                  {Math.round((reached / items.length) * 100)}%
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-[repeat(auto-fill,1.75rem)] gap-1.5">
                 {items.map((comp) => {
                   const rec = p.competencies[comp.id] ?? emptyRecord();
                   return (
-                    <li
-                      key={comp.id}
-                      className="flex items-start justify-between gap-2 rounded-md border p-3 text-sm"
-                    >
-                      <div>
-                        <div className="font-medium">{comp.name}</div>
-                        <div className="text-xs text-muted-foreground leading-snug">
-                          {comp.description}
-                        </div>
-                      </div>
+                    <li key={comp.id}>
                       <span
-                        className={`shrink-0 rounded border px-2 py-0.5 text-[10px] uppercase tracking-wide ${STATUS_COLOR[rec.status]}`}
-                        title={
+                        tabIndex={0}
+                        role="img"
+                        aria-label={`${comp.name}: ${STATUS_LABEL[rec.status]}`}
+                        className={`block size-7 rounded-[3px] border transition-transform hover:scale-110 focus:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${HEAT[rec.status]}`}
+                        title={`${comp.name} — ${STATUS_LABEL[rec.status]}\n${comp.description}${
                           rec.lastPracticedTs
-                            ? `Last practiced ${new Date(rec.lastPracticedTs).toLocaleDateString()}`
-                            : "Not yet practiced"
-                        }
-                      >
-                        {STATUS_LABEL[rec.status]}
-                      </span>
+                            ? `\nLast practised ${new Date(rec.lastPracticedTs).toLocaleDateString()}`
+                            : ""
+                        }`}
+                      />
                     </li>
                   );
                 })}

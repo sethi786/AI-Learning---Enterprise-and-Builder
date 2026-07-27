@@ -32,7 +32,7 @@ function PortalLayout() {
   useProgressSync();
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background">
+      <div className="flex min-h-svh w-full bg-background">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
           <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur">
@@ -49,7 +49,7 @@ function PortalLayout() {
               ← Back to site
             </Link>
           </header>
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-4 md:p-6">
             <Outlet />
           </main>
         </div>

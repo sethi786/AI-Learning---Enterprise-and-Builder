@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MasteryBar, PageHeader, ProgressRing } from "@/components/learning/Primitives";
 import { useProgress, domainScore, roleProgress } from "@/lib/progress";
+import { findResume } from "@/lib/resume";
 import { roles } from "@/content/roles";
 import { labs } from "@/content/labs";
 import { scenarios } from "@/content/scenarios";
@@ -62,6 +63,8 @@ function Dashboard() {
     return null;
   })();
 
+  const resume = findResume(p.lastVisited);
+
   return (
     <div className="mx-auto max-w-7xl">
       <PageHeader
@@ -75,6 +78,25 @@ function Dashboard() {
           </Button>
         }
       />
+
+      {resume && (
+        <Card className="mb-4 border-brand/30 bg-brand/5">
+          <CardContent className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <div className="text-xs tracking-wide text-muted-foreground uppercase">
+                Continue where you left off
+              </div>
+              <div className="mt-1 truncate font-semibold">{resume.place.title}</div>
+              <div className="text-xs text-muted-foreground">{resume.place.kind}</div>
+            </div>
+            <Button asChild className="shrink-0">
+              <Link to={resume.path}>
+                Resume <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         {roles.map((r) => {

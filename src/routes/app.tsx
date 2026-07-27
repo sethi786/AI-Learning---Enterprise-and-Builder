@@ -1,11 +1,25 @@
-import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
+import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { progress } from "@/lib/progress";
 
 export const Route = createFileRoute("/app")({
   component: PortalLayout,
 });
+
+/**
+ * Records where the learner has been so the dashboard can offer to resume.
+ * `progressStore.touch` existed but was never called, leaving `lastVisited`
+ * permanently empty.
+ */
+function useVisitTracking() {
+  const pathname = useRouterState({ select: (r) => r.location.pathname });
+  useEffect(() => {
+    progress.touch(pathname);
+  }, [pathname]);
+}
 
 /**
  * Chrome for the learning portal. Lives here rather than in `__root` so the
@@ -13,6 +27,7 @@ export const Route = createFileRoute("/app")({
  * around them.
  */
 function PortalLayout() {
+  useVisitTracking();
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">

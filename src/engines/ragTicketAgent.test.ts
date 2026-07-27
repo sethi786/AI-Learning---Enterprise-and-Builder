@@ -34,7 +34,13 @@ function securedState(): ScenarioState {
 describe("ragTicketAgent engine", () => {
   it("self-tests all pass", () => {
     const results = runSelfTests();
-    expect(results.every((r) => r.ok), results.filter((r) => !r.ok).map((r) => r.name).join(",")).toBe(true);
+    expect(
+      results.every((r) => r.ok),
+      results
+        .filter((r) => !r.ok)
+        .map((r) => r.name)
+        .join(","),
+    ).toBe(true);
   });
 
   it("insecure baseline evaluation exposes ACL leaks and low injection resistance", () => {
@@ -65,7 +71,12 @@ describe("ragTicketAgent engine", () => {
     // Apply remediation to the same run
     const remediated: ScenarioState = {
       ...attacked,
-      rag: { ...attacked.rag, permissionFilter: "query_time_acl", contentSanitization: true, toolCallGuardOnRetrieval: true },
+      rag: {
+        ...attacked.rag,
+        permissionFilter: "query_time_acl",
+        contentSanitization: true,
+        toolCallGuardOnRetrieval: true,
+      },
       identity: { ...attacked.identity, agentIdentity: "delegated" },
       agent: { ...attacked.agent, humanApproval: "writes_only" },
     };
@@ -80,7 +91,12 @@ describe("ragTicketAgent engine", () => {
     const attacked = applyInjection(insecureState(), indirectPromptInjection);
     const remediated: ScenarioState = {
       ...attacked,
-      rag: { ...attacked.rag, permissionFilter: "query_time_acl", contentSanitization: true, toolCallGuardOnRetrieval: true },
+      rag: {
+        ...attacked.rag,
+        permissionFilter: "query_time_acl",
+        contentSanitization: true,
+        toolCallGuardOnRetrieval: true,
+      },
       identity: { ...attacked.identity, agentIdentity: "delegated" },
       agent: { ...attacked.agent, humanApproval: "writes_only" },
     };
@@ -91,7 +107,8 @@ describe("ragTicketAgent engine", () => {
       blastRadius: indirectPromptInjection.truth.blastRadius,
       containment: indirectPromptInjection.truth.containment,
       remediation: indirectPromptInjection.truth.remediation,
-      riskReasoning: "Indirect prompt injection via retrieved SharePoint content; least-privilege delegated identity, query-time ACL, sanitization and tool-call guard close the exploit; residual risk is stale ACL cache.",
+      riskReasoning:
+        "Indirect prompt injection via retrieved SharePoint content; least-privilege delegated identity, query-time ACL, sanitization and tool-call guard close the exploit; residual risk is stale ACL cache.",
     };
     const bad: DiagnosisAnswer = {
       symptom: "model_timeout",

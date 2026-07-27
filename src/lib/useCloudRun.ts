@@ -8,9 +8,19 @@ import {
 } from "@/lib/scenarioRuns.functions";
 
 type EventKind =
-  | "stage_enter" | "config_change" | "architecture_change" | "command"
-  | "injection_fired" | "diagnosis" | "containment" | "remediation"
-  | "evaluation" | "artifact" | "sar_answer" | "decision" | "note";
+  | "stage_enter"
+  | "config_change"
+  | "architecture_change"
+  | "command"
+  | "injection_fired"
+  | "diagnosis"
+  | "containment"
+  | "remediation"
+  | "evaluation"
+  | "artifact"
+  | "sar_answer"
+  | "decision"
+  | "note";
 
 type Severity = "info" | "warn" | "error" | "critical";
 
@@ -35,7 +45,9 @@ export function useCloudRun(scenarioId: string, scenarioVersion = "v1") {
     starting.current = true;
     startScenarioRun({ data: { scenarioId, scenarioVersion, state: {} } })
       .then((row) => setRunId((row as { id: string }).id))
-      .catch(() => { starting.current = false; });
+      .catch(() => {
+        starting.current = false;
+      });
   }, [user, loading, runId, scenarioId, scenarioVersion]);
 
   function log(args: LogArgs) {

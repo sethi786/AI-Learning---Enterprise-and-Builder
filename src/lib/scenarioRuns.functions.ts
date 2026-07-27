@@ -4,18 +4,31 @@ import { z } from "zod";
 import type { Json } from "@/integrations/supabase/types";
 
 const EventKind = z.enum([
-  "stage_enter","config_change","architecture_change","command","injection_fired",
-  "diagnosis","containment","remediation","evaluation","artifact","sar_answer","decision","note",
+  "stage_enter",
+  "config_change",
+  "architecture_change",
+  "command",
+  "injection_fired",
+  "diagnosis",
+  "containment",
+  "remediation",
+  "evaluation",
+  "artifact",
+  "sar_answer",
+  "decision",
+  "note",
 ]);
 
 export const startScenarioRun = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    z.object({
-      scenarioId: z.string(),
-      scenarioVersion: z.string().default("v1"),
-      state: z.record(z.string(), z.any()).default({}),
-    }).parse(input),
+    z
+      .object({
+        scenarioId: z.string(),
+        scenarioVersion: z.string().default("v1"),
+        state: z.record(z.string(), z.any()).default({}),
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
@@ -36,13 +49,15 @@ export const startScenarioRun = createServerFn({ method: "POST" })
 export const appendScenarioEvent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    z.object({
-      runId: z.string().uuid(),
-      kind: EventKind,
-      stage: z.string().optional(),
-      severity: z.enum(["info", "warn", "error", "critical"]).default("info"),
-      payload: z.record(z.string(), z.any()).default({}),
-    }).parse(input),
+    z
+      .object({
+        runId: z.string().uuid(),
+        kind: EventKind,
+        stage: z.string().optional(),
+        severity: z.enum(["info", "warn", "error", "critical"]).default("info"),
+        payload: z.record(z.string(), z.any()).default({}),
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
@@ -61,12 +76,14 @@ export const appendScenarioEvent = createServerFn({ method: "POST" })
 export const updateScenarioRun = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    z.object({
-      runId: z.string().uuid(),
-      currentStage: z.string().optional(),
-      state: z.record(z.string(), z.any()).optional(),
-      competencies: z.record(z.string(), z.any()).optional(),
-    }).parse(input),
+    z
+      .object({
+        runId: z.string().uuid(),
+        currentStage: z.string().optional(),
+        state: z.record(z.string(), z.any()).optional(),
+        competencies: z.record(z.string(), z.any()).optional(),
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
@@ -91,13 +108,15 @@ export const updateScenarioRun = createServerFn({ method: "POST" })
 export const finishScenarioRun = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
-    z.object({
-      runId: z.string().uuid(),
-      status: z.enum(["passed", "failed", "abandoned"]),
-      score: z.number().nullable().optional(),
-      maxScore: z.number().nullable().optional(),
-      competencies: z.record(z.string(), z.any()).optional(),
-    }).parse(input),
+    z
+      .object({
+        runId: z.string().uuid(),
+        status: z.enum(["passed", "failed", "abandoned"]),
+        score: z.number().nullable().optional(),
+        maxScore: z.number().nullable().optional(),
+        competencies: z.record(z.string(), z.any()).optional(),
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
@@ -122,7 +141,9 @@ export const listMyScenarioRuns = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
     const { data, error } = await supabase
       .from("scenario_runs")
-      .select("id, scenario_id, scenario_version, status, current_stage, score, max_score, started_at, finished_at")
+      .select(
+        "id, scenario_id, scenario_version, status, current_stage, score, max_score, started_at, finished_at",
+      )
       .eq("user_id", userId)
       .order("started_at", { ascending: false })
       .limit(50);

@@ -18,7 +18,8 @@ export const exams: ExamDef[] = [
           { id: "c", label: "Latency" },
           { id: "d", label: "Model hallucination" },
         ],
-        explanation: "Retrieved content is untrusted input. Concatenating it into the system prompt gives it authority.",
+        explanation:
+          "Retrieved content is untrusted input. Concatenating it into the system prompt gives it authority.",
         domain: "security",
       },
       {
@@ -27,7 +28,11 @@ export const exams: ExamDef[] = [
         prompt: "Best control against agent tool misuse via prompt injection?",
         options: [
           { id: "a", label: "Instruct the model to refuse malicious inputs" },
-          { id: "b", label: "Strict tool allowlist + per-tool schemas + HITL for state-changing tools", correct: true },
+          {
+            id: "b",
+            label: "Strict tool allowlist + per-tool schemas + HITL for state-changing tools",
+            correct: true,
+          },
           { id: "c", label: "Bigger model" },
           { id: "d", label: "Rate limiting" },
         ],
@@ -70,7 +75,8 @@ export const exams: ExamDef[] = [
           { id: "c", label: "Cost" },
           { id: "d", label: "Cache misses" },
         ],
-        explanation: "Shared service accounts erase user-level accountability and permission scoping.",
+        explanation:
+          "Shared service accounts erase user-level accountability and permission scoping.",
         domain: "security",
       },
       {
@@ -83,7 +89,8 @@ export const exams: ExamDef[] = [
           { id: "c", label: "Product Manager" },
           { id: "d", label: "Legal" },
         ],
-        explanation: "Security Architecture Review is owned by AI Security Architecture, partnered with Solution Architecture.",
+        explanation:
+          "Security Architecture Review is owned by AI Security Architecture, partnered with Solution Architecture.",
         domain: "governance_grc",
       },
       {
@@ -92,7 +99,11 @@ export const exams: ExamDef[] = [
         prompt: "Best control for secrets ending up in coding-assistant context?",
         options: [
           { id: "a", label: "User training only" },
-          { id: "b", label: "Repo-level secrets scanning + pre-commit hooks + policy-blocked file types", correct: true },
+          {
+            id: "b",
+            label: "Repo-level secrets scanning + pre-commit hooks + policy-blocked file types",
+            correct: true,
+          },
           { id: "c", label: "Bigger context window" },
           { id: "d", label: "Turn the assistant off" },
         ],
@@ -105,7 +116,11 @@ export const exams: ExamDef[] = [
         prompt: "Kill switch counts as a control only if…",
         options: [
           { id: "a", label: "It exists in Confluence" },
-          { id: "b", label: "It has been tested in the last 30 days with logged evidence", correct: true },
+          {
+            id: "b",
+            label: "It has been tested in the last 30 days with logged evidence",
+            correct: true,
+          },
           { id: "c", label: "The vendor supports it" },
           { id: "d", label: "It has a red button icon" },
         ],
@@ -118,7 +133,11 @@ export const exams: ExamDef[] = [
         prompt: "AI Search index for a RAG app has no security-trimming filter.",
         options: [
           { id: "a", label: "Latency" },
-          { id: "b", label: "Any authenticated user can retrieve any indexed document", correct: true },
+          {
+            id: "b",
+            label: "Any authenticated user can retrieve any indexed document",
+            correct: true,
+          },
           { id: "c", label: "Model refuses to answer" },
           { id: "d", label: "Cost" },
         ],
@@ -132,7 +151,11 @@ export const exams: ExamDef[] = [
         options: [
           { id: "a", label: "Go" },
           { id: "b", label: "Conditional — pilot only" },
-          { id: "c", label: "No-Go — push back for narrower scope; block until reduced", correct: true },
+          {
+            id: "c",
+            label: "No-Go — push back for narrower scope; block until reduced",
+            correct: true,
+          },
           { id: "d", label: "Defer" },
         ],
         explanation: "Broad scope requests are the top connector risk. Block or narrow.",
@@ -153,11 +176,16 @@ export const exams: ExamDef[] = [
         prompt: "Best single control to eliminate personal-account shadow AI?",
         options: [
           { id: "a", label: "Acceptable-use policy" },
-          { id: "b", label: "Verified domain / domain capture on the enterprise workspace", correct: true },
+          {
+            id: "b",
+            label: "Verified domain / domain capture on the enterprise workspace",
+            correct: true,
+          },
           { id: "c", label: "Block ChatGPT at proxy" },
           { id: "d", label: "Longer passwords" },
         ],
-        explanation: "Domain capture forces employees with corporate email into the managed workspace.",
+        explanation:
+          "Domain capture forces employees with corporate email into the managed workspace.",
         domain: "platform",
       },
     ],
@@ -172,10 +200,15 @@ export const exams: ExamDef[] = [
       {
         id: "go-1",
         type: "owner",
-        prompt: "A team wants a new SharePoint-grounded RAG assistant. Which review path is REQUIRED?",
+        prompt:
+          "A team wants a new SharePoint-grounded RAG assistant. Which review path is REQUIRED?",
         options: [
           { id: "a", label: "Security only" },
-          { id: "b", label: "Security + Privacy + Legal + QRM + Data Governance + IAM", correct: true },
+          {
+            id: "b",
+            label: "Security + Privacy + Legal + QRM + Data Governance + IAM",
+            correct: true,
+          },
           { id: "c", label: "Governance committee only" },
           { id: "d", label: "None" },
         ],
@@ -201,7 +234,8 @@ export const exams: ExamDef[] = [
           { id: "c", label: "An agent with 5 tools" },
           { id: "d", label: "A search box" },
         ],
-        explanation: "RAG with citations is the standard pattern for grounded Q&A over enterprise content.",
+        explanation:
+          "RAG with citations is the standard pattern for grounded Q&A over enterprise content.",
         domain: "architecture",
       },
     ],
@@ -216,10 +250,15 @@ export const exams: ExamDef[] = [
       {
         id: "grc-1",
         type: "gate",
-        prompt: "A business unit proposes a fourth chat AI platform 'to compare.' You already have three.",
+        prompt:
+          "A business unit proposes a fourth chat AI platform 'to compare.' You already have three.",
         options: [
           { id: "a", label: "Go" },
-          { id: "b", label: "Conditional — 30-day AI Lab bake-off, retire one before adding", correct: true },
+          {
+            id: "b",
+            label: "Conditional — 30-day AI Lab bake-off, retire one before adding",
+            correct: true,
+          },
           { id: "c", label: "No-Go — reject" },
           { id: "d", label: "Defer" },
         ],

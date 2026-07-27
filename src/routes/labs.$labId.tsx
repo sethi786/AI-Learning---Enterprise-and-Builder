@@ -14,7 +14,12 @@ export const Route = createFileRoute("/labs/$labId")({
   },
   head: ({ loaderData }) =>
     loaderData
-      ? { meta: [{ title: `${loaderData.lab.name} — Lab` }, { name: "description", content: loaderData.lab.tagline }] }
+      ? {
+          meta: [
+            { title: `${loaderData.lab.name} — Lab` },
+            { name: "description", content: loaderData.lab.tagline },
+          ],
+        }
       : { meta: [{ title: "Lab" }] },
   component: LabPage,
   notFoundComponent: () => <div className="p-6">Lab not found.</div>,
@@ -27,13 +32,24 @@ function LabPage() {
       <PageHeader
         title={lab.name}
         subtitle={lab.tagline}
-        right={<Badge variant={lab.depth === "deep" ? "default" : "secondary"}>{lab.depth === "deep" ? "Deep content" : "Scaffold"}</Badge>}
+        right={
+          <Badge variant={lab.depth === "deep" ? "default" : "secondary"}>
+            {lab.depth === "deep" ? "Deep content" : "Scaffold"}
+          </Badge>
+        }
       />
       <Card>
-        <CardHeader><CardTitle className="text-base">Mission</CardTitle><CardDescription>{lab.mission}</CardDescription></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-base">Mission</CardTitle>
+          <CardDescription>{lab.mission}</CardDescription>
+        </CardHeader>
       </Card>
       {lab.modules.length === 0 ? (
-        <Card><CardContent className="p-6 text-sm text-muted-foreground">No modules seeded yet. Add modules in <code>src/content/labs.ts</code>.</CardContent></Card>
+        <Card>
+          <CardContent className="p-6 text-sm text-muted-foreground">
+            No modules seeded yet. Add modules in <code>src/content/labs.ts</code>.
+          </CardContent>
+        </Card>
       ) : null}
       {lab.modules.map((m: LabModule, i: number) => {
         const scenario = m.scenarioId ? scenariosById[m.scenarioId] : undefined;
@@ -43,7 +59,12 @@ function LabPage() {
               <Badge variant="outline">Module {i + 1}</Badge>
               <h2 className="text-lg font-semibold">{m.title}</h2>
             </div>
-            <LessonShell id={`${lab.id}:${m.id}`} title={m.title} section={m.lesson} domain={lab.domain} />
+            <LessonShell
+              id={`${lab.id}:${m.id}`}
+              title={m.title}
+              section={m.lesson}
+              domain={lab.domain}
+            />
             {m.quiz.length ? (
               <Quiz id={`${lab.id}:${m.id}:quiz`} questions={m.quiz} domain={lab.domain} />
             ) : null}
@@ -54,7 +75,13 @@ function LabPage() {
                   <CardDescription>{scenario.title}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link to="/scenarios/$scenarioId" params={{ scenarioId: scenario.id }} className="text-primary underline text-sm">Run scenario →</Link>
+                  <Link
+                    to="/scenarios/$scenarioId"
+                    params={{ scenarioId: scenario.id }}
+                    className="text-primary underline text-sm"
+                  >
+                    Run scenario →
+                  </Link>
                 </CardContent>
               </Card>
             ) : null}

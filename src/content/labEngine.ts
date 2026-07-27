@@ -223,7 +223,8 @@ const ragLab: LabBlueprint = {
         },
         {
           id: "guard",
-          label: "Enable retrieval-content guardrail: strip / neutralize instructions in retrieved chunks and block tool-calls originating from retrieved content",
+          label:
+            "Enable retrieval-content guardrail: strip / neutralize instructions in retrieved chunks and block tool-calls originating from retrieved content",
           scoreDelta: 3,
           correct: true,
           followupLogs: [
@@ -388,9 +389,7 @@ const agentLab: LabBlueprint = {
       id: "escalation",
       title: "3. Post-shift review",
       narrative: "Ops reviews the audit trail.",
-      logs: [
-        "[audit] session=agt-9931 tool-calls=1,842 unique-users-touched=612",
-      ],
+      logs: ["[audit] session=agt-9931 tool-calls=1,842 unique-users-touched=612"],
     },
   ],
   injections: [
@@ -420,15 +419,15 @@ const agentLab: LabBlueprint = {
         },
         {
           id: "kill",
-          label: "Trip the kill switch: terminate session, revoke tool credentials, quarantine memory",
+          label:
+            "Trip the kill switch: terminate session, revoke tool credentials, quarantine memory",
           scoreDelta: 3,
           correct: true,
           followupLogs: [
             "[killswitch] session=agt-9931 terminated",
             "[killswitch] tool credentials revoked; memory quarantined for review",
           ],
-          explain:
-            "Correct. Blast-radius containment is the priority; forensics comes after.",
+          explain: "Correct. Blast-radius containment is the priority; forensics comes after.",
         },
       ],
     },
@@ -449,7 +448,8 @@ const agentLab: LabBlueprint = {
           scoreDelta: 3,
           correct: true,
           followupLogs: ["[memory] shared store purged; new writes scoped per-user"],
-          explain: "Cross-user memory is a shared trust boundary — treat it like a database with no auth.",
+          explain:
+            "Cross-user memory is a shared trust boundary — treat it like a database with no auth.",
         },
         {
           id: "filter",
@@ -612,7 +612,8 @@ const connectorLab: LabBlueprint = {
         "[siem] user=ceo@corp granted consent to 'AI Assistant' (client_id=UNKNOWN-8812)",
         "[siem] client_id does NOT match approved connector",
       ],
-      prompt: "A lookalike app has phished a real user into granting broad Google scopes. Response?",
+      prompt:
+        "A lookalike app has phished a real user into granting broad Google scopes. Response?",
       choices: [
         {
           id: "ignore",
@@ -622,7 +623,8 @@ const connectorLab: LabBlueprint = {
         },
         {
           id: "revoke",
-          label: "Revoke tokens for UNKNOWN-8812, restrict OAuth app installs to admin-approved list, notify user",
+          label:
+            "Revoke tokens for UNKNOWN-8812, restrict OAuth app installs to admin-approved list, notify user",
           scoreDelta: 3,
           correct: true,
           followupLogs: [
@@ -648,7 +650,8 @@ const connectorLab: LabBlueprint = {
       label: "Per-user consent (not silent admin-wide install)",
       weight: 2,
       check: (c) => c.consent === "user",
-      remedy: "Admin-wide install skips user awareness; save it for tools with true domain-wide need.",
+      remedy:
+        "Admin-wide install skips user awareness; save it for tools with true domain-wide need.",
     },
     {
       id: "token",

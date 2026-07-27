@@ -91,7 +91,15 @@ const practice: Item[] = [
   { title: "My Runs (cloud)", url: "/my-runs", icon: History },
 ];
 
-function Group({ label, items, currentPath }: { label: string; items: Item[]; currentPath: string }) {
+function Group({
+  label,
+  items,
+  currentPath,
+}: {
+  label: string;
+  items: Item[];
+  currentPath: string;
+}) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
@@ -155,7 +163,12 @@ function AccountBlock() {
   if (!user) {
     return (
       <div className="px-2 py-2">
-        <Button size="sm" variant="outline" className="w-full" onClick={() => navigate({ to: "/auth" })}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="w-full"
+          onClick={() => navigate({ to: "/auth" })}
+        >
           <LogIn className="mr-2 h-4 w-4" /> Sign in
         </Button>
       </div>

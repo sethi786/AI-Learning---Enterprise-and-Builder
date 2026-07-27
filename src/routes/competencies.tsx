@@ -1,12 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/learning/Primitives";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { competencies, competencyCategories } from "@/content/competencies";
 import { useProgress } from "@/lib/progress";
 import { STATUS_COLOR, STATUS_LABEL, emptyRecord } from "@/lib/competency";
@@ -52,7 +46,9 @@ function CompetenciesPage() {
       <div className="grid gap-2 md:grid-cols-6">
         {(Object.keys(counts) as CompetencyStatus[]).map((s) => (
           <Card key={s} className="p-3">
-            <div className={`inline-block rounded border px-2 py-0.5 text-[11px] ${STATUS_COLOR[s]}`}>
+            <div
+              className={`inline-block rounded border px-2 py-0.5 text-[11px] ${STATUS_COLOR[s]}`}
+            >
               {STATUS_LABEL[s]}
             </div>
             <div className="mt-2 text-2xl font-semibold tabular-nums">
@@ -110,11 +106,26 @@ function CompetenciesPage() {
           <CardTitle className="text-sm">How competency status changes</CardTitle>
         </CardHeader>
         <CardContent className="text-xs text-muted-foreground space-y-1">
-          <p><span className="font-medium">Introduced</span> — you opened a lesson tagged with this competency.</p>
-          <p><span className="font-medium">Practiced</span> — you passed a quiz (≥60%) or completed a lab module.</p>
-          <p><span className="font-medium">Demonstrated</span> — you chose the ideal option on a scenario step.</p>
-          <p><span className="font-medium">Mastered</span> — you demonstrated the competency across two or more distinct scenarios.</p>
-          <p><span className="font-medium">Needs reinforcement</span> — a recent failure, or {"\u2265"} 30 days without practice on a mastered skill.</p>
+          <p>
+            <span className="font-medium">Introduced</span> — you opened a lesson tagged with this
+            competency.
+          </p>
+          <p>
+            <span className="font-medium">Practiced</span> — you passed a quiz (≥60%) or completed a
+            lab module.
+          </p>
+          <p>
+            <span className="font-medium">Demonstrated</span> — you chose the ideal option on a
+            scenario step.
+          </p>
+          <p>
+            <span className="font-medium">Mastered</span> — you demonstrated the competency across
+            two or more distinct scenarios.
+          </p>
+          <p>
+            <span className="font-medium">Needs reinforcement</span> — a recent failure, or{" "}
+            {"\u2265"} 30 days without practice on a mastered skill.
+          </p>
         </CardContent>
       </Card>
     </div>

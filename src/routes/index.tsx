@@ -9,14 +9,28 @@ import { labs } from "@/content/labs";
 import { scenarios } from "@/content/scenarios";
 import type { MasteryDomain } from "@/content/types";
 import {
-  Boxes, Shield, Lock, Compass, Bot, Scale, Wrench, ArrowRight, FlaskConical, FileCog, GraduationCap,
+  Boxes,
+  Shield,
+  Lock,
+  Compass,
+  Bot,
+  Scale,
+  Wrench,
+  ArrowRight,
+  FlaskConical,
+  FileCog,
+  GraduationCap,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-const masteryMeta: { id: MasteryDomain; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+const masteryMeta: {
+  id: MasteryDomain;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
   { id: "platform", label: "AI Platform", icon: Boxes },
   { id: "security", label: "Security Risk", icon: Shield },
   { id: "privacy_legal_risk", label: "Privacy / Legal / Risk", icon: Lock },
@@ -34,7 +48,9 @@ function scenarioOfDay() {
 function Dashboard() {
   const p = useProgress();
   const sod = scenarioOfDay();
-  const weakest = [...masteryMeta].sort((a, b) => (p.masteryPoints[a.id] ?? 0) - (p.masteryPoints[b.id] ?? 0)).slice(0, 3);
+  const weakest = [...masteryMeta]
+    .sort((a, b) => (p.masteryPoints[a.id] ?? 0) - (p.masteryPoints[b.id] ?? 0))
+    .slice(0, 3);
 
   const nextLesson = (() => {
     for (const lab of labs) {
@@ -53,7 +69,9 @@ function Dashboard() {
         subtitle="Learn to think like an AI Platform Admin, Governance Operator, Solution Architect, Security Architect, and Enterprise AI GRC Lead."
         right={
           <Button asChild>
-            <Link to="/career-path">Open career path <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Link to="/career-path">
+              Open career path <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         }
       />
@@ -69,11 +87,16 @@ function Dashboard() {
           const pct = roleProgress(p, lessonIds, quizIds, r.scenarioIds);
           return (
             <Card key={r.id} className="flex flex-col items-center p-4 text-center">
-              <ProgressRing value={pct} label={`Stage ${Math.min(4, Math.floor(pct / 25) + 1)}/4`} />
+              <ProgressRing
+                value={pct}
+                label={`Stage ${Math.min(4, Math.floor(pct / 25) + 1)}/4`}
+              />
               <div className="mt-3 text-sm font-semibold leading-tight">{r.name}</div>
               <div className="mt-1 text-xs text-muted-foreground">{r.short}</div>
               <Button asChild variant="ghost" size="sm" className="mt-2">
-                <Link to="/roles/$roleId" params={{ roleId: r.id }}>Open</Link>
+                <Link to="/roles/$roleId" params={{ roleId: r.id }}>
+                  Open
+                </Link>
               </Button>
             </Card>
           );
@@ -94,7 +117,9 @@ function Dashboard() {
             <p className="text-sm text-muted-foreground line-clamp-3">{sod.context}</p>
             <div className="mt-4 flex gap-2">
               <Button asChild size="sm">
-                <Link to="/scenarios/$scenarioId" params={{ scenarioId: sod.id }}>Run scenario</Link>
+                <Link to="/scenarios/$scenarioId" params={{ scenarioId: sod.id }}>
+                  Run scenario
+                </Link>
               </Button>
               <Button asChild size="sm" variant="outline">
                 <Link to="/learn/scenario">All scenarios</Link>
@@ -119,7 +144,9 @@ function Dashboard() {
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2"><FlaskConical className="h-4 w-4" /> Recommended next lesson</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <FlaskConical className="h-4 w-4" /> Recommended next lesson
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {nextLesson ? (
@@ -127,18 +154,24 @@ function Dashboard() {
                 <div className="text-sm font-medium">{nextLesson.module.title}</div>
                 <div className="text-xs text-muted-foreground">{nextLesson.lab.name}</div>
                 <Button asChild size="sm" className="mt-3">
-                  <Link to="/labs/$labId" params={{ labId: nextLesson.lab.id }}>Open lab</Link>
+                  <Link to="/labs/$labId" params={{ labId: nextLesson.lab.id }}>
+                    Open lab
+                  </Link>
                 </Button>
               </>
             ) : (
-              <p className="text-sm text-muted-foreground">You've completed the seeded lessons. Try a scenario or exam next.</p>
+              <p className="text-sm text-muted-foreground">
+                You've completed the seeded lessons. Try a scenario or exam next.
+              </p>
             )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2"><GraduationCap className="h-4 w-4" /> Practice exam</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <GraduationCap className="h-4 w-4" /> Practice exam
+            </CardTitle>
             <CardDescription>Timed mock questions across role paths.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -150,7 +183,9 @@ function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2"><FileCog className="h-4 w-4" /> Artifact builder</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <FileCog className="h-4 w-4" /> Artifact builder
+            </CardTitle>
             <CardDescription>Draft SAR, PIA, TAD, Threat Model, Go/No-Go and more.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -169,8 +204,14 @@ function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-2">
             {weakest.map((w) => (
-              <div key={w.id} className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
-                <span className="flex items-center gap-2"><w.icon className="h-4 w-4 text-muted-foreground" />{w.label}</span>
+              <div
+                key={w.id}
+                className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
+              >
+                <span className="flex items-center gap-2">
+                  <w.icon className="h-4 w-4 text-muted-foreground" />
+                  {w.label}
+                </span>
                 <Badge variant="outline">{domainScore(p, w.id)}%</Badge>
               </div>
             ))}

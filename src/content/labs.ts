@@ -88,7 +88,8 @@ const saasOnboarding: LabDef = {
             { id: "c", label: "MFA disabled" },
             { id: "d", label: "Group policy misconfigured" },
           ],
-          explanation: "SSO handles login. SCIM handles lifecycle. Without SCIM, deprovisioning drifts.",
+          explanation:
+            "SSO handles login. SCIM handles lifecycle. Without SCIM, deprovisioning drifts.",
           domain: "platform",
         },
       ],
@@ -125,7 +126,12 @@ const saasOnboarding: LabDef = {
           prompt: "A vendor added a new memory feature default-on last release. Biggest risk?",
           options: [
             { id: "a", label: "Latency" },
-            { id: "b", label: "Sensitive context persists across sessions and leaks between users if sharing is misused", correct: true },
+            {
+              id: "b",
+              label:
+                "Sensitive context persists across sessions and leaks between users if sharing is misused",
+              correct: true,
+            },
             { id: "c", label: "Storage cost" },
             { id: "d", label: "None" },
           ],
@@ -160,7 +166,8 @@ const saasOnboarding: LabDef = {
             { id: "c", label: "Any Python code interpretation" },
             { id: "d", label: "All prompts containing 'password'" },
           ],
-          explanation: "Admin-role changes are the highest-signal indicator of takeover or insider misuse.",
+          explanation:
+            "Admin-role changes are the highest-signal indicator of takeover or insider misuse.",
           domain: "security",
         },
       ],
@@ -169,12 +176,16 @@ const saasOnboarding: LabDef = {
       id: "offboarding",
       title: "Offboarding an AI power user",
       lesson: {
-        simple: "When someone leaves, their GPTs, agents, and connectors must move to a group owner first.",
+        simple:
+          "When someone leaves, their GPTs, agents, and connectors must move to a group owner first.",
         enterprise:
           "Standard offboarding treats accounts as leaf nodes. AI users own assets others depend on. Add an AI-asset transfer step to offboarding runbooks.",
         deepDive:
           "For each platform, enumerate ownable assets (GPTs, agents, projects, connectors, API keys, shared prompts). Owner transfer must be to a group, not a person. Where the platform supports it, enable inherited ownership by default so this is not a manual step.",
-        mistakes: ["Deleting the user first, orphaning assets", "Transferring to another individual"],
+        mistakes: [
+          "Deleting the user first, orphaning assets",
+          "Transferring to another individual",
+        ],
         risks: ["Broken agents in production", "Loss of institutional AI IP"],
         fixes: ["Transfer-to-group step in offboarding", "Enable inherited group ownership"],
         evidence: ["Offboarding runbook", "Asset transfer log"],
@@ -186,7 +197,11 @@ const saasOnboarding: LabDef = {
           prompt: "Who runs the AI-asset transfer step?",
           options: [
             { id: "a", label: "HR" },
-            { id: "b", label: "AI Platform Admin, coordinated with the user's manager", correct: true },
+            {
+              id: "b",
+              label: "AI Platform Admin, coordinated with the user's manager",
+              correct: true,
+            },
             { id: "c", label: "Security only" },
             { id: "d", label: "The departing user" },
           ],
@@ -238,7 +253,12 @@ const agentLab: LabDef = {
           "Kill switch that revokes tokens",
           "Memory scoped per user with TTL",
         ],
-        evidence: ["Threat model", "Tool inventory + scopes", "Kill-switch runbook", "Audit log sample"],
+        evidence: [
+          "Threat model",
+          "Tool inventory + scopes",
+          "Kill-switch runbook",
+          "Audit log sample",
+        ],
       },
       quiz: [
         {
@@ -248,7 +268,11 @@ const agentLab: LabDef = {
           options: [
             { id: "go", label: "Go — LLM is good" },
             { id: "cond", label: "Conditional — add HITL for writes, cut scope to project" },
-            { id: "no", label: "No-Go — no HITL and broad write scope is a hard block", correct: true },
+            {
+              id: "no",
+              label: "No-Go — no HITL and broad write scope is a hard block",
+              correct: true,
+            },
             { id: "defer", label: "Defer to product" },
           ],
           explanation:
@@ -273,7 +297,11 @@ const agentLab: LabDef = {
           "'God-mode' tool that wraps a whole API",
           "Missing input validation on tool inputs",
         ],
-        risks: ["Bypass of per-user permissions", "Excessive blast radius", "Injection through tool inputs"],
+        risks: [
+          "Bypass of per-user permissions",
+          "Excessive blast radius",
+          "Injection through tool inputs",
+        ],
         fixes: [
           "OBO flow to downstream APIs",
           "Narrow tools (open_ticket, not admin_jira)",
@@ -288,7 +316,12 @@ const agentLab: LabDef = {
           prompt: "Most important control on a support agent that can email customers?",
           options: [
             { id: "a", label: "Rate limiting" },
-            { id: "b", label: "HITL approval for outbound email + allowlist of recipients + audit of every send", correct: true },
+            {
+              id: "b",
+              label:
+                "HITL approval for outbound email + allowlist of recipients + audit of every send",
+              correct: true,
+            },
             { id: "c", label: "Larger context window" },
             { id: "d", label: "Better model" },
           ],
@@ -307,9 +340,15 @@ const agentLab: LabDef = {
           "A kill switch is a documented, tested control that (1) stops the agent runner, (2) revokes its tokens, (3) alerts owners. HITL is a design pattern where the agent proposes and a human approves state-changing actions.",
         deepDive:
           "Implement kill switch as: (a) feature flag that short-circuits the planner, (b) revocation of OAuth tokens / managed identity, (c) queue drain, (d) incident channel notification. Test it monthly. HITL should surface the exact tool call, inputs, and predicted impact — not just 'proceed?'.",
-        mistakes: ["Kill switch exists on paper but never tested", "HITL that shows nothing meaningful"],
+        mistakes: [
+          "Kill switch exists on paper but never tested",
+          "HITL that shows nothing meaningful",
+        ],
         risks: ["No way to stop a misbehaving agent", "HITL fatigue leading to auto-approve"],
-        fixes: ["Monthly kill-switch drill", "Rich HITL that shows tool + inputs + estimated blast radius"],
+        fixes: [
+          "Monthly kill-switch drill",
+          "Rich HITL that shows tool + inputs + estimated blast radius",
+        ],
         evidence: ["Kill-switch drill log", "HITL UI screenshot"],
       },
       quiz: [
@@ -319,7 +358,11 @@ const agentLab: LabDef = {
           prompt: "What proves a kill switch works?",
           options: [
             { id: "a", label: "It exists in the runbook" },
-            { id: "b", label: "It was tested in the last month and logs show tokens were revoked", correct: true },
+            {
+              id: "b",
+              label: "It was tested in the last month and logs show tokens were revoked",
+              correct: true,
+            },
             { id: "c", label: "The vendor says so" },
             { id: "d", label: "It compiles" },
           ],
@@ -336,7 +379,8 @@ const ragLab: LabDef = {
   id: "rag",
   name: "RAG Architecture Lab",
   tagline: "Design permission-aware, injection-resistant RAG.",
-  mission: "Learn RAG end-to-end: ingestion, chunking, embeddings, retrieval, grounding, security, privacy, governance.",
+  mission:
+    "Learn RAG end-to-end: ingestion, chunking, embeddings, retrieval, grounding, security, privacy, governance.",
   domain: "agent_rag_connector",
   depth: "deep",
   modules: [
@@ -358,7 +402,11 @@ const ragLab: LabDef = {
           "Security trim only at UI",
         ],
         risks: ["Wrong answers with citations", "Cross-user leakage", "Stale index"],
-        fixes: ["Sentence-aware chunking", "Hybrid search + reranker", "Security trim in the index query"],
+        fixes: [
+          "Sentence-aware chunking",
+          "Hybrid search + reranker",
+          "Security trim in the index query",
+        ],
         evidence: ["Eval report", "Index security query", "Refresh schedule"],
       },
       quiz: [
@@ -368,7 +416,11 @@ const ragLab: LabDef = {
           prompt: "Where must permission trimming happen?",
           options: [
             { id: "a", label: "In the UI" },
-            { id: "b", label: "In the index query so unauthorized chunks are never retrieved", correct: true },
+            {
+              id: "b",
+              label: "In the index query so unauthorized chunks are never retrieved",
+              correct: true,
+            },
             { id: "c", label: "In the model prompt" },
             { id: "d", label: "In the log" },
           ],
@@ -411,7 +463,11 @@ const ragLab: LabDef = {
           prompt: "Best single control against indirect prompt injection?",
           options: [
             { id: "a", label: "Ask the model to ignore instructions in documents" },
-            { id: "b", label: "Tightly allowlisted tools + per-user identity so injection cannot escalate", correct: true },
+            {
+              id: "b",
+              label: "Tightly allowlisted tools + per-user identity so injection cannot escalate",
+              correct: true,
+            },
             { id: "c", label: "Larger model" },
             { id: "d", label: "Rate limit" },
           ],
@@ -432,7 +488,11 @@ const ragLab: LabDef = {
           "Treat the index as regulated storage: classification carried from source, retention aligned to source, deletion honored via reindex, quality measured with an eval set on every change.",
         deepDive:
           "Metadata: source ACL, classification, retention, owner, ingest ts. Deletion: source deletion must trigger index deletion within SLA. Evaluation: golden Q&A set with grounded-accuracy, citation, and refusal metrics; run in CI on prompt or model change.",
-        mistakes: ["Index outlives source", "No eval on prompt changes", "No classification in metadata"],
+        mistakes: [
+          "Index outlives source",
+          "No eval on prompt changes",
+          "No classification in metadata",
+        ],
         risks: ["DSR non-compliance", "Silent regressions", "Stale answers"],
         fixes: ["Deletion webhook", "Eval-gated releases", "Classification-aware retrieval"],
         evidence: ["Deletion audit", "Eval report per release", "Metadata schema"],
@@ -448,7 +508,8 @@ const ragLab: LabDef = {
             { id: "c", label: "Wait for the next full reindex" },
             { id: "d", label: "Archive to cold storage" },
           ],
-          explanation: "DSR obligations extend to embeddings that carry the person's identifiable content.",
+          explanation:
+            "DSR obligations extend to embeddings that carry the person's identifiable content.",
           domain: "privacy_legal_risk",
         },
       ],
@@ -476,17 +537,32 @@ const connectorLab: LabDef = {
           "Compare requested scopes against the feature's actual data path. Prefer file.read.selected over files.read.all. For write scopes, require HITL. Store credentials in a managed secrets store, never in prompt/context. Rotate. Audit consented apps quarterly.",
         mistakes: ["Approving requested scopes as-is", "Storing tokens in code or config"],
         risks: ["Broad data exfil path", "Long-lived token compromise"],
-        fixes: ["Scope reduction request to vendor", "Managed secrets store", "Rotation policy", "Quarterly consent review"],
-        evidence: ["Scope decision record", "Vault reference", "Rotation log", "Consent review report"],
+        fixes: [
+          "Scope reduction request to vendor",
+          "Managed secrets store",
+          "Rotation policy",
+          "Quarterly consent review",
+        ],
+        evidence: [
+          "Scope decision record",
+          "Vault reference",
+          "Rotation log",
+          "Consent review report",
+        ],
       },
       quiz: [
         {
           id: "q-conn-1",
           type: "find-risk",
-          prompt: "A new connector asks for 'Sites.FullControl.All'. It only needs to read one library.",
+          prompt:
+            "A new connector asks for 'Sites.FullControl.All'. It only needs to read one library.",
           options: [
             { id: "a", label: "Approve — SSO enforces user identity anyway" },
-            { id: "b", label: "Reject and require site-scoped read-only permission", correct: true },
+            {
+              id: "b",
+              label: "Reject and require site-scoped read-only permission",
+              correct: true,
+            },
             { id: "c", label: "Approve for pilot only" },
             { id: "d", label: "Approve with an acceptable-use policy" },
           ],
@@ -499,13 +575,20 @@ const connectorLab: LabDef = {
       id: "connector-dlp",
       title: "DLP and lifecycle",
       lesson: {
-        simple: "Connectors move data. DLP must apply on that data path. Retire connectors when unused.",
+        simple:
+          "Connectors move data. DLP must apply on that data path. Retire connectors when unused.",
         enterprise:
           "Wire DLP policies to connector data paths (Purview / Chronicle / Netskope). Track usage; a connector unused for 90 days should be reviewed for removal.",
         deepDive:
           "Every connector = new data flow. Map: source, sink, classification, DLP policy, log destination, owner, last used. Automate 90-day dormancy alerts. On removal, revoke tokens and delete any cached data.",
-        mistakes: ["Enabling connector without DLP policy update", "Never retiring unused connectors"],
-        risks: ["Classified data leaves via unmonitored path", "Zombie connectors as attack surface"],
+        mistakes: [
+          "Enabling connector without DLP policy update",
+          "Never retiring unused connectors",
+        ],
+        risks: [
+          "Classified data leaves via unmonitored path",
+          "Zombie connectors as attack surface",
+        ],
         fixes: ["DLP policy update per connector", "Dormancy alerts", "Retirement runbook"],
         evidence: ["Connector register", "DLP policy diff", "Dormancy report"],
       },
@@ -533,7 +616,8 @@ const zeroTrust: LabDef = {
   id: "zero-trust",
   name: "Zero Trust AI Lab",
   tagline: "Verify explicitly. Least privilege. Assume breach — applied to AI.",
-  mission: "Apply Zero Trust to identity, device, app, data, network, workload, and AI-specific controls.",
+  mission:
+    "Apply Zero Trust to identity, device, app, data, network, workload, and AI-specific controls.",
   domain: "security",
   depth: "deep",
   modules: [
@@ -546,9 +630,19 @@ const zeroTrust: LabDef = {
           "AI apps must propagate user identity end-to-end (OBO), enforce conditional access, and never use god-mode service accounts.",
         deepDive:
           "Chain: user token → API token (OBO) → data source token. Conditional access on device compliance and risk. Managed identity between services, never shared secrets. Break-glass admin via PIM with recorded justification.",
-        mistakes: ["Service account calling data source on behalf of users", "No conditional access on AI apps"],
-        risks: ["Retrieval bypass of per-user permissions", "Unmanaged devices exfiltrating outputs"],
-        fixes: ["OBO flow", "Conditional access policies for AI apps", "Managed identities everywhere"],
+        mistakes: [
+          "Service account calling data source on behalf of users",
+          "No conditional access on AI apps",
+        ],
+        risks: [
+          "Retrieval bypass of per-user permissions",
+          "Unmanaged devices exfiltrating outputs",
+        ],
+        fixes: [
+          "OBO flow",
+          "Conditional access policies for AI apps",
+          "Managed identities everywhere",
+        ],
         evidence: ["Identity flow diagram", "Conditional access policy export"],
       },
       quiz: [
@@ -558,7 +652,11 @@ const zeroTrust: LabDef = {
           prompt: "Best Zero Trust identity pattern for a RAG app?",
           options: [
             { id: "a", label: "Shared service account for retrieval" },
-            { id: "b", label: "OBO from user to API to data source with conditional access", correct: true },
+            {
+              id: "b",
+              label: "OBO from user to API to data source with conditional access",
+              correct: true,
+            },
             { id: "c", label: "API key per user" },
             { id: "d", label: "IP allowlist only" },
           ],
@@ -571,14 +669,24 @@ const zeroTrust: LabDef = {
       id: "zt-network",
       title: "Network, workload, and assume-breach",
       lesson: {
-        simple: "Keep AI endpoints private. Assume the app will be compromised — limit blast radius.",
+        simple:
+          "Keep AI endpoints private. Assume the app will be compromised — limit blast radius.",
         enterprise:
           "Private endpoints for model + data. Egress allowlist. Workload identity for service-to-service. Segment environments. Design for containment.",
         deepDive:
           "Private link to model + search + storage. Deny-all egress with explicit allowlist. Kill switch that revokes workload identity. Runbook for token compromise. Detection rules for anomalous tool calls and unusual output sizes.",
-        mistakes: ["Public model endpoint", "Any-egress from AI workload", "Same env for dev and prod"],
+        mistakes: [
+          "Public model endpoint",
+          "Any-egress from AI workload",
+          "Same env for dev and prod",
+        ],
         risks: ["Direct model abuse", "Exfil via egress", "Blast radius across environments"],
-        fixes: ["Private endpoints", "Egress allowlist", "Env separation", "Kill switch + detections"],
+        fixes: [
+          "Private endpoints",
+          "Egress allowlist",
+          "Env separation",
+          "Kill switch + detections",
+        ],
         evidence: ["Network diagram", "Egress policy", "Detection catalog"],
       },
       quiz: [
@@ -605,7 +713,8 @@ const inhouseLab: LabDef = {
   id: "in-house-app",
   name: "In-House AI App Simulator",
   tagline: "Design a full in-house AI app across all domains.",
-  mission: "Make architecture, security, privacy, legal, data governance, IAM, DevSecOps, ops, and FinOps decisions.",
+  mission:
+    "Make architecture, security, privacy, legal, data governance, IAM, DevSecOps, ops, and FinOps decisions.",
   domain: "architecture",
   depth: "deep",
   modules: [
@@ -613,7 +722,8 @@ const inhouseLab: LabDef = {
       id: "arch-overview",
       title: "Architecture: components and boundaries",
       lesson: {
-        simple: "An in-house AI app has frontend, API, orchestrator, model, RAG, data sources, logs.",
+        simple:
+          "An in-house AI app has frontend, API, orchestrator, model, RAG, data sources, logs.",
         enterprise:
           "Every arrow is a security boundary and every component is an on-call surface. Draw the identity flow before the prompt flow.",
         deepDive:
@@ -644,10 +754,16 @@ export const labs: LabDef[] = [
     "Learn how to run a PIA for AI, map PII, and enforce minimization and residency.",
     "privacy_legal_risk",
     [
-      seedModule("pii-mapping", "PII mapping and minimization",
-        "Map every PII field the AI app touches. Remove or hash what isn't needed."),
-      seedModule("dsr", "DSR (deletion, access, portability)",
-        "Design deletion into the RAG index, prompt logs, and eval sets."),
+      seedModule(
+        "pii-mapping",
+        "PII mapping and minimization",
+        "Map every PII field the AI app touches. Remove or hash what isn't needed.",
+      ),
+      seedModule(
+        "dsr",
+        "DSR (deletion, access, portability)",
+        "Design deletion into the RAG index, prompt logs, and eval sets.",
+      ),
     ],
   ),
   scaffoldLab(
@@ -657,8 +773,11 @@ export const labs: LabDef[] = [
     "Learn to read AI vendor terms, DPAs, and client restrictions.",
     "privacy_legal_risk",
     [
-      seedModule("vendor-terms", "Reading vendor terms",
-        "Focus on: no-training clauses, output ownership, indemnification, subprocessors."),
+      seedModule(
+        "vendor-terms",
+        "Reading vendor terms",
+        "Focus on: no-training clauses, output ownership, indemnification, subprocessors.",
+      ),
     ],
   ),
   scaffoldLab(
@@ -668,8 +787,11 @@ export const labs: LabDef[] = [
     "Learn to tier, treat, and articulate residual risk.",
     "privacy_legal_risk",
     [
-      seedModule("risk-tiering", "AI risk tiering",
-        "Tier by data sensitivity, autonomy, and blast radius."),
+      seedModule(
+        "risk-tiering",
+        "AI risk tiering",
+        "Tier by data sensitivity, autonomy, and blast radius.",
+      ),
     ],
   ),
   scaffoldLab(
@@ -679,8 +801,11 @@ export const labs: LabDef[] = [
     "Learn to enforce data-owner sign-off and vector lifecycle discipline.",
     "governance_grc",
     [
-      seedModule("data-owner", "Data owner sign-off",
-        "No data source enters RAG without a named data owner approval."),
+      seedModule(
+        "data-owner",
+        "Data owner sign-off",
+        "No data source enters RAG without a named data owner approval.",
+      ),
     ],
   ),
   scaffoldLab(
@@ -689,10 +814,7 @@ export const labs: LabDef[] = [
     "SSO, OBO, managed identities, service principals.",
     "Learn identity propagation and least-privilege patterns for AI systems.",
     "security",
-    [
-      seedModule("obo", "On-Behalf-Of flow",
-        "Preserve user identity from client to data source."),
-    ],
+    [seedModule("obo", "On-Behalf-Of flow", "Preserve user identity from client to data source.")],
   ),
   scaffoldLab(
     "devsecops",
@@ -701,8 +823,11 @@ export const labs: LabDef[] = [
     "Learn to secure the AI SDLC.",
     "security",
     [
-      seedModule("prompt-versioning", "Prompt and model versioning",
-        "Prompts and models are code — version, review, evaluate on change."),
+      seedModule(
+        "prompt-versioning",
+        "Prompt and model versioning",
+        "Prompts and models are code — version, review, evaluate on change.",
+      ),
     ],
   ),
   scaffoldLab(
@@ -712,8 +837,11 @@ export const labs: LabDef[] = [
     "Learn the engineering discipline of shipping AI.",
     "architecture",
     [
-      seedModule("evals", "Building an eval set",
-        "Golden Q&A + grounded-accuracy + refusal metrics + regression gates."),
+      seedModule(
+        "evals",
+        "Building an eval set",
+        "Golden Q&A + grounded-accuracy + refusal metrics + regression gates.",
+      ),
     ],
   ),
 ];

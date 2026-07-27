@@ -55,10 +55,7 @@ export function rankOf(s: CompetencyStatus): number {
  *  - scenario_failed or quiz_failed after mastered -> needs_reinforcement
  *  - never regress by an "opened" event
  */
-export function applyEvidence(
-  record: CompetencyRecord,
-  event: EvidenceEvent,
-): CompetencyRecord {
+export function applyEvidence(record: CompetencyRecord, event: EvidenceEvent): CompetencyRecord {
   const r: CompetencyRecord = {
     ...record,
     evidence: [...record.evidence.slice(-19), event],

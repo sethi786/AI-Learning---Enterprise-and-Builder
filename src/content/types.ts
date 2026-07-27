@@ -46,12 +46,7 @@ export interface PlatformDef {
   id: string;
   name: string;
   category:
-    | "saas-productivity"
-    | "saas-chat"
-    | "coding-assistant"
-    | "cloud-ai"
-    | "internal"
-    | "pattern";
+    "saas-productivity" | "saas-chat" | "coding-assistant" | "cloud-ai" | "internal" | "pattern";
   what: string;
   useCases: string[];
   adminResponsibilities: string[];
@@ -72,12 +67,7 @@ export interface PlatformDef {
   depth: "deep" | "scaffold";
 }
 
-export type QuizType =
-  | "mc"
-  | "find-risk"
-  | "choose-control"
-  | "owner"
-  | "gate";
+export type QuizType = "mc" | "find-risk" | "choose-control" | "owner" | "gate";
 
 export interface QuizQuestion {
   id: string;
@@ -122,7 +112,13 @@ export interface LessonSection {
 }
 
 export interface LessonSource {
-  type: "stable-concept" | "product-specific" | "version-sensitive" | "framework" | "instructor" | "simulation";
+  type:
+    | "stable-concept"
+    | "product-specific"
+    | "version-sensitive"
+    | "framework"
+    | "instructor"
+    | "simulation";
   title: string;
   url?: string;
   retrievedDate?: string;
@@ -134,12 +130,7 @@ export interface LessonSource {
 export type CompetencyId = string;
 
 export type CompetencyCategory =
-  | "platform"
-  | "governance"
-  | "architecture"
-  | "security"
-  | "privacy_legal_risk"
-  | "engineering";
+  "platform" | "governance" | "architecture" | "security" | "privacy_legal_risk" | "engineering";
 
 export type CompetencyStatus =
   | "not_introduced"
@@ -175,13 +166,7 @@ export interface LabDef {
   depth: "deep" | "scaffold";
 }
 
-export type EnvDecision =
-  | "ai-lab"
-  | "dev"
-  | "uat"
-  | "pilot"
-  | "production"
-  | "blocked";
+export type EnvDecision = "ai-lab" | "dev" | "uat" | "pilot" | "production" | "blocked";
 
 export interface ScenarioStep {
   id: string;

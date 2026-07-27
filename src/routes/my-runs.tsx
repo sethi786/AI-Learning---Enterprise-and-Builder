@@ -12,7 +12,11 @@ export const Route = createFileRoute("/my-runs")({
   head: () => ({
     meta: [
       { title: "My Runs — Assurance Platform" },
-      { name: "description", content: "Immutable audit trail of every scenario run: stage transitions, config changes, injections, diagnoses, decisions." },
+      {
+        name: "description",
+        content:
+          "Immutable audit trail of every scenario run: stage transitions, config changes, injections, diagnoses, decisions.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -33,17 +37,23 @@ function MyRunsPage() {
       .catch((e: Error) => setErr(e.message));
   }, [user, loading]);
 
-  if (loading) return <div className="mx-auto max-w-3xl p-6 text-sm text-muted-foreground">Loading…</div>;
+  if (loading)
+    return <div className="mx-auto max-w-3xl p-6 text-sm text-muted-foreground">Loading…</div>;
   if (!user) {
     return (
       <div className="mx-auto max-w-md p-6">
         <Card>
           <CardHeader>
             <CardTitle>Sign in to view your runs</CardTitle>
-            <CardDescription>Scenario runs, events, and decisions are stored to your account so an auditor could replay every step.</CardDescription>
+            <CardDescription>
+              Scenario runs, events, and decisions are stored to your account so an auditor could
+              replay every step.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => navigate({ to: "/auth", search: { next: "/my-runs" } })}>Sign in</Button>
+            <Button onClick={() => navigate({ to: "/auth", search: { next: "/my-runs" } })}>
+              Sign in
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -54,19 +64,34 @@ function MyRunsPage() {
     <div className="mx-auto max-w-4xl p-6 space-y-4">
       <div>
         <h1 className="text-2xl font-bold">My scenario runs</h1>
-        <p className="text-sm text-muted-foreground">Append-only audit trail. Nothing here is a real approval or production evidence.</p>
+        <p className="text-sm text-muted-foreground">
+          Append-only audit trail. Nothing here is a real approval or production evidence.
+        </p>
       </div>
-      {err && <Card><CardContent className="p-4 text-sm text-destructive">{err}</CardContent></Card>}
+      {err && (
+        <Card>
+          <CardContent className="p-4 text-sm text-destructive">{err}</CardContent>
+        </Card>
+      )}
       {runs && runs.length === 0 && (
-        <Card><CardContent className="p-4 text-sm">
-          No runs yet. <Link to="/scenarios/rag-ticket-agent" className="underline">Start the RAG + Ticket Agent scenario</Link>.
-        </CardContent></Card>
+        <Card>
+          <CardContent className="p-4 text-sm">
+            No runs yet.{" "}
+            <Link to="/scenarios/rag-ticket-agent" className="underline">
+              Start the RAG + Ticket Agent scenario
+            </Link>
+            .
+          </CardContent>
+        </Card>
       )}
       {runs?.map((r) => (
         <Card key={r.id}>
           <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4">
             <div>
-              <div className="font-medium">{r.scenario_id} <span className="text-xs text-muted-foreground">({r.scenario_version})</span></div>
+              <div className="font-medium">
+                {r.scenario_id}{" "}
+                <span className="text-xs text-muted-foreground">({r.scenario_version})</span>
+              </div>
               <div className="text-xs text-muted-foreground">
                 Started {new Date(r.started_at).toLocaleString()}
                 {r.finished_at ? ` · Finished ${new Date(r.finished_at).toLocaleString()}` : ""}
@@ -74,14 +99,24 @@ function MyRunsPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={r.status === "passed" ? "default" : r.status === "failed" ? "destructive" : "outline"}>
+              <Badge
+                variant={
+                  r.status === "passed"
+                    ? "default"
+                    : r.status === "failed"
+                      ? "destructive"
+                      : "outline"
+                }
+              >
                 {r.status}
               </Badge>
               {r.score != null && r.max_score != null && (
                 <Badge variant="outline">{Math.round((r.score / r.max_score) * 100)}%</Badge>
               )}
               <Button asChild size="sm" variant="outline">
-                <Link to="/my-runs/$runId" params={{ runId: r.id }}>Open trace</Link>
+                <Link to="/my-runs/$runId" params={{ runId: r.id }}>
+                  Open trace
+                </Link>
               </Button>
             </div>
           </CardContent>

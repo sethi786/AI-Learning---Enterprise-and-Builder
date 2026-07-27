@@ -6,7 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { exams } from "@/content/exams";
 
 export const Route = createFileRoute("/exams")({
-  head: () => ({ meta: [{ title: "Practice Exams" }, { name: "description", content: "Scenario-based practice exams for each role." }] }),
+  head: () => ({
+    meta: [
+      { title: "Practice Exams" },
+      { name: "description", content: "Scenario-based practice exams for each role." },
+    ],
+  }),
   component: ExamsPage,
 });
 
@@ -16,20 +21,27 @@ function ExamsPage() {
   if (inChild) return <Outlet />;
   return (
     <div className="mx-auto max-w-4xl">
-      <PageHeader title="Practice Exams" subtitle="One deep exam (Security Architect) plus samples for other roles." />
+      <PageHeader
+        title="Practice Exams"
+        subtitle="One deep exam (Security Architect) plus samples for other roles."
+      />
       <div className="grid gap-3 md:grid-cols-2">
         {exams.map((e) => (
           <Card key={e.id}>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">{e.name}</CardTitle>
-                <Badge variant={e.depth === "deep" ? "default" : "secondary"}>{e.depth === "deep" ? "Deep" : "Sample"}</Badge>
+                <Badge variant={e.depth === "deep" ? "default" : "secondary"}>
+                  {e.depth === "deep" ? "Deep" : "Sample"}
+                </Badge>
               </div>
               <CardDescription>{e.description}</CardDescription>
             </CardHeader>
             <CardContent>
               <Button asChild size="sm">
-                <Link to="/exams/$examId" params={{ examId: e.id }}>Start exam ({e.questions.length} q)</Link>
+                <Link to="/exams/$examId" params={{ examId: e.id }}>
+                  Start exam ({e.questions.length} q)
+                </Link>
               </Button>
             </CardContent>
           </Card>

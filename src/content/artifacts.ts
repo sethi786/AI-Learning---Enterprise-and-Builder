@@ -1,7 +1,12 @@
 import type { ArtifactTemplate } from "./types";
 
 const lines = (v: string | string[] | undefined) =>
-  Array.isArray(v) ? v.filter(Boolean).map((x) => `- ${x}`).join("\n") : v ?? "";
+  Array.isArray(v)
+    ? v
+        .filter(Boolean)
+        .map((x) => `- ${x}`)
+        .join("\n")
+    : (v ?? "");
 
 const s = (v: Record<string, string | string[]>, k: string) => {
   const x = v[k];
@@ -17,16 +22,35 @@ export const artifactTemplates: ArtifactTemplate[] = [
     fields: [
       { id: "name", label: "Use case name", type: "text" },
       { id: "requester", label: "Requester + business unit", type: "text" },
-      { id: "type", label: "Request type", type: "select", options: [
-        "SaaS AI platform onboarding", "New feature on existing platform", "New model", "New agent", "New connector", "In-house AI app", "RAG app", "Coding assistant", "AI Lab experiment",
-      ] },
+      {
+        id: "type",
+        label: "Request type",
+        type: "select",
+        options: [
+          "SaaS AI platform onboarding",
+          "New feature on existing platform",
+          "New model",
+          "New agent",
+          "New connector",
+          "In-house AI app",
+          "RAG app",
+          "Coding assistant",
+          "AI Lab experiment",
+        ],
+      },
       { id: "purpose", label: "Business purpose", type: "textarea" },
-      { id: "data", label: "Data involved (classifications)", type: "textarea", placeholder: "PII, Confidential, Regulated…" },
+      {
+        id: "data",
+        label: "Data involved (classifications)",
+        type: "textarea",
+        placeholder: "PII, Confidential, Regulated…",
+      },
       { id: "users", label: "Users and volumes", type: "text" },
       { id: "risks", label: "Known risks / concerns", type: "textarea" },
       { id: "timeline", label: "Timeline / urgency", type: "text" },
     ],
-    markdown: (v) => `# AI Intake — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Requester:** ${s(v, "requester")}\n**Type:** ${s(v, "type")}\n**Timeline:** ${s(v, "timeline")}\n\n## Business purpose\n${s(v, "purpose")}\n\n## Data\n${s(v, "data")}\n\n## Users\n${s(v, "users")}\n\n## Known risks\n${s(v, "risks")}\n`,
+    markdown: (v) =>
+      `# AI Intake — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Requester:** ${s(v, "requester")}\n**Type:** ${s(v, "type")}\n**Timeline:** ${s(v, "timeline")}\n\n## Business purpose\n${s(v, "purpose")}\n\n## Data\n${s(v, "data")}\n\n## Users\n${s(v, "users")}\n\n## Known risks\n${s(v, "risks")}\n`,
   },
   {
     id: "tad",
@@ -35,14 +59,20 @@ export const artifactTemplates: ArtifactTemplate[] = [
     description: "High-level technical architecture.",
     fields: [
       { id: "name", label: "System name", type: "text" },
-      { id: "pattern", label: "Chosen pattern", type: "select", options: ["SaaS onboarding", "In-house RAG", "Agent", "Coding assistant", "Other"] },
+      {
+        id: "pattern",
+        label: "Chosen pattern",
+        type: "select",
+        options: ["SaaS onboarding", "In-house RAG", "Agent", "Coding assistant", "Other"],
+      },
       { id: "components", label: "Components (one per line)", type: "textarea" },
       { id: "identity", label: "Identity flow", type: "textarea" },
       { id: "data", label: "Data flow", type: "textarea" },
       { id: "nfrs", label: "NFRs (latency, availability, cost, scale)", type: "textarea" },
       { id: "decisions", label: "Key decisions and rationale", type: "textarea" },
     ],
-    markdown: (v) => `# TAD — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Pattern:** ${s(v, "pattern")}\n\n## Components\n${lines(v.components?.toString().split("\n"))}\n\n## Identity flow\n${s(v, "identity")}\n\n## Data flow\n${s(v, "data")}\n\n## NFRs\n${s(v, "nfrs")}\n\n## Decisions\n${s(v, "decisions")}\n`,
+    markdown: (v) =>
+      `# TAD — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Pattern:** ${s(v, "pattern")}\n\n## Components\n${lines(v.components?.toString().split("\n"))}\n\n## Identity flow\n${s(v, "identity")}\n\n## Data flow\n${s(v, "data")}\n\n## NFRs\n${s(v, "nfrs")}\n\n## Decisions\n${s(v, "decisions")}\n`,
   },
   {
     id: "sar",
@@ -59,9 +89,15 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "connector", label: "Connector scopes", type: "textarea" },
       { id: "logging", label: "Logging & detection", type: "textarea" },
       { id: "residual", label: "Residual risk", type: "textarea" },
-      { id: "decision", label: "Decision", type: "select", options: ["Approve", "Conditional approve", "Block"] },
+      {
+        id: "decision",
+        label: "Decision",
+        type: "select",
+        options: ["Approve", "Conditional approve", "Block"],
+      },
     ],
-    markdown: (v) => `# SAR — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Decision:** ${s(v, "decision")}\n\n## Identity & access\n${s(v, "identity")}\n\n## Network & endpoints\n${s(v, "network")}\n\n## Data protection\n${s(v, "data")}\n\n## App security (LLM Top 10)\n${s(v, "app")}\n\n## Agent / tools\n${s(v, "agent")}\n\n## Connectors\n${s(v, "connector")}\n\n## Logging & detection\n${s(v, "logging")}\n\n## Residual risk\n${s(v, "residual")}\n`,
+    markdown: (v) =>
+      `# SAR — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Decision:** ${s(v, "decision")}\n\n## Identity & access\n${s(v, "identity")}\n\n## Network & endpoints\n${s(v, "network")}\n\n## Data protection\n${s(v, "data")}\n\n## App security (LLM Top 10)\n${s(v, "app")}\n\n## Agent / tools\n${s(v, "agent")}\n\n## Connectors\n${s(v, "connector")}\n\n## Logging & detection\n${s(v, "logging")}\n\n## Residual risk\n${s(v, "residual")}\n`,
   },
   {
     id: "threat-model",
@@ -75,7 +111,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "threats", label: "Threats (STRIDE + LLM Top 10)", type: "textarea" },
       { id: "mitigations", label: "Mitigations", type: "textarea" },
     ],
-    markdown: (v) => `# Threat Model — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Assets\n${s(v, "assets")}\n\n## Actors\n${s(v, "actors")}\n\n## Threats\n${s(v, "threats")}\n\n## Mitigations\n${s(v, "mitigations")}\n`,
+    markdown: (v) =>
+      `# Threat Model — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Assets\n${s(v, "assets")}\n\n## Actors\n${s(v, "actors")}\n\n## Threats\n${s(v, "threats")}\n\n## Mitigations\n${s(v, "mitigations")}\n`,
   },
   {
     id: "pia",
@@ -91,7 +128,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "subprocessors", label: "Subprocessors", type: "textarea" },
       { id: "dsr", label: "DSR handling", type: "textarea" },
     ],
-    markdown: (v) => `# PIA — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## PII categories\n${s(v, "pii")}\n\n## Legal basis / consent\n${s(v, "basis")}\n\n## Retention & deletion\n${s(v, "retention")}\n\n## Residency & transfers\n${s(v, "residency")}\n\n## Subprocessors\n${s(v, "subprocessors")}\n\n## DSR handling\n${s(v, "dsr")}\n`,
+    markdown: (v) =>
+      `# PIA — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## PII categories\n${s(v, "pii")}\n\n## Legal basis / consent\n${s(v, "basis")}\n\n## Retention & deletion\n${s(v, "retention")}\n\n## Residency & transfers\n${s(v, "residency")}\n\n## Subprocessors\n${s(v, "subprocessors")}\n\n## DSR handling\n${s(v, "dsr")}\n`,
   },
   {
     id: "legal",
@@ -106,7 +144,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "ip", label: "IP / output ownership", type: "textarea" },
       { id: "regulated", label: "Regulated data considerations", type: "textarea" },
     ],
-    markdown: (v) => `# Legal Review — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**DPA:** ${s(v, "dpa")}\n\n## Vendor terms\n${s(v, "terms")}\n\n## Client restrictions\n${s(v, "client")}\n\n## IP / output ownership\n${s(v, "ip")}\n\n## Regulated data\n${s(v, "regulated")}\n`,
+    markdown: (v) =>
+      `# Legal Review — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**DPA:** ${s(v, "dpa")}\n\n## Vendor terms\n${s(v, "terms")}\n\n## Client restrictions\n${s(v, "client")}\n\n## IP / output ownership\n${s(v, "ip")}\n\n## Regulated data\n${s(v, "regulated")}\n`,
   },
   {
     id: "qrm",
@@ -120,7 +159,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "residual", label: "Residual risk", type: "textarea" },
       { id: "acceptance", label: "Risk acceptance (name + rationale)", type: "textarea" },
     ],
-    markdown: (v) => `# QRM Risk Assessment — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Inherent\n${s(v, "inherent")}\n\n## Controls\n${s(v, "controls")}\n\n## Residual\n${s(v, "residual")}\n\n## Acceptance\n${s(v, "acceptance")}\n`,
+    markdown: (v) =>
+      `# QRM Risk Assessment — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Inherent\n${s(v, "inherent")}\n\n## Controls\n${s(v, "controls")}\n\n## Residual\n${s(v, "residual")}\n\n## Acceptance\n${s(v, "acceptance")}\n`,
   },
   {
     id: "datagov",
@@ -135,7 +175,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "trimming", label: "Permission trimming approach", type: "textarea" },
       { id: "lifecycle", label: "Vector lifecycle (ingest, refresh, delete)", type: "textarea" },
     ],
-    markdown: (v) => `# Data Governance — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Sources\n${s(v, "sources")}\n\n## Owners\n${s(v, "owners")}\n\n## Classification\n${s(v, "classification")}\n\n## Permission trimming\n${s(v, "trimming")}\n\n## Vector lifecycle\n${s(v, "lifecycle")}\n`,
+    markdown: (v) =>
+      `# Data Governance — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Sources\n${s(v, "sources")}\n\n## Owners\n${s(v, "owners")}\n\n## Classification\n${s(v, "classification")}\n\n## Permission trimming\n${s(v, "trimming")}\n\n## Vector lifecycle\n${s(v, "lifecycle")}\n`,
   },
   {
     id: "iam",
@@ -149,7 +190,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "rbac", label: "RBAC / groups", type: "textarea" },
       { id: "ca", label: "Conditional access", type: "textarea" },
     ],
-    markdown: (v) => `# IAM Review — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## User identity flow\n${s(v, "users")}\n\n## Service identity flow\n${s(v, "service")}\n\n## RBAC / groups\n${s(v, "rbac")}\n\n## Conditional access\n${s(v, "ca")}\n`,
+    markdown: (v) =>
+      `# IAM Review — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## User identity flow\n${s(v, "users")}\n\n## Service identity flow\n${s(v, "service")}\n\n## RBAC / groups\n${s(v, "rbac")}\n\n## Conditional access\n${s(v, "ca")}\n`,
   },
   {
     id: "devsecops",
@@ -164,7 +206,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "prompts", label: "Prompt / model versioning", type: "textarea" },
       { id: "release", label: "Release gates", type: "textarea" },
     ],
-    markdown: (v) => `# DevSecOps — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Scans\n${s(v, "scans")}\n\n## Secrets\n${s(v, "secrets")}\n\n## IaC\n${s(v, "iac")}\n\n## Prompt / model versioning\n${s(v, "prompts")}\n\n## Release gates\n${s(v, "release")}\n`,
+    markdown: (v) =>
+      `# DevSecOps — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Scans\n${s(v, "scans")}\n\n## Secrets\n${s(v, "secrets")}\n\n## IaC\n${s(v, "iac")}\n\n## Prompt / model versioning\n${s(v, "prompts")}\n\n## Release gates\n${s(v, "release")}\n`,
   },
   {
     id: "agent-gov",
@@ -179,7 +222,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "kill", label: "Kill switch", type: "textarea" },
       { id: "audit", label: "Audit / detection", type: "textarea" },
     ],
-    markdown: (v) => `# Agent Governance — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Tools\n${s(v, "tools")}\n\n## Identity\n${s(v, "identity")}\n\n## HITL\n${s(v, "hitl")}\n\n## Kill switch\n${s(v, "kill")}\n\n## Audit\n${s(v, "audit")}\n`,
+    markdown: (v) =>
+      `# Agent Governance — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Tools\n${s(v, "tools")}\n\n## Identity\n${s(v, "identity")}\n\n## HITL\n${s(v, "hitl")}\n\n## Kill switch\n${s(v, "kill")}\n\n## Audit\n${s(v, "audit")}\n`,
   },
   {
     id: "connector-gov",
@@ -193,7 +237,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "dlp", label: "DLP coverage", type: "textarea" },
       { id: "lifecycle", label: "Lifecycle (review cadence)", type: "textarea" },
     ],
-    markdown: (v) => `# Connector Governance — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Scopes\n${s(v, "scopes")}\n\n## Credentials\n${s(v, "creds")}\n\n## DLP\n${s(v, "dlp")}\n\n## Lifecycle\n${s(v, "lifecycle")}\n`,
+    markdown: (v) =>
+      `# Connector Governance — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Scopes\n${s(v, "scopes")}\n\n## Credentials\n${s(v, "creds")}\n\n## DLP\n${s(v, "dlp")}\n\n## Lifecycle\n${s(v, "lifecycle")}\n`,
   },
   {
     id: "runbook",
@@ -207,7 +252,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "kill", label: "Kill switch procedure", type: "textarea" },
       { id: "escalation", label: "Escalation path", type: "textarea" },
     ],
-    markdown: (v) => `# Runbook — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Severity\n${s(v, "sev")}\n\n## Alerts\n${s(v, "alerts")}\n\n## Kill switch\n${s(v, "kill")}\n\n## Escalation\n${s(v, "escalation")}\n`,
+    markdown: (v) =>
+      `# Runbook — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Severity\n${s(v, "sev")}\n\n## Alerts\n${s(v, "alerts")}\n\n## Kill switch\n${s(v, "kill")}\n\n## Escalation\n${s(v, "escalation")}\n`,
   },
   {
     id: "training",
@@ -220,7 +266,8 @@ export const artifactTemplates: ArtifactTemplate[] = [
       { id: "modules", label: "Modules", type: "textarea" },
       { id: "aup", label: "Acceptable-use highlights", type: "textarea" },
     ],
-    markdown: (v) => `# Training Plan — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Audiences\n${s(v, "audiences")}\n\n## Modules\n${s(v, "modules")}\n\n## Acceptable use\n${s(v, "aup")}\n`,
+    markdown: (v) =>
+      `# Training Plan — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n## Audiences\n${s(v, "audiences")}\n\n## Modules\n${s(v, "modules")}\n\n## Acceptable use\n${s(v, "aup")}\n`,
   },
   {
     id: "gonogo",
@@ -229,12 +276,18 @@ export const artifactTemplates: ArtifactTemplate[] = [
     description: "Final go/no-go with pre-reqs and residual risk.",
     fields: [
       { id: "name", label: "System", type: "text" },
-      { id: "decision", label: "Decision", type: "select", options: ["Go", "Conditional Go", "No-Go"] },
+      {
+        id: "decision",
+        label: "Decision",
+        type: "select",
+        options: ["Go", "Conditional Go", "No-Go"],
+      },
       { id: "prereqs", label: "Pre-reqs before go-live", type: "textarea" },
       { id: "residual", label: "Residual risk + owner", type: "textarea" },
       { id: "sponsors", label: "Sponsors sign-off", type: "textarea" },
     ],
-    markdown: (v) => `# Go / No-Go — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Decision:** ${s(v, "decision")}\n\n## Pre-reqs\n${s(v, "prereqs")}\n\n## Residual risk\n${s(v, "residual")}\n\n## Sponsors\n${s(v, "sponsors")}\n`,
+    markdown: (v) =>
+      `# Go / No-Go — ${s(v, "name")}\n\n_Practice artifact for learning only._\n\n**Decision:** ${s(v, "decision")}\n\n## Pre-reqs\n${s(v, "prereqs")}\n\n## Residual risk\n${s(v, "residual")}\n\n## Sponsors\n${s(v, "sponsors")}\n`,
   },
 ];
 

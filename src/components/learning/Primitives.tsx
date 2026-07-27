@@ -12,30 +12,51 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import type {
-  LessonSection,
-  QuizQuestion,
-  ScenarioDef,
-  MasteryDomain,
-} from "@/content/types";
+import type { LessonSection, QuizQuestion, ScenarioDef, MasteryDomain } from "@/content/types";
 import { progress as progressStore, useProgress } from "@/lib/progress";
 
 export function RiskBadge({ level }: { level: "low" | "medium" | "high" | "info" }) {
   const map = {
-    low: { icon: ShieldCheck, cls: "bg-emerald-500/15 text-emerald-700 border-emerald-500/30 dark:text-emerald-300", label: "Low" },
-    medium: { icon: ShieldQuestion, cls: "bg-amber-500/15 text-amber-700 border-amber-500/30 dark:text-amber-300", label: "Medium" },
-    high: { icon: ShieldAlert, cls: "bg-rose-500/15 text-rose-700 border-rose-500/30 dark:text-rose-300", label: "High" },
-    info: { icon: ShieldCheck, cls: "bg-sky-500/15 text-sky-700 border-sky-500/30 dark:text-sky-300", label: "Info" },
+    low: {
+      icon: ShieldCheck,
+      cls: "bg-emerald-500/15 text-emerald-700 border-emerald-500/30 dark:text-emerald-300",
+      label: "Low",
+    },
+    medium: {
+      icon: ShieldQuestion,
+      cls: "bg-amber-500/15 text-amber-700 border-amber-500/30 dark:text-amber-300",
+      label: "Medium",
+    },
+    high: {
+      icon: ShieldAlert,
+      cls: "bg-rose-500/15 text-rose-700 border-rose-500/30 dark:text-rose-300",
+      label: "High",
+    },
+    info: {
+      icon: ShieldCheck,
+      cls: "bg-sky-500/15 text-sky-700 border-sky-500/30 dark:text-sky-300",
+      label: "Info",
+    },
   } as const;
   const { icon: Icon, cls, label } = map[level];
   return (
-    <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium ${cls}`}>
+    <span
+      className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium ${cls}`}
+    >
       <Icon className="h-3.5 w-3.5" /> {label}
     </span>
   );
 }
 
-export function ProgressRing({ value, size = 72, label }: { value: number; size?: number; label?: string }) {
+export function ProgressRing({
+  value,
+  size = 72,
+  label,
+}: {
+  value: number;
+  size?: number;
+  label?: string;
+}) {
   const stroke = 8;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
@@ -43,7 +64,15 @@ export function ProgressRing({ value, size = 72, label }: { value: number; size?
   return (
     <div className="inline-flex flex-col items-center gap-1">
       <svg width={size} height={size} className="text-primary">
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="currentColor" strokeOpacity="0.15" strokeWidth={stroke} fill="none" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          stroke="currentColor"
+          strokeOpacity="0.15"
+          strokeWidth={stroke}
+          fill="none"
+        />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -55,7 +84,13 @@ export function ProgressRing({ value, size = 72, label }: { value: number; size?
           strokeLinecap="round"
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
-        <text x="50%" y="52%" dominantBaseline="middle" textAnchor="middle" className="fill-foreground text-sm font-semibold">
+        <text
+          x="50%"
+          y="52%"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          className="fill-foreground text-sm font-semibold"
+        >
           {value}%
         </text>
       </svg>
@@ -117,15 +152,21 @@ export function LessonShell({
         <Accordion type="multiple" defaultValue={["simple", "enterprise", "deep"]}>
           <AccordionItem value="simple">
             <AccordionTrigger>Simple explanation</AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed">{section.simple}</AccordionContent>
+            <AccordionContent className="text-muted-foreground leading-relaxed">
+              {section.simple}
+            </AccordionContent>
           </AccordionItem>
           <AccordionItem value="enterprise">
             <AccordionTrigger>Enterprise explanation</AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed">{section.enterprise}</AccordionContent>
+            <AccordionContent className="text-muted-foreground leading-relaxed">
+              {section.enterprise}
+            </AccordionContent>
           </AccordionItem>
           <AccordionItem value="deep">
             <AccordionTrigger>Technical deep dive</AccordionTrigger>
-            <AccordionContent className="text-muted-foreground leading-relaxed">{section.deepDive}</AccordionContent>
+            <AccordionContent className="text-muted-foreground leading-relaxed">
+              {section.deepDive}
+            </AccordionContent>
           </AccordionItem>
           {section.diagram ? (
             <AccordionItem value="diagram">
@@ -139,23 +180,33 @@ export function LessonShell({
             <AccordionTrigger>Common mistakes</AccordionTrigger>
             <AccordionContent>
               <ul className="list-disc pl-5 space-y-1">
-                {section.mistakes.map((m) => <li key={m}>{m}</li>)}
+                {section.mistakes.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
               </ul>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="risks">
-            <AccordionTrigger>Risks <RiskBadge level="high" /></AccordionTrigger>
+            <AccordionTrigger>
+              Risks <RiskBadge level="high" />
+            </AccordionTrigger>
             <AccordionContent>
               <ul className="list-disc pl-5 space-y-1">
-                {section.risks.map((m) => <li key={m}>{m}</li>)}
+                {section.risks.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
               </ul>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="fixes">
-            <AccordionTrigger>Fixes <RiskBadge level="low" /></AccordionTrigger>
+            <AccordionTrigger>
+              Fixes <RiskBadge level="low" />
+            </AccordionTrigger>
             <AccordionContent>
               <ul className="list-disc pl-5 space-y-1">
-                {section.fixes.map((m) => <li key={m}>{m}</li>)}
+                {section.fixes.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
               </ul>
             </AccordionContent>
           </AccordionItem>
@@ -163,7 +214,9 @@ export function LessonShell({
             <AccordionTrigger>Evidence expected</AccordionTrigger>
             <AccordionContent>
               <ul className="list-disc pl-5 space-y-1">
-                {section.evidence.map((m) => <li key={m}>{m}</li>)}
+                {section.evidence.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
               </ul>
             </AccordionContent>
           </AccordionItem>
@@ -188,6 +241,16 @@ export function Quiz({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
 
+  const correctCount = useMemo(
+    () =>
+      questions.reduce((n, q) => {
+        const chosen = answers[q.id];
+        const correct = q.options.find((o) => o.correct)?.id;
+        return n + (chosen && chosen === correct ? 1 : 0);
+      }, 0),
+    [answers, questions],
+  );
+
   if (!questions.length) {
     return (
       <Card>
@@ -198,16 +261,6 @@ export function Quiz({
       </Card>
     );
   }
-
-  const correctCount = useMemo(
-    () =>
-      questions.reduce((n, q) => {
-        const chosen = answers[q.id];
-        const correct = q.options.find((o) => o.correct)?.id;
-        return n + (chosen && chosen === correct ? 1 : 0);
-      }, 0),
-    [answers, questions],
-  );
 
   return (
     <Card>
@@ -226,11 +279,16 @@ export function Quiz({
           return (
             <div key={q.id} className="space-y-2 rounded-md border p-4">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs uppercase">{q.type}</Badge>
+                <Badge variant="outline" className="text-xs uppercase">
+                  {q.type}
+                </Badge>
                 <span className="text-xs text-muted-foreground">Question {i + 1}</span>
               </div>
               <p className="font-medium text-sm">{q.prompt}</p>
-              <RadioGroup value={chosen ?? ""} onValueChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}>
+              <RadioGroup
+                value={chosen ?? ""}
+                onValueChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}
+              >
                 {q.options.map((o) => {
                   const isCorrect = submitted && o.id === correctId;
                   const isWrong = submitted && chosen === o.id && o.id !== correctId;
@@ -242,7 +300,9 @@ export function Quiz({
                       } ${isWrong ? "border-rose-500/60 bg-rose-500/5" : ""}`}
                     >
                       <RadioGroupItem id={`${q.id}-${o.id}`} value={o.id} disabled={submitted} />
-                      <Label htmlFor={`${q.id}-${o.id}`} className="flex-1 cursor-pointer">{o.label}</Label>
+                      <Label htmlFor={`${q.id}-${o.id}`} className="flex-1 cursor-pointer">
+                        {o.label}
+                      </Label>
                       {isCorrect ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : null}
                       {isWrong ? <XCircle className="h-4 w-4 text-rose-600" /> : null}
                     </div>
@@ -250,7 +310,9 @@ export function Quiz({
                 })}
               </RadioGroup>
               {submitted ? (
-                <p className="text-xs text-muted-foreground pt-1"><span className="font-medium">Why:</span> {q.explanation}</p>
+                <p className="text-xs text-muted-foreground pt-1">
+                  <span className="font-medium">Why:</span> {q.explanation}
+                </p>
               ) : null}
             </div>
           );
@@ -271,8 +333,18 @@ export function Quiz({
             </Button>
           ) : (
             <>
-              <Badge>Score: {correctCount}/{questions.length}</Badge>
-              <Button variant="outline" onClick={() => { setSubmitted(false); setAnswers({}); }}>Retry</Button>
+              <Badge>
+                Score: {correctCount}/{questions.length}
+              </Badge>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSubmitted(false);
+                  setAnswers({});
+                }}
+              >
+                Retry
+              </Button>
             </>
           )}
         </div>
@@ -302,7 +374,9 @@ export function ScenarioRunner({ scenario }: { scenario: ScenarioDef }) {
               <CardTitle>{scenario.title}</CardTitle>
               <CardDescription className="pt-1">{scenario.summary}</CardDescription>
             </div>
-            <Badge variant="outline" className="capitalize">{scenario.difficulty}</Badge>
+            <Badge variant="outline" className="capitalize">
+              {scenario.difficulty}
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -323,7 +397,10 @@ export function ScenarioRunner({ scenario }: { scenario: ScenarioDef }) {
               <CardDescription>{step.question}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <RadioGroup value={chosen ?? ""} onValueChange={(v) => setAnswers((a) => ({ ...a, [step.id]: v }))}>
+              <RadioGroup
+                value={chosen ?? ""}
+                onValueChange={(v) => setAnswers((a) => ({ ...a, [step.id]: v }))}
+              >
                 {step.options.map((o) => {
                   const isIdeal = submitted && o.id === ideal;
                   const isWrong = submitted && chosen === o.id && o.id !== ideal;
@@ -335,13 +412,17 @@ export function ScenarioRunner({ scenario }: { scenario: ScenarioDef }) {
                       } ${isWrong ? "border-rose-500/60 bg-rose-500/5" : ""}`}
                     >
                       <RadioGroupItem id={`${step.id}-${o.id}`} value={o.id} disabled={submitted} />
-                      <Label htmlFor={`${step.id}-${o.id}`} className="flex-1 cursor-pointer">{o.label}</Label>
+                      <Label htmlFor={`${step.id}-${o.id}`} className="flex-1 cursor-pointer">
+                        {o.label}
+                      </Label>
                     </div>
                   );
                 })}
               </RadioGroup>
               {submitted ? (
-                <p className="pt-2 text-xs text-muted-foreground"><span className="font-medium">Ideal:</span> {step.explain}</p>
+                <p className="pt-2 text-xs text-muted-foreground">
+                  <span className="font-medium">Ideal:</span> {step.explain}
+                </p>
               ) : null}
             </CardContent>
           </Card>
@@ -367,7 +448,9 @@ export function ScenarioRunner({ scenario }: { scenario: ScenarioDef }) {
                 >
                   <div className="flex items-center gap-2">
                     <RadioGroupItem id={`dec-${o.id}`} value={o.id} disabled={submitted} />
-                    <Label htmlFor={`dec-${o.id}`} className="flex-1 cursor-pointer capitalize">{o.label}</Label>
+                    <Label htmlFor={`dec-${o.id}`} className="flex-1 cursor-pointer capitalize">
+                      {o.label}
+                    </Label>
                   </div>
                   {submitted ? <p className="pl-6 text-xs text-muted-foreground">{o.why}</p> : null}
                 </div>
@@ -421,7 +504,14 @@ export function ScenarioRunner({ scenario }: { scenario: ScenarioDef }) {
           <CardContent>
             <p className="text-sm text-muted-foreground leading-relaxed">{scenario.idealAnswer}</p>
             <div className="mt-4">
-              <Button variant="outline" onClick={() => { setSubmitted(false); setAnswers({}); setDecision(undefined); }}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSubmitted(false);
+                  setAnswers({});
+                  setDecision(undefined);
+                }}
+              >
                 Retry
               </Button>
             </div>
@@ -440,14 +530,24 @@ export function CoachPanel({ tips }: { tips: string[] }) {
       </CardHeader>
       <CardContent>
         <ul className="list-disc pl-5 space-y-2 text-sm">
-          {tips.map((t) => <li key={t}>{t}</li>)}
+          {tips.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
         </ul>
       </CardContent>
     </Card>
   );
 }
 
-export function PageHeader({ title, subtitle, right }: { title: string; subtitle?: string; right?: React.ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  right,
+}: {
+  title: string;
+  subtitle?: string;
+  right?: React.ReactNode;
+}) {
   return (
     <div className="flex items-start justify-between gap-4 pb-6">
       <div>

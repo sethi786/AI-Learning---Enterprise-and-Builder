@@ -17,8 +17,7 @@ const scaffoldPlatform = (
   what,
   useCases: [`Enterprise use cases for ${name} (add real cases as you learn)`],
   adminResponsibilities: ["Identity, RBAC, feature enablement, audit logs, cost"],
-  architecture:
-    "Fill in identity → app → orchestrator → model → data flow for this platform.",
+  architecture: "Fill in identity → app → orchestrator → model → data flow for this platform.",
   securityModel: ["SSO/MFA", "Admin RBAC", "Audit logs"],
   iamModel: ["SAML/OIDC", "SCIM provisioning where supported"],
   dataModel: ["Prompt/response retention", "Enterprise data boundary"],
@@ -60,11 +59,7 @@ export const platforms: PlatformDef[] = [
       "Conditional Access + MFA",
       "Customer Key / DKE for high-sensitivity",
     ],
-    iamModel: [
-      "Entra ID SSO (SAML/OIDC)",
-      "Group-based licensing",
-      "PIM for admin roles",
-    ],
+    iamModel: ["Entra ID SSO (SAML/OIDC)", "Group-based licensing", "PIM for admin roles"],
     dataModel: [
       "Retrieval respects existing Graph ACLs (garbage-in-permissions = garbage-out)",
       "Prompts/responses retained per tenant policy",
@@ -75,10 +70,7 @@ export const platforms: PlatformDef[] = [
       "Purview retention + eDiscovery apply",
       "DSR handled via existing M365 tooling",
     ],
-    legal: [
-      "Copilot Copyright Commitment",
-      "Standard Microsoft OST + DPA apply",
-    ],
+    legal: ["Copilot Copyright Commitment", "Standard Microsoft OST + DPA apply"],
     dataGovernance: [
       "Oversharing in SharePoint is Copilot's #1 pre-req problem",
       "Run SharePoint Advanced Management + Restrict Access Control before rollout",
@@ -109,7 +101,8 @@ export const platforms: PlatformDef[] = [
       {
         id: "q-m365-1",
         type: "mc",
-        prompt: "Copilot returns a document the requester should not see. What is the most likely root cause?",
+        prompt:
+          "Copilot returns a document the requester should not see. What is the most likely root cause?",
         options: [
           { id: "a", label: "Copilot ignores Graph ACLs" },
           { id: "b", label: "SharePoint oversharing — the ACL already allowed it", correct: true },
@@ -201,7 +194,8 @@ export const platforms: PlatformDef[] = [
       {
         id: "q-cgpte-1",
         type: "choose-control",
-        prompt: "Legal is worried about employees pasting client data into personal ChatGPT accounts. Which control most directly reduces this?",
+        prompt:
+          "Legal is worried about employees pasting client data into personal ChatGPT accounts. Which control most directly reduces this?",
         options: [
           { id: "a", label: "Turn off memory in the workspace" },
           { id: "b", label: "Domain capture / verified domain claim", correct: true },
@@ -215,10 +209,15 @@ export const platforms: PlatformDef[] = [
       {
         id: "q-cgpte-2",
         type: "find-risk",
-        prompt: "A team shares a custom GPT built on confidential contract templates with the whole workspace. Biggest risk?",
+        prompt:
+          "A team shares a custom GPT built on confidential contract templates with the whole workspace. Biggest risk?",
         options: [
           { id: "a", label: "Model may hallucinate template names" },
-          { id: "b", label: "Users outside the contracts team can retrieve contract content via the GPT", correct: true },
+          {
+            id: "b",
+            label: "Users outside the contracts team can retrieve contract content via the GPT",
+            correct: true,
+          },
           { id: "c", label: "Rate limits will be exceeded" },
           { id: "d", label: "Memory will retain the templates" },
         ],
@@ -312,19 +311,84 @@ export const platforms: PlatformDef[] = [
       },
     ],
   }),
-  scaffoldPlatform("copilot-studio", "Copilot Studio", "saas-productivity", "Low-code builder for M365 Copilot agents with actions and connectors."),
-  scaffoldPlatform("chatgpt-workspace-agents", "ChatGPT Workspace Agents", "saas-chat", "OpenAI workspace agents with tools and connectors."),
-  scaffoldPlatform("gemini-enterprise", "Gemini Enterprise", "saas-productivity", "Google's enterprise assistant grounded in Workspace + connectors."),
-  scaffoldPlatform("claude-enterprise", "Claude Enterprise", "saas-chat", "Anthropic's enterprise workspace with SSO, admin, and no training on business data."),
-  scaffoldPlatform("claude-code", "Claude Code", "coding-assistant", "Terminal-based coding assistant with repo context and tool use."),
-  scaffoldPlatform("codex", "Codex", "coding-assistant", "OpenAI coding assistant for engineering workflows."),
-  scaffoldPlatform("replit", "Replit", "coding-assistant", "Cloud coding + AI agent environment for teams."),
-  scaffoldPlatform("vertex-ai", "Google Vertex AI", "cloud-ai", "Google Cloud's platform for building AI apps grounded in Workspace and BigQuery."),
-  scaffoldPlatform("aws-bedrock", "AWS Bedrock", "cloud-ai", "AWS's managed foundation-model platform with knowledge bases and agents."),
-  scaffoldPlatform("internal-ai-apps", "Internal AI Apps", "internal", "In-house apps built on top of hosted models."),
-  scaffoldPlatform("rag-systems", "RAG Systems", "pattern", "Retrieval-augmented generation systems across platforms."),
-  scaffoldPlatform("ai-agents", "AI Agents", "pattern", "Agentic patterns with tools, memory, and planning."),
-  scaffoldPlatform("ai-connectors", "AI Connectors", "pattern", "Cross-platform connectors that give AI systems access to enterprise data."),
+  scaffoldPlatform(
+    "copilot-studio",
+    "Copilot Studio",
+    "saas-productivity",
+    "Low-code builder for M365 Copilot agents with actions and connectors.",
+  ),
+  scaffoldPlatform(
+    "chatgpt-workspace-agents",
+    "ChatGPT Workspace Agents",
+    "saas-chat",
+    "OpenAI workspace agents with tools and connectors.",
+  ),
+  scaffoldPlatform(
+    "gemini-enterprise",
+    "Gemini Enterprise",
+    "saas-productivity",
+    "Google's enterprise assistant grounded in Workspace + connectors.",
+  ),
+  scaffoldPlatform(
+    "claude-enterprise",
+    "Claude Enterprise",
+    "saas-chat",
+    "Anthropic's enterprise workspace with SSO, admin, and no training on business data.",
+  ),
+  scaffoldPlatform(
+    "claude-code",
+    "Claude Code",
+    "coding-assistant",
+    "Terminal-based coding assistant with repo context and tool use.",
+  ),
+  scaffoldPlatform(
+    "codex",
+    "Codex",
+    "coding-assistant",
+    "OpenAI coding assistant for engineering workflows.",
+  ),
+  scaffoldPlatform(
+    "replit",
+    "Replit",
+    "coding-assistant",
+    "Cloud coding + AI agent environment for teams.",
+  ),
+  scaffoldPlatform(
+    "vertex-ai",
+    "Google Vertex AI",
+    "cloud-ai",
+    "Google Cloud's platform for building AI apps grounded in Workspace and BigQuery.",
+  ),
+  scaffoldPlatform(
+    "aws-bedrock",
+    "AWS Bedrock",
+    "cloud-ai",
+    "AWS's managed foundation-model platform with knowledge bases and agents.",
+  ),
+  scaffoldPlatform(
+    "internal-ai-apps",
+    "Internal AI Apps",
+    "internal",
+    "In-house apps built on top of hosted models.",
+  ),
+  scaffoldPlatform(
+    "rag-systems",
+    "RAG Systems",
+    "pattern",
+    "Retrieval-augmented generation systems across platforms.",
+  ),
+  scaffoldPlatform(
+    "ai-agents",
+    "AI Agents",
+    "pattern",
+    "Agentic patterns with tools, memory, and planning.",
+  ),
+  scaffoldPlatform(
+    "ai-connectors",
+    "AI Connectors",
+    "pattern",
+    "Cross-platform connectors that give AI systems access to enterprise data.",
+  ),
 ];
 
 export const platformsById: Record<string, PlatformDef> = Object.fromEntries(

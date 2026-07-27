@@ -196,7 +196,11 @@ export const progress = {
         masteryPoints: mp,
       };
       const kind: EvidenceKind =
-        outcome === "ideal" ? "scenario_ideal" : outcome === "failed" ? "scenario_failed" : "scenario_partial";
+        outcome === "ideal"
+          ? "scenario_ideal"
+          : outcome === "failed"
+            ? "scenario_failed"
+            : "scenario_partial";
       next = recordEvidenceInto(next, competencyIds, kind, id);
       return next;
     });
@@ -213,10 +217,7 @@ export const progress = {
   addNote(title: string, body: string) {
     update((s) => ({
       ...s,
-      notes: [
-        { id: crypto.randomUUID(), title, body, ts: Date.now() },
-        ...s.notes,
-      ],
+      notes: [{ id: crypto.randomUUID(), title, body, ts: Date.now() }, ...s.notes],
     }));
   },
   updateNote(id: string, title: string, body: string) {
@@ -228,11 +229,7 @@ export const progress = {
   deleteNote(id: string) {
     update((s) => ({ ...s, notes: s.notes.filter((n) => n.id !== id) }));
   },
-  saveArtifact(
-    templateId: string,
-    name: string,
-    values: Record<string, string | string[]>,
-  ) {
+  saveArtifact(templateId: string, name: string, values: Record<string, string | string[]>) {
     update((s) => ({
       ...s,
       artifacts: [
@@ -267,10 +264,7 @@ export const progress = {
   },
   exportNotesMarkdown() {
     return state.notes
-      .map(
-        (n) =>
-          `# ${n.title}\n\n_${new Date(n.ts).toLocaleString()}_\n\n${n.body}\n\n---\n`,
-      )
+      .map((n) => `# ${n.title}\n\n_${new Date(n.ts).toLocaleString()}_\n\n${n.body}\n\n---\n`)
       .join("\n");
   },
 };

@@ -18,7 +18,10 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — AI Assurance & Learning Platform" },
-      { name: "description", content: "Sign in to persist scenario runs, evidence, and review-board transcripts." },
+      {
+        name: "description",
+        content: "Sign in to persist scenario runs, evidence, and review-board transcripts.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -47,14 +50,16 @@ function AuthPage() {
   }, [loading, user, navigate, target]);
 
   async function signIn() {
-    setErr(null); setBusy(true);
+    setErr(null);
+    setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) setErr(error.message);
   }
 
   async function signUp() {
-    setErr(null); setBusy(true);
+    setErr(null);
+    setBusy(true);
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -82,13 +87,18 @@ function AuthPage() {
         <CardHeader>
           <CardTitle>Sign in to the Assurance Platform</CardTitle>
           <CardDescription>
-            Runs, evidence, decisions and audit events persist to your account. Practice only — do not enter real client data or production secrets.
+            Runs, evidence, decisions and audit events persist to your account. Practice only — do
+            not enter real client data or production secrets.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" className="w-full" onClick={google}>Continue with Google</Button>
+          <Button variant="outline" className="w-full" onClick={google}>
+            Continue with Google
+          </Button>
           <div className="relative">
-            <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">or</span>
             </div>
@@ -99,18 +109,58 @@ function AuthPage() {
               <TabsTrigger value="signup">Create account</TabsTrigger>
             </TabsList>
             <TabsContent value="signin" className="space-y-3">
-              <div className="space-y-1"><Label>Email</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
-              <div className="space-y-1"><Label>Password</Label><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /></div>
-              <Button className="w-full" onClick={signIn} disabled={busy || !email || !password}>Sign in</Button>
+              <div className="space-y-1">
+                <Label>Email</Label>
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className="space-y-1">
+                <Label>Password</Label>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <Button className="w-full" onClick={signIn} disabled={busy || !email || !password}>
+                Sign in
+              </Button>
             </TabsContent>
             <TabsContent value="signup" className="space-y-3">
-              <div className="space-y-1"><Label>Display name</Label><Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Optional" /></div>
-              <div className="space-y-1"><Label>Email</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
-              <div className="space-y-1"><Label>Password</Label><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} minLength={8} /></div>
-              <Button className="w-full" onClick={signUp} disabled={busy || !email || password.length < 8}>Create account</Button>
+              <div className="space-y-1">
+                <Label>Display name</Label>
+                <Input
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Optional"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label>Email</Label>
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className="space-y-1">
+                <Label>Password</Label>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={8}
+                />
+              </div>
+              <Button
+                className="w-full"
+                onClick={signUp}
+                disabled={busy || !email || password.length < 8}
+              >
+                Create account
+              </Button>
             </TabsContent>
           </Tabs>
-          {err && <Alert><AlertDescription>{err}</AlertDescription></Alert>}
+          {err && (
+            <Alert>
+              <AlertDescription>{err}</AlertDescription>
+            </Alert>
+          )}
         </CardContent>
       </Card>
     </div>

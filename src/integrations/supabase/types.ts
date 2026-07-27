@@ -1,215 +1,209 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
-  }
+    PostgrestVersion: "14.5";
+  };
   public: {
     Tables: {
       policy_decisions: {
         Row: {
-          created_at: string
-          decision: string
-          facts: Json
-          failed_rules: Json
-          id: string
-          policy_id: string
-          policy_version: string
-          required_remediation: Json
-          run_id: string
-          user_id: string
-        }
+          created_at: string;
+          decision: string;
+          facts: Json;
+          failed_rules: Json;
+          id: string;
+          policy_id: string;
+          policy_version: string;
+          required_remediation: Json;
+          run_id: string;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          decision: string
-          facts?: Json
-          failed_rules?: Json
-          id?: string
-          policy_id: string
-          policy_version: string
-          required_remediation?: Json
-          run_id: string
-          user_id: string
-        }
+          created_at?: string;
+          decision: string;
+          facts?: Json;
+          failed_rules?: Json;
+          id?: string;
+          policy_id: string;
+          policy_version: string;
+          required_remediation?: Json;
+          run_id: string;
+          user_id: string;
+        };
         Update: {
-          created_at?: string
-          decision?: string
-          facts?: Json
-          failed_rules?: Json
-          id?: string
-          policy_id?: string
-          policy_version?: string
-          required_remediation?: Json
-          run_id?: string
-          user_id?: string
-        }
+          created_at?: string;
+          decision?: string;
+          facts?: Json;
+          failed_rules?: Json;
+          id?: string;
+          policy_id?: string;
+          policy_version?: string;
+          required_remediation?: Json;
+          run_id?: string;
+          user_id?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "policy_decisions_run_id_fkey"
-            columns: ["run_id"]
-            isOneToOne: false
-            referencedRelation: "scenario_runs"
-            referencedColumns: ["id"]
+            foreignKeyName: "policy_decisions_run_id_fkey";
+            columns: ["run_id"];
+            isOneToOne: false;
+            referencedRelation: "scenario_runs";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       profiles: {
         Row: {
-          created_at: string
-          display_name: string | null
-          id: string
-          role_focus: string | null
-          updated_at: string
-        }
+          created_at: string;
+          display_name: string | null;
+          id: string;
+          role_focus: string | null;
+          updated_at: string;
+        };
         Insert: {
-          created_at?: string
-          display_name?: string | null
-          id: string
-          role_focus?: string | null
-          updated_at?: string
-        }
+          created_at?: string;
+          display_name?: string | null;
+          id: string;
+          role_focus?: string | null;
+          updated_at?: string;
+        };
         Update: {
-          created_at?: string
-          display_name?: string | null
-          id?: string
-          role_focus?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          display_name?: string | null;
+          id?: string;
+          role_focus?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       scenario_events: {
         Row: {
-          created_at: string
-          id: number
-          kind: Database["public"]["Enums"]["event_kind"]
-          payload: Json
-          run_id: string
-          severity: string
-          stage: string | null
-          user_id: string
-        }
+          created_at: string;
+          id: number;
+          kind: Database["public"]["Enums"]["event_kind"];
+          payload: Json;
+          run_id: string;
+          severity: string;
+          stage: string | null;
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id?: number
-          kind: Database["public"]["Enums"]["event_kind"]
-          payload?: Json
-          run_id: string
-          severity?: string
-          stage?: string | null
-          user_id: string
-        }
+          created_at?: string;
+          id?: number;
+          kind: Database["public"]["Enums"]["event_kind"];
+          payload?: Json;
+          run_id: string;
+          severity?: string;
+          stage?: string | null;
+          user_id: string;
+        };
         Update: {
-          created_at?: string
-          id?: number
-          kind?: Database["public"]["Enums"]["event_kind"]
-          payload?: Json
-          run_id?: string
-          severity?: string
-          stage?: string | null
-          user_id?: string
-        }
+          created_at?: string;
+          id?: number;
+          kind?: Database["public"]["Enums"]["event_kind"];
+          payload?: Json;
+          run_id?: string;
+          severity?: string;
+          stage?: string | null;
+          user_id?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "scenario_events_run_id_fkey"
-            columns: ["run_id"]
-            isOneToOne: false
-            referencedRelation: "scenario_runs"
-            referencedColumns: ["id"]
+            foreignKeyName: "scenario_events_run_id_fkey";
+            columns: ["run_id"];
+            isOneToOne: false;
+            referencedRelation: "scenario_runs";
+            referencedColumns: ["id"];
           },
-        ]
-      }
+        ];
+      };
       scenario_runs: {
         Row: {
-          competencies: Json
-          current_stage: string | null
-          finished_at: string | null
-          id: string
-          max_score: number | null
-          scenario_id: string
-          scenario_version: string
-          score: number | null
-          started_at: string
-          state: Json
-          status: Database["public"]["Enums"]["run_status"]
-          updated_at: string
-          user_id: string
-        }
+          competencies: Json;
+          current_stage: string | null;
+          finished_at: string | null;
+          id: string;
+          max_score: number | null;
+          scenario_id: string;
+          scenario_version: string;
+          score: number | null;
+          started_at: string;
+          state: Json;
+          status: Database["public"]["Enums"]["run_status"];
+          updated_at: string;
+          user_id: string;
+        };
         Insert: {
-          competencies?: Json
-          current_stage?: string | null
-          finished_at?: string | null
-          id?: string
-          max_score?: number | null
-          scenario_id: string
-          scenario_version?: string
-          score?: number | null
-          started_at?: string
-          state?: Json
-          status?: Database["public"]["Enums"]["run_status"]
-          updated_at?: string
-          user_id: string
-        }
+          competencies?: Json;
+          current_stage?: string | null;
+          finished_at?: string | null;
+          id?: string;
+          max_score?: number | null;
+          scenario_id: string;
+          scenario_version?: string;
+          score?: number | null;
+          started_at?: string;
+          state?: Json;
+          status?: Database["public"]["Enums"]["run_status"];
+          updated_at?: string;
+          user_id: string;
+        };
         Update: {
-          competencies?: Json
-          current_stage?: string | null
-          finished_at?: string | null
-          id?: string
-          max_score?: number | null
-          scenario_id?: string
-          scenario_version?: string
-          score?: number | null
-          started_at?: string
-          state?: Json
-          status?: Database["public"]["Enums"]["run_status"]
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
+          competencies?: Json;
+          current_stage?: string | null;
+          finished_at?: string | null;
+          id?: string;
+          max_score?: number | null;
+          scenario_id?: string;
+          scenario_version?: string;
+          score?: number | null;
+          started_at?: string;
+          state?: Json;
+          status?: Database["public"]["Enums"]["run_status"];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       user_roles: {
         Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
+          created_at: string;
+          id: string;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
+          created_at?: string;
+          id?: string;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
-    }
+          created_at?: string;
+          id?: string;
+          role?: Database["public"]["Enums"]["app_role"];
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       has_role: {
         Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-    }
+          _role: Database["public"]["Enums"]["app_role"];
+          _user_id: string;
+        };
+        Returns: boolean;
+      };
+    };
     Enums: {
-      app_role: "learner" | "reviewer" | "admin"
+      app_role: "learner" | "reviewer" | "admin";
       event_kind:
         | "stage_enter"
         | "config_change"
@@ -223,131 +217,125 @@ export type Database = {
         | "artifact"
         | "sar_answer"
         | "decision"
-        | "note"
-      run_status: "in_progress" | "passed" | "failed" | "abandoned"
-    }
+        | "note";
+      run_status: "in_progress" | "passed" | "failed" | "abandoned";
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+    : never;
 
 export const Constants = {
   public: {
@@ -371,4 +359,4 @@ export const Constants = {
       run_status: ["in_progress", "passed", "failed", "abandoned"],
     },
   },
-} as const
+} as const;

@@ -5,7 +5,15 @@ import { Button } from "@/components/ui/button";
 import { labsById } from "@/content/labs";
 
 export const Route = createFileRoute("/simulators/saas-onboarding")({
-  head: () => ({ meta: [{ title: "SaaS AI Onboarding Simulator" }, { name: "description", content: "Onboard SaaS AI tools with admin, security, privacy, legal, ops, and FinOps." }] }),
+  head: () => ({
+    meta: [
+      { title: "SaaS AI Onboarding Simulator" },
+      {
+        name: "description",
+        content: "Onboard SaaS AI tools with admin, security, privacy, legal, ops, and FinOps.",
+      },
+    ],
+  }),
   component: () => {
     const lab = labsById["saas-onboarding"]!;
     return (
@@ -13,7 +21,13 @@ export const Route = createFileRoute("/simulators/saas-onboarding")({
         <PageHeader
           title="SaaS AI Onboarding Simulator"
           subtitle="Onboard ChatGPT Enterprise, Copilot, Gemini, Claude, Replit, Codex — end-to-end."
-          right={<Button asChild><Link to="/labs/$labId" params={{ labId: "saas-onboarding" }}>Open full lab</Link></Button>}
+          right={
+            <Button asChild>
+              <Link to="/labs/$labId" params={{ labId: "saas-onboarding" }}>
+                Open full lab
+              </Link>
+            </Button>
+          }
         />
         <div className="grid gap-3 md:grid-cols-2">
           {lab.modules.map((m) => (
@@ -24,7 +38,9 @@ export const Route = createFileRoute("/simulators/saas-onboarding")({
               </CardHeader>
               <CardContent>
                 <Button asChild size="sm" variant="outline">
-                  <Link to="/labs/$labId" params={{ labId: "saas-onboarding" }} hash={m.id}>Open module</Link>
+                  <Link to="/labs/$labId" params={{ labId: "saas-onboarding" }} hash={m.id}>
+                    Open module
+                  </Link>
                 </Button>
               </CardContent>
             </Card>

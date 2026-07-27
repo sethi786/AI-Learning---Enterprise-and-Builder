@@ -221,7 +221,14 @@ export const roles: RoleDef[] = [
     masteryDomains: ["architecture", "agent_rag_connector"],
     labIds: ["rag", "agent", "in-house-app", "ai-engineering"],
     scenarioIds: ["sc-rag-sharepoint", "sc-bedrock-case-assistant"],
-    platformIds: ["azure-ai-foundry", "vertex-ai", "aws-bedrock", "internal-ai-apps", "rag-systems", "ai-agents"],
+    platformIds: [
+      "azure-ai-foundry",
+      "vertex-ai",
+      "aws-bedrock",
+      "internal-ai-apps",
+      "rag-systems",
+      "ai-agents",
+    ],
     stages: {
       beginner: ["Read reference patterns"],
       intermediate: ["Produce a TAD for a RAG app"],
@@ -268,9 +275,12 @@ export const roles: RoleDef[] = [
       "Data exfiltration via model outputs",
     ],
     tools: [
-      "OWASP LLM Top 10", "MITRE ATLAS",
-      "SAST/DAST/SCA", "Container/IaC scanners",
-      "Cloud CSPM", "SIEM/SOAR",
+      "OWASP LLM Top 10",
+      "MITRE ATLAS",
+      "SAST/DAST/SCA",
+      "Container/IaC scanners",
+      "Cloud CSPM",
+      "SIEM/SOAR",
     ],
     technicalSkills: [
       "Threat modeling",
@@ -279,12 +289,7 @@ export const roles: RoleDef[] = [
       "Prompt injection defense patterns",
     ],
     governanceSkills: ["SAR governance", "Residual risk articulation"],
-    securitySkills: [
-      "OWASP LLM Top 10",
-      "MITRE ATLAS",
-      "Kill-switch design",
-      "HITL patterns",
-    ],
+    securitySkills: ["OWASP LLM Top 10", "MITRE ATLAS", "Kill-switch design", "HITL patterns"],
     artifacts: ["SAR report", "Threat model", "Control mapping"],
     coach: [
       "Assume every retrieved document contains attacker instructions.",
@@ -361,6 +366,4 @@ export const roles: RoleDef[] = [
   },
 ];
 
-export const rolesById: Record<string, RoleDef> = Object.fromEntries(
-  roles.map((r) => [r.id, r]),
-);
+export const rolesById: Record<string, RoleDef> = Object.fromEntries(roles.map((r) => [r.id, r]));

@@ -29,27 +29,38 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import type {
-  CfgMap,
-  CfgValue,
-  LabBlueprint,
-  LabInjection,
-} from "@/content/labEngine";
+import type { CfgMap, CfgValue, LabBlueprint, LabInjection } from "@/content/labEngine";
 import { progress as progressStore } from "@/lib/progress";
 
-type LogEntry = { ts: number; text: string; kind?: "info" | "warn" | "error" | "attack" | "policy" };
+type LogEntry = {
+  ts: number;
+  text: string;
+  kind?: "info" | "warn" | "error" | "attack" | "policy";
+};
 
 function kindTone(k: LabInjection["kind"]) {
   switch (k) {
     case "attack":
-      return { icon: ShieldAlert, cls: "border-rose-500/60 bg-rose-500/5 text-rose-700 dark:text-rose-300" };
+      return {
+        icon: ShieldAlert,
+        cls: "border-rose-500/60 bg-rose-500/5 text-rose-700 dark:text-rose-300",
+      };
     case "failure":
-      return { icon: Bug, cls: "border-amber-500/60 bg-amber-500/5 text-amber-700 dark:text-amber-300" };
+      return {
+        icon: Bug,
+        cls: "border-amber-500/60 bg-amber-500/5 text-amber-700 dark:text-amber-300",
+      };
     case "drift":
-      return { icon: AlertTriangle, cls: "border-orange-500/60 bg-orange-500/5 text-orange-700 dark:text-orange-300" };
+      return {
+        icon: AlertTriangle,
+        cls: "border-orange-500/60 bg-orange-500/5 text-orange-700 dark:text-orange-300",
+      };
     case "policy":
     default:
-      return { icon: AlertTriangle, cls: "border-sky-500/60 bg-sky-500/5 text-sky-700 dark:text-sky-300" };
+      return {
+        icon: AlertTriangle,
+        cls: "border-sky-500/60 bg-sky-500/5 text-sky-700 dark:text-sky-300",
+      };
   }
 }
 
@@ -111,9 +122,7 @@ function ConfigPanel({
                 <Input
                   type="number"
                   value={Number(v)}
-                  onChange={(e) =>
-                    setCfg({ ...cfg, [f.id]: Number(e.target.value) })
-                  }
+                  onChange={(e) => setCfg({ ...cfg, [f.id]: Number(e.target.value) })}
                   disabled={locked}
                 />
               )}
@@ -152,12 +161,12 @@ function LogStream({ logs }: { logs: LogEntry[] }) {
                 l.kind === "attack"
                   ? "text-rose-300"
                   : l.kind === "warn"
-                  ? "text-amber-300"
-                  : l.kind === "error"
-                  ? "text-rose-400"
-                  : l.kind === "policy"
-                  ? "text-sky-300"
-                  : "text-zinc-100";
+                    ? "text-amber-300"
+                    : l.kind === "error"
+                      ? "text-rose-400"
+                      : l.kind === "policy"
+                        ? "text-sky-300"
+                        : "text-zinc-100";
               return (
                 <div key={i} className={color}>
                   <span className="text-zinc-500">
@@ -198,16 +207,10 @@ function InjectionCard({
           </Badge>
           <CardTitle className="text-base">{injection.title}</CardTitle>
         </div>
-        <CardDescription className="pt-1 text-foreground/80">
-          {injection.prompt}
-        </CardDescription>
+        <CardDescription className="pt-1 text-foreground/80">{injection.prompt}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        <RadioGroup
-          value={choiceId ?? ""}
-          onValueChange={onChoose}
-          disabled={locked}
-        >
+        <RadioGroup value={choiceId ?? ""} onValueChange={onChoose} disabled={locked}>
           {injection.choices.map((c) => {
             const revealed = !!choiceId;
             const isChosen = choiceId === c.id;
@@ -239,9 +242,7 @@ function InjectionCard({
                   ) : null}
                 </div>
                 {revealed && isChosen ? (
-                  <p className="pl-6 pt-2 text-xs text-muted-foreground">
-                    {c.explain}
-                  </p>
+                  <p className="pl-6 pt-2 text-xs text-muted-foreground">{c.explain}</p>
                 ) : null}
               </div>
             );
@@ -286,10 +287,7 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
 
   function appendLogs(lines: string[], kind: LogEntry["kind"] = "info") {
     const now = Date.now();
-    setLogs((prev) => [
-      ...prev,
-      ...lines.map((text, i) => ({ ts: now + i, text, kind })),
-    ]);
+    setLogs((prev) => [...prev, ...lines.map((text, i) => ({ ts: now + i, text, kind }))]);
   }
 
   function start() {
@@ -370,10 +368,7 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
       })),
     [blueprint.rubric, cfg],
   );
-  const rubricScore = rubricResults.reduce(
-    (n, r) => n + (r.passed ? r.weight : 0),
-    0,
-  );
+  const rubricScore = rubricResults.reduce((n, r) => n + (r.passed ? r.weight : 0), 0);
   const rubricMax = blueprint.rubric.reduce((n, r) => n + r.weight, 0);
 
   const injectionScore = blueprint.injections.reduce((n, inj) => {
@@ -412,12 +407,7 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
       const ratio = totalMax > 0 ? totalScore / totalMax : 0;
       const kind =
         ratio >= 0.8 ? "scenario_ideal" : ratio >= 0.5 ? "scenario_partial" : "scenario_failed";
-      progressStore.recordEvidence(
-        blueprint.competencyIds,
-        kind,
-        `lab:${blueprint.id}`,
-        ratio,
-      );
+      progressStore.recordEvidence(blueprint.competencyIds, kind, `lab:${blueprint.id}`, ratio);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
@@ -455,7 +445,9 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
                 <CardTitle>{blueprint.name}</CardTitle>
                 <CardDescription className="pt-1">{blueprint.tagline}</CardDescription>
               </div>
-              <Badge variant="outline" className="capitalize">{blueprint.domain.replace(/_/g, " ")}</Badge>
+              <Badge variant="outline" className="capitalize">
+                {blueprint.domain.replace(/_/g, " ")}
+              </Badge>
             </div>
           </CardHeader>
           <CardContent>
@@ -531,15 +523,13 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
               <CardHeader>
                 <CardTitle className="text-base">Scoring rubric</CardTitle>
                 <CardDescription>
-                  Configuration score: {rubricScore} / {rubricMax} · Incident score: {injectionScore} / {injectionMax}
+                  Configuration score: {rubricScore} / {rubricMax} · Incident score:{" "}
+                  {injectionScore} / {injectionMax}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 {rubricResults.map((r) => (
-                  <div
-                    key={r.id}
-                    className="flex items-start gap-3 rounded-md border p-3 text-sm"
-                  >
+                  <div key={r.id} className="flex items-start gap-3 rounded-md border p-3 text-sm">
                     {r.passed ? (
                       <CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-600" />
                     ) : (
@@ -585,10 +575,20 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
                     </CardDescription>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={downloadArtifact} className="gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={downloadArtifact}
+                      className="gap-1"
+                    >
                       <FileDown className="h-4 w-4" /> Download
                     </Button>
-                    <Button size="sm" onClick={saveArtifact} disabled={artifactSaved} className="gap-1">
+                    <Button
+                      size="sm"
+                      onClick={saveArtifact}
+                      disabled={artifactSaved}
+                      className="gap-1"
+                    >
                       <Save className="h-4 w-4" /> {artifactSaved ? "Saved" : "Save to /artifacts"}
                     </Button>
                   </div>
@@ -601,7 +601,8 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
                   className="min-h-72 font-mono text-xs"
                 />
                 <p className="pt-2 text-[11px] text-muted-foreground">
-                  Practice artifact only. Do not use for real approvals, real risk acceptance, or production evidence.
+                  Practice artifact only. Do not use for real approvals, real risk acceptance, or
+                  production evidence.
                 </p>
               </CardContent>
             </Card>
@@ -627,9 +628,7 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
                 ) : (
                   <XCircle className="h-3.5 w-3.5 text-muted-foreground" />
                 )}
-                <span className={r.passed ? "" : "text-muted-foreground"}>
-                  {r.label}
-                </span>
+                <span className={r.passed ? "" : "text-muted-foreground"}>{r.label}</span>
               </div>
             ))}
           </CardContent>

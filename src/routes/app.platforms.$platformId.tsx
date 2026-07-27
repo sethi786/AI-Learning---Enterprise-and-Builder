@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { platformsById } from "@/content/platforms";
 import { scenariosById } from "@/content/scenarios";
 
-export const Route = createFileRoute("/platforms/$platformId")({
+export const Route = createFileRoute("/app/platforms/$platformId")({
   loader: ({ params }) => {
     const platform = platformsById[params.platformId];
     if (!platform) throw notFound();
@@ -97,7 +97,7 @@ function PlatformPage() {
           </CardHeader>
           <CardContent>
             <Link
-              to="/scenarios/$scenarioId"
+              to="/app/scenarios/$scenarioId"
               params={{ scenarioId: sc.id }}
               className="text-primary underline text-sm"
             >

@@ -11,8 +11,6 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AppSidebar } from "@/components/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -123,28 +121,18 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Only app-wide concerns live here. Layout chrome belongs to the layout
+ * routes: `app.tsx` owns the portal sidebar, `_site.tsx` owns the marketing
+ * header and footer. That keeps `/auth`, 404s, and error screens full-page.
+ */
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-background">
-          <AppSidebar />
-          <div className="flex flex-1 flex-col">
-            <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur">
-              <SidebarTrigger />
-              <span className="text-sm font-medium text-muted-foreground">
-                Enterprise AI Career Learning Simulator
-              </span>
-            </header>
-            <main className="flex-1 p-6">
-              <Outlet />
-            </main>
-          </div>
-        </div>
-        <Toaster />
-      </SidebarProvider>
+      <Outlet />
+      <Toaster />
     </QueryClientProvider>
   );
 }

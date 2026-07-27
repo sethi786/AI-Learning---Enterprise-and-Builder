@@ -28,9 +28,12 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+// Signing in lands you in the portal, not on the marketing page. Anything that
+// isn't a plain same-origin path is rejected so `next` can't be used to bounce
+// a user off-site.
 function safePath(p: string | undefined): string {
-  if (!p) return "/";
-  if (!p.startsWith("/") || p.startsWith("//")) return "/";
+  if (!p) return "/app";
+  if (!p.startsWith("/") || p.startsWith("//")) return "/app";
   return p;
 }
 

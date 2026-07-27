@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { roles } from "@/content/roles";
 
-export const Route = createFileRoute("/learn/role")({
+export const Route = createFileRoute("/app/learn/role")({
   head: () => ({
     meta: [
       { title: "Learn by Role" },
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/learn/role")({
       />
       <div className="grid gap-4 md:grid-cols-2">
         {roles.map((r) => (
-          <Link key={r.id} to="/roles/$roleId" params={{ roleId: r.id }}>
+          <Link key={r.id} to="/app/roles/$roleId" params={{ roleId: r.id }}>
             <Card className="h-full transition-colors hover:border-primary/50">
               <CardHeader>
                 <div className="flex items-center justify-between">

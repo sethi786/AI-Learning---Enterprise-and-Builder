@@ -636,7 +636,7 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
 
         <p className="text-[11px] text-muted-foreground px-1">
           Simulator only. No real client data, no real approvals. See{" "}
-          <Link to="/artifacts" className="underline">
+          <Link to="/app/artifacts" className="underline">
             /artifacts
           </Link>{" "}
           for saved practice outputs.

@@ -3,7 +3,7 @@ import { PageHeader, Quiz } from "@/components/learning/Primitives";
 import { examsById } from "@/content/exams";
 import type { ExamDef } from "@/content/types";
 
-export const Route = createFileRoute("/exams/$examId")({
+export const Route = createFileRoute("/app/exams/$examId")({
   loader: ({ params }) => {
     const exam = examsById[params.examId];
     if (!exam) throw notFound();

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { PageHeader } from "@/components/learning/Primitives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { FlaskConical, ArrowRight } from "lucide-react";
 import { labBlueprints } from "@/content/labEngine";
 
-export const Route = createFileRoute("/lab-engine")({
+export const Route = createFileRoute("/app/lab-engine")({
   head: () => ({
     meta: [
       { title: "Lab Engine — Interactive AI Labs" },
@@ -21,6 +21,10 @@ export const Route = createFileRoute("/lab-engine")({
 });
 
 function LabEngineIndex() {
+  // This route is a parent of a $param child. Without handing off to the
+  // Outlet, the detail page silently renders this index instead.
+  const matches = useMatches();
+  if (matches.some((m) => m.routeId === "/app/lab-engine/$labId")) return <Outlet />;
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <PageHeader
@@ -55,7 +59,7 @@ function LabEngineIndex() {
                   <span>{b.rubric.length} rubric items</span>
                 </div>
                 <Button asChild size="sm" className="gap-1">
-                  <Link to="/lab-engine/$labId" params={{ labId: b.id }}>
+                  <Link to="/app/lab-engine/$labId" params={{ labId: b.id }}>
                     Open <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </Button>

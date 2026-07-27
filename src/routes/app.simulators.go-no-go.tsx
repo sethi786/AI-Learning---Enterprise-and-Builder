@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { scenarios } from "@/content/scenarios";
 
-export const Route = createFileRoute("/simulators/go-no-go")({
+export const Route = createFileRoute("/app/simulators/go-no-go")({
   head: () => ({
     meta: [
       { title: "Go / No-Go Simulator" },
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/simulators/go-no-go")({
             </CardHeader>
             <CardContent>
               <Button asChild size="sm">
-                <Link to="/scenarios/$scenarioId" params={{ scenarioId: s.id }}>
+                <Link to="/app/scenarios/$scenarioId" params={{ scenarioId: s.id }}>
                   Decide
                 </Link>
               </Button>

@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PageHeader, ScenarioRunner } from "@/components/learning/Primitives";
 import { scenariosById } from "@/content/scenarios";
 
-export const Route = createFileRoute("/scenarios/$scenarioId")({
+export const Route = createFileRoute("/app/scenarios/$scenarioId")({
   loader: ({ params }) => {
     const scenario = scenariosById[params.scenarioId];
     if (!scenario) throw notFound();

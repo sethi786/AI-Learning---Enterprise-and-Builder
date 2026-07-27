@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { listMyScenarioRuns } from "@/lib/scenarioRuns.functions";
 import { useSession } from "@/lib/session";
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 
 type Run = Awaited<ReturnType<typeof listMyScenarioRuns>>[number];
 
-export const Route = createFileRoute("/my-runs")({
+export const Route = createFileRoute("/app/my-runs")({
   head: () => ({
     meta: [
       { title: "My Runs — Assurance Platform" },
@@ -24,6 +24,10 @@ export const Route = createFileRoute("/my-runs")({
 });
 
 function MyRunsPage() {
+  // This route is a parent of a $param child. Without handing off to the
+  // Outlet, the detail page silently renders this index instead.
+  const matches = useMatches();
+  const inChild = matches.some((m) => m.routeId === "/app/my-runs/$runId");
   const { user, loading } = useSession();
   const navigate = useNavigate();
   const [runs, setRuns] = useState<Run[] | null>(null);
@@ -37,6 +41,8 @@ function MyRunsPage() {
       .catch((e: Error) => setErr(e.message));
   }, [user, loading]);
 
+  // Every hook above runs unconditionally; only now is it safe to bail out.
+  if (inChild) return <Outlet />;
   if (loading)
     return <div className="mx-auto max-w-3xl p-6 text-sm text-muted-foreground">Loading…</div>;
   if (!user) {
@@ -51,7 +57,7 @@ function MyRunsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => navigate({ to: "/auth", search: { next: "/my-runs" } })}>
+            <Button onClick={() => navigate({ to: "/auth", search: { next: "/app/my-runs" } })}>
               Sign in
             </Button>
           </CardContent>
@@ -77,7 +83,7 @@ function MyRunsPage() {
         <Card>
           <CardContent className="p-4 text-sm">
             No runs yet.{" "}
-            <Link to="/scenarios/rag-ticket-agent" className="underline">
+            <Link to="/app/scenarios/rag-ticket-agent" className="underline">
               Start the RAG + Ticket Agent scenario
             </Link>
             .
@@ -114,7 +120,7 @@ function MyRunsPage() {
                 <Badge variant="outline">{Math.round((r.score / r.max_score) * 100)}%</Badge>
               )}
               <Button asChild size="sm" variant="outline">
-                <Link to="/my-runs/$runId" params={{ runId: r.id }}>
+                <Link to="/app/my-runs/$runId" params={{ runId: r.id }}>
                   Open trace
                 </Link>
               </Button>

@@ -9,41 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ArtifactsRouteImport } from './routes/artifacts'
+import { Route as SiteRouteImport } from './routes/_site'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as CareerPathRouteImport } from './routes/career-path'
-import { Route as CompetenciesRouteImport } from './routes/competencies'
-import { Route as ExamsRouteImport } from './routes/exams'
-import { Route as FlashcardsRouteImport } from './routes/flashcards'
-import { Route as LabEngineRouteImport } from './routes/lab-engine'
-import { Route as MyRunsRouteImport } from './routes/my-runs'
-import { Route as NotesRouteImport } from './routes/notes'
-import { Route as ArtifactsArtifactIdRouteImport } from './routes/artifacts.$artifactId'
-import { Route as ExamsExamIdRouteImport } from './routes/exams.$examId'
-import { Route as LabEngineLabIdRouteImport } from './routes/lab-engine.$labId'
-import { Route as LabsLabIdRouteImport } from './routes/labs.$labId'
-import { Route as LearnPlatformRouteImport } from './routes/learn.platform'
-import { Route as LearnRoleRouteImport } from './routes/learn.role'
-import { Route as LearnScenarioRouteImport } from './routes/learn.scenario'
-import { Route as MyRunsRunIdRouteImport } from './routes/my-runs.$runId'
-import { Route as PlatformsPlatformIdRouteImport } from './routes/platforms.$platformId'
-import { Route as RolesRoleIdRouteImport } from './routes/roles.$roleId'
-import { Route as ScenariosScenarioIdRouteImport } from './routes/scenarios.$scenarioId'
-import { Route as ScenariosRagTicketAgentRouteImport } from './routes/scenarios.rag-ticket-agent'
-import { Route as SimulatorsEnvRouteImport } from './routes/simulators.env'
-import { Route as SimulatorsGoNoGoRouteImport } from './routes/simulators.go-no-go'
-import { Route as SimulatorsInHouseAppRouteImport } from './routes/simulators.in-house-app'
-import { Route as SimulatorsSaasOnboardingRouteImport } from './routes/simulators.saas-onboarding'
+import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteAboutRouteImport } from './routes/_site.about'
+import { Route as SitePathsRouteImport } from './routes/_site.paths'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppArtifactsRouteImport } from './routes/app.artifacts'
+import { Route as AppCareerPathRouteImport } from './routes/app.career-path'
+import { Route as AppCompetenciesRouteImport } from './routes/app.competencies'
+import { Route as AppExamsRouteImport } from './routes/app.exams'
+import { Route as AppFlashcardsRouteImport } from './routes/app.flashcards'
+import { Route as AppLabEngineRouteImport } from './routes/app.lab-engine'
+import { Route as AppMyRunsRouteImport } from './routes/app.my-runs'
+import { Route as AppNotesRouteImport } from './routes/app.notes'
+import { Route as SiteForAudienceRouteImport } from './routes/_site.for.$audience'
+import { Route as SitePathsPathIdRouteImport } from './routes/_site.paths.$pathId'
+import { Route as AppArtifactsArtifactIdRouteImport } from './routes/app.artifacts.$artifactId'
+import { Route as AppExamsExamIdRouteImport } from './routes/app.exams.$examId'
+import { Route as AppLabEngineLabIdRouteImport } from './routes/app.lab-engine.$labId'
+import { Route as AppLabsLabIdRouteImport } from './routes/app.labs.$labId'
+import { Route as AppLearnPlatformRouteImport } from './routes/app.learn.platform'
+import { Route as AppLearnRoleRouteImport } from './routes/app.learn.role'
+import { Route as AppLearnScenarioRouteImport } from './routes/app.learn.scenario'
+import { Route as AppMyRunsRunIdRouteImport } from './routes/app.my-runs.$runId'
+import { Route as AppPlatformsPlatformIdRouteImport } from './routes/app.platforms.$platformId'
+import { Route as AppRolesRoleIdRouteImport } from './routes/app.roles.$roleId'
+import { Route as AppScenariosScenarioIdRouteImport } from './routes/app.scenarios.$scenarioId'
+import { Route as AppScenariosRagTicketAgentRouteImport } from './routes/app.scenarios.rag-ticket-agent'
+import { Route as AppSimulatorsEnvRouteImport } from './routes/app.simulators.env'
+import { Route as AppSimulatorsGoNoGoRouteImport } from './routes/app.simulators.go-no-go'
+import { Route as AppSimulatorsInHouseAppRouteImport } from './routes/app.simulators.in-house-app'
+import { Route as AppSimulatorsSaasOnboardingRouteImport } from './routes/app.simulators.saas-onboarding'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const SiteRoute = SiteRouteImport.update({
+  id: '/_site',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArtifactsRoute = ArtifactsRouteImport.update({
-  id: '/artifacts',
-  path: '/artifacts',
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -51,334 +57,387 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CareerPathRoute = CareerPathRouteImport.update({
+const SiteIndexRoute = SiteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteAboutRoute = SiteAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SitePathsRoute = SitePathsRouteImport.update({
+  id: '/paths',
+  path: '/paths',
+  getParentRoute: () => SiteRoute,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppArtifactsRoute = AppArtifactsRouteImport.update({
+  id: '/artifacts',
+  path: '/artifacts',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCareerPathRoute = AppCareerPathRouteImport.update({
   id: '/career-path',
   path: '/career-path',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const CompetenciesRoute = CompetenciesRouteImport.update({
+const AppCompetenciesRoute = AppCompetenciesRouteImport.update({
   id: '/competencies',
   path: '/competencies',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ExamsRoute = ExamsRouteImport.update({
+const AppExamsRoute = AppExamsRouteImport.update({
   id: '/exams',
   path: '/exams',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const FlashcardsRoute = FlashcardsRouteImport.update({
+const AppFlashcardsRoute = AppFlashcardsRouteImport.update({
   id: '/flashcards',
   path: '/flashcards',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const LabEngineRoute = LabEngineRouteImport.update({
+const AppLabEngineRoute = AppLabEngineRouteImport.update({
   id: '/lab-engine',
   path: '/lab-engine',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const MyRunsRoute = MyRunsRouteImport.update({
+const AppMyRunsRoute = AppMyRunsRouteImport.update({
   id: '/my-runs',
   path: '/my-runs',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const NotesRoute = NotesRouteImport.update({
+const AppNotesRoute = AppNotesRouteImport.update({
   id: '/notes',
   path: '/notes',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ArtifactsArtifactIdRoute = ArtifactsArtifactIdRouteImport.update({
+const SiteForAudienceRoute = SiteForAudienceRouteImport.update({
+  id: '/for/$audience',
+  path: '/for/$audience',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SitePathsPathIdRoute = SitePathsPathIdRouteImport.update({
+  id: '/$pathId',
+  path: '/$pathId',
+  getParentRoute: () => SitePathsRoute,
+} as any)
+const AppArtifactsArtifactIdRoute = AppArtifactsArtifactIdRouteImport.update({
   id: '/$artifactId',
   path: '/$artifactId',
-  getParentRoute: () => ArtifactsRoute,
+  getParentRoute: () => AppArtifactsRoute,
 } as any)
-const ExamsExamIdRoute = ExamsExamIdRouteImport.update({
+const AppExamsExamIdRoute = AppExamsExamIdRouteImport.update({
   id: '/$examId',
   path: '/$examId',
-  getParentRoute: () => ExamsRoute,
+  getParentRoute: () => AppExamsRoute,
 } as any)
-const LabEngineLabIdRoute = LabEngineLabIdRouteImport.update({
+const AppLabEngineLabIdRoute = AppLabEngineLabIdRouteImport.update({
   id: '/$labId',
   path: '/$labId',
-  getParentRoute: () => LabEngineRoute,
+  getParentRoute: () => AppLabEngineRoute,
 } as any)
-const LabsLabIdRoute = LabsLabIdRouteImport.update({
+const AppLabsLabIdRoute = AppLabsLabIdRouteImport.update({
   id: '/labs/$labId',
   path: '/labs/$labId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const LearnPlatformRoute = LearnPlatformRouteImport.update({
+const AppLearnPlatformRoute = AppLearnPlatformRouteImport.update({
   id: '/learn/platform',
   path: '/learn/platform',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const LearnRoleRoute = LearnRoleRouteImport.update({
+const AppLearnRoleRoute = AppLearnRoleRouteImport.update({
   id: '/learn/role',
   path: '/learn/role',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const LearnScenarioRoute = LearnScenarioRouteImport.update({
+const AppLearnScenarioRoute = AppLearnScenarioRouteImport.update({
   id: '/learn/scenario',
   path: '/learn/scenario',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const MyRunsRunIdRoute = MyRunsRunIdRouteImport.update({
+const AppMyRunsRunIdRoute = AppMyRunsRunIdRouteImport.update({
   id: '/$runId',
   path: '/$runId',
-  getParentRoute: () => MyRunsRoute,
+  getParentRoute: () => AppMyRunsRoute,
 } as any)
-const PlatformsPlatformIdRoute = PlatformsPlatformIdRouteImport.update({
+const AppPlatformsPlatformIdRoute = AppPlatformsPlatformIdRouteImport.update({
   id: '/platforms/$platformId',
   path: '/platforms/$platformId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const RolesRoleIdRoute = RolesRoleIdRouteImport.update({
+const AppRolesRoleIdRoute = AppRolesRoleIdRouteImport.update({
   id: '/roles/$roleId',
   path: '/roles/$roleId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ScenariosScenarioIdRoute = ScenariosScenarioIdRouteImport.update({
+const AppScenariosScenarioIdRoute = AppScenariosScenarioIdRouteImport.update({
   id: '/scenarios/$scenarioId',
   path: '/scenarios/$scenarioId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const ScenariosRagTicketAgentRoute = ScenariosRagTicketAgentRouteImport.update({
-  id: '/scenarios/rag-ticket-agent',
-  path: '/scenarios/rag-ticket-agent',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SimulatorsEnvRoute = SimulatorsEnvRouteImport.update({
+const AppScenariosRagTicketAgentRoute =
+  AppScenariosRagTicketAgentRouteImport.update({
+    id: '/scenarios/rag-ticket-agent',
+    path: '/scenarios/rag-ticket-agent',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSimulatorsEnvRoute = AppSimulatorsEnvRouteImport.update({
   id: '/simulators/env',
   path: '/simulators/env',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const SimulatorsGoNoGoRoute = SimulatorsGoNoGoRouteImport.update({
+const AppSimulatorsGoNoGoRoute = AppSimulatorsGoNoGoRouteImport.update({
   id: '/simulators/go-no-go',
   path: '/simulators/go-no-go',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const SimulatorsInHouseAppRoute = SimulatorsInHouseAppRouteImport.update({
+const AppSimulatorsInHouseAppRoute = AppSimulatorsInHouseAppRouteImport.update({
   id: '/simulators/in-house-app',
   path: '/simulators/in-house-app',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const SimulatorsSaasOnboardingRoute =
-  SimulatorsSaasOnboardingRouteImport.update({
+const AppSimulatorsSaasOnboardingRoute =
+  AppSimulatorsSaasOnboardingRouteImport.update({
     id: '/simulators/saas-onboarding',
     path: '/simulators/saas-onboarding',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AppRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/artifacts': typeof ArtifactsRouteWithChildren
+  '/': typeof SiteIndexRoute
+  '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
-  '/career-path': typeof CareerPathRoute
-  '/competencies': typeof CompetenciesRoute
-  '/exams': typeof ExamsRouteWithChildren
-  '/flashcards': typeof FlashcardsRoute
-  '/lab-engine': typeof LabEngineRouteWithChildren
-  '/my-runs': typeof MyRunsRouteWithChildren
-  '/notes': typeof NotesRoute
-  '/artifacts/$artifactId': typeof ArtifactsArtifactIdRoute
-  '/exams/$examId': typeof ExamsExamIdRoute
-  '/lab-engine/$labId': typeof LabEngineLabIdRoute
-  '/labs/$labId': typeof LabsLabIdRoute
-  '/learn/platform': typeof LearnPlatformRoute
-  '/learn/role': typeof LearnRoleRoute
-  '/learn/scenario': typeof LearnScenarioRoute
-  '/my-runs/$runId': typeof MyRunsRunIdRoute
-  '/platforms/$platformId': typeof PlatformsPlatformIdRoute
-  '/roles/$roleId': typeof RolesRoleIdRoute
-  '/scenarios/$scenarioId': typeof ScenariosScenarioIdRoute
-  '/scenarios/rag-ticket-agent': typeof ScenariosRagTicketAgentRoute
-  '/simulators/env': typeof SimulatorsEnvRoute
-  '/simulators/go-no-go': typeof SimulatorsGoNoGoRoute
-  '/simulators/in-house-app': typeof SimulatorsInHouseAppRoute
-  '/simulators/saas-onboarding': typeof SimulatorsSaasOnboardingRoute
+  '/about': typeof SiteAboutRoute
+  '/paths': typeof SitePathsRouteWithChildren
+  '/app/artifacts': typeof AppArtifactsRouteWithChildren
+  '/app/career-path': typeof AppCareerPathRoute
+  '/app/competencies': typeof AppCompetenciesRoute
+  '/app/exams': typeof AppExamsRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/lab-engine': typeof AppLabEngineRouteWithChildren
+  '/app/my-runs': typeof AppMyRunsRouteWithChildren
+  '/app/notes': typeof AppNotesRoute
+  '/app/': typeof AppIndexRoute
+  '/for/$audience': typeof SiteForAudienceRoute
+  '/paths/$pathId': typeof SitePathsPathIdRoute
+  '/app/artifacts/$artifactId': typeof AppArtifactsArtifactIdRoute
+  '/app/exams/$examId': typeof AppExamsExamIdRoute
+  '/app/lab-engine/$labId': typeof AppLabEngineLabIdRoute
+  '/app/labs/$labId': typeof AppLabsLabIdRoute
+  '/app/learn/platform': typeof AppLearnPlatformRoute
+  '/app/learn/role': typeof AppLearnRoleRoute
+  '/app/learn/scenario': typeof AppLearnScenarioRoute
+  '/app/my-runs/$runId': typeof AppMyRunsRunIdRoute
+  '/app/platforms/$platformId': typeof AppPlatformsPlatformIdRoute
+  '/app/roles/$roleId': typeof AppRolesRoleIdRoute
+  '/app/scenarios/$scenarioId': typeof AppScenariosScenarioIdRoute
+  '/app/scenarios/rag-ticket-agent': typeof AppScenariosRagTicketAgentRoute
+  '/app/simulators/env': typeof AppSimulatorsEnvRoute
+  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
+  '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
+  '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/artifacts': typeof ArtifactsRouteWithChildren
   '/auth': typeof AuthRoute
-  '/career-path': typeof CareerPathRoute
-  '/competencies': typeof CompetenciesRoute
-  '/exams': typeof ExamsRouteWithChildren
-  '/flashcards': typeof FlashcardsRoute
-  '/lab-engine': typeof LabEngineRouteWithChildren
-  '/my-runs': typeof MyRunsRouteWithChildren
-  '/notes': typeof NotesRoute
-  '/artifacts/$artifactId': typeof ArtifactsArtifactIdRoute
-  '/exams/$examId': typeof ExamsExamIdRoute
-  '/lab-engine/$labId': typeof LabEngineLabIdRoute
-  '/labs/$labId': typeof LabsLabIdRoute
-  '/learn/platform': typeof LearnPlatformRoute
-  '/learn/role': typeof LearnRoleRoute
-  '/learn/scenario': typeof LearnScenarioRoute
-  '/my-runs/$runId': typeof MyRunsRunIdRoute
-  '/platforms/$platformId': typeof PlatformsPlatformIdRoute
-  '/roles/$roleId': typeof RolesRoleIdRoute
-  '/scenarios/$scenarioId': typeof ScenariosScenarioIdRoute
-  '/scenarios/rag-ticket-agent': typeof ScenariosRagTicketAgentRoute
-  '/simulators/env': typeof SimulatorsEnvRoute
-  '/simulators/go-no-go': typeof SimulatorsGoNoGoRoute
-  '/simulators/in-house-app': typeof SimulatorsInHouseAppRoute
-  '/simulators/saas-onboarding': typeof SimulatorsSaasOnboardingRoute
+  '/about': typeof SiteAboutRoute
+  '/paths': typeof SitePathsRouteWithChildren
+  '/app/artifacts': typeof AppArtifactsRouteWithChildren
+  '/app/career-path': typeof AppCareerPathRoute
+  '/app/competencies': typeof AppCompetenciesRoute
+  '/app/exams': typeof AppExamsRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/lab-engine': typeof AppLabEngineRouteWithChildren
+  '/app/my-runs': typeof AppMyRunsRouteWithChildren
+  '/app/notes': typeof AppNotesRoute
+  '/': typeof SiteIndexRoute
+  '/app': typeof AppIndexRoute
+  '/for/$audience': typeof SiteForAudienceRoute
+  '/paths/$pathId': typeof SitePathsPathIdRoute
+  '/app/artifacts/$artifactId': typeof AppArtifactsArtifactIdRoute
+  '/app/exams/$examId': typeof AppExamsExamIdRoute
+  '/app/lab-engine/$labId': typeof AppLabEngineLabIdRoute
+  '/app/labs/$labId': typeof AppLabsLabIdRoute
+  '/app/learn/platform': typeof AppLearnPlatformRoute
+  '/app/learn/role': typeof AppLearnRoleRoute
+  '/app/learn/scenario': typeof AppLearnScenarioRoute
+  '/app/my-runs/$runId': typeof AppMyRunsRunIdRoute
+  '/app/platforms/$platformId': typeof AppPlatformsPlatformIdRoute
+  '/app/roles/$roleId': typeof AppRolesRoleIdRoute
+  '/app/scenarios/$scenarioId': typeof AppScenariosScenarioIdRoute
+  '/app/scenarios/rag-ticket-agent': typeof AppScenariosRagTicketAgentRoute
+  '/app/simulators/env': typeof AppSimulatorsEnvRoute
+  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
+  '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
+  '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/artifacts': typeof ArtifactsRouteWithChildren
+  '/_site': typeof SiteRouteWithChildren
+  '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
-  '/career-path': typeof CareerPathRoute
-  '/competencies': typeof CompetenciesRoute
-  '/exams': typeof ExamsRouteWithChildren
-  '/flashcards': typeof FlashcardsRoute
-  '/lab-engine': typeof LabEngineRouteWithChildren
-  '/my-runs': typeof MyRunsRouteWithChildren
-  '/notes': typeof NotesRoute
-  '/artifacts/$artifactId': typeof ArtifactsArtifactIdRoute
-  '/exams/$examId': typeof ExamsExamIdRoute
-  '/lab-engine/$labId': typeof LabEngineLabIdRoute
-  '/labs/$labId': typeof LabsLabIdRoute
-  '/learn/platform': typeof LearnPlatformRoute
-  '/learn/role': typeof LearnRoleRoute
-  '/learn/scenario': typeof LearnScenarioRoute
-  '/my-runs/$runId': typeof MyRunsRunIdRoute
-  '/platforms/$platformId': typeof PlatformsPlatformIdRoute
-  '/roles/$roleId': typeof RolesRoleIdRoute
-  '/scenarios/$scenarioId': typeof ScenariosScenarioIdRoute
-  '/scenarios/rag-ticket-agent': typeof ScenariosRagTicketAgentRoute
-  '/simulators/env': typeof SimulatorsEnvRoute
-  '/simulators/go-no-go': typeof SimulatorsGoNoGoRoute
-  '/simulators/in-house-app': typeof SimulatorsInHouseAppRoute
-  '/simulators/saas-onboarding': typeof SimulatorsSaasOnboardingRoute
+  '/_site/about': typeof SiteAboutRoute
+  '/_site/paths': typeof SitePathsRouteWithChildren
+  '/app/artifacts': typeof AppArtifactsRouteWithChildren
+  '/app/career-path': typeof AppCareerPathRoute
+  '/app/competencies': typeof AppCompetenciesRoute
+  '/app/exams': typeof AppExamsRouteWithChildren
+  '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/lab-engine': typeof AppLabEngineRouteWithChildren
+  '/app/my-runs': typeof AppMyRunsRouteWithChildren
+  '/app/notes': typeof AppNotesRoute
+  '/_site/': typeof SiteIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/_site/for/$audience': typeof SiteForAudienceRoute
+  '/_site/paths/$pathId': typeof SitePathsPathIdRoute
+  '/app/artifacts/$artifactId': typeof AppArtifactsArtifactIdRoute
+  '/app/exams/$examId': typeof AppExamsExamIdRoute
+  '/app/lab-engine/$labId': typeof AppLabEngineLabIdRoute
+  '/app/labs/$labId': typeof AppLabsLabIdRoute
+  '/app/learn/platform': typeof AppLearnPlatformRoute
+  '/app/learn/role': typeof AppLearnRoleRoute
+  '/app/learn/scenario': typeof AppLearnScenarioRoute
+  '/app/my-runs/$runId': typeof AppMyRunsRunIdRoute
+  '/app/platforms/$platformId': typeof AppPlatformsPlatformIdRoute
+  '/app/roles/$roleId': typeof AppRolesRoleIdRoute
+  '/app/scenarios/$scenarioId': typeof AppScenariosScenarioIdRoute
+  '/app/scenarios/rag-ticket-agent': typeof AppScenariosRagTicketAgentRoute
+  '/app/simulators/env': typeof AppSimulatorsEnvRoute
+  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
+  '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
+  '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/artifacts'
+    | '/app'
     | '/auth'
-    | '/career-path'
-    | '/competencies'
-    | '/exams'
-    | '/flashcards'
-    | '/lab-engine'
-    | '/my-runs'
-    | '/notes'
-    | '/artifacts/$artifactId'
-    | '/exams/$examId'
-    | '/lab-engine/$labId'
-    | '/labs/$labId'
-    | '/learn/platform'
-    | '/learn/role'
-    | '/learn/scenario'
-    | '/my-runs/$runId'
-    | '/platforms/$platformId'
-    | '/roles/$roleId'
-    | '/scenarios/$scenarioId'
-    | '/scenarios/rag-ticket-agent'
-    | '/simulators/env'
-    | '/simulators/go-no-go'
-    | '/simulators/in-house-app'
-    | '/simulators/saas-onboarding'
+    | '/about'
+    | '/paths'
+    | '/app/artifacts'
+    | '/app/career-path'
+    | '/app/competencies'
+    | '/app/exams'
+    | '/app/flashcards'
+    | '/app/lab-engine'
+    | '/app/my-runs'
+    | '/app/notes'
+    | '/app/'
+    | '/for/$audience'
+    | '/paths/$pathId'
+    | '/app/artifacts/$artifactId'
+    | '/app/exams/$examId'
+    | '/app/lab-engine/$labId'
+    | '/app/labs/$labId'
+    | '/app/learn/platform'
+    | '/app/learn/role'
+    | '/app/learn/scenario'
+    | '/app/my-runs/$runId'
+    | '/app/platforms/$platformId'
+    | '/app/roles/$roleId'
+    | '/app/scenarios/$scenarioId'
+    | '/app/scenarios/rag-ticket-agent'
+    | '/app/simulators/env'
+    | '/app/simulators/go-no-go'
+    | '/app/simulators/in-house-app'
+    | '/app/simulators/saas-onboarding'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/artifacts'
     | '/auth'
-    | '/career-path'
-    | '/competencies'
-    | '/exams'
-    | '/flashcards'
-    | '/lab-engine'
-    | '/my-runs'
-    | '/notes'
-    | '/artifacts/$artifactId'
-    | '/exams/$examId'
-    | '/lab-engine/$labId'
-    | '/labs/$labId'
-    | '/learn/platform'
-    | '/learn/role'
-    | '/learn/scenario'
-    | '/my-runs/$runId'
-    | '/platforms/$platformId'
-    | '/roles/$roleId'
-    | '/scenarios/$scenarioId'
-    | '/scenarios/rag-ticket-agent'
-    | '/simulators/env'
-    | '/simulators/go-no-go'
-    | '/simulators/in-house-app'
-    | '/simulators/saas-onboarding'
+    | '/about'
+    | '/paths'
+    | '/app/artifacts'
+    | '/app/career-path'
+    | '/app/competencies'
+    | '/app/exams'
+    | '/app/flashcards'
+    | '/app/lab-engine'
+    | '/app/my-runs'
+    | '/app/notes'
+    | '/'
+    | '/app'
+    | '/for/$audience'
+    | '/paths/$pathId'
+    | '/app/artifacts/$artifactId'
+    | '/app/exams/$examId'
+    | '/app/lab-engine/$labId'
+    | '/app/labs/$labId'
+    | '/app/learn/platform'
+    | '/app/learn/role'
+    | '/app/learn/scenario'
+    | '/app/my-runs/$runId'
+    | '/app/platforms/$platformId'
+    | '/app/roles/$roleId'
+    | '/app/scenarios/$scenarioId'
+    | '/app/scenarios/rag-ticket-agent'
+    | '/app/simulators/env'
+    | '/app/simulators/go-no-go'
+    | '/app/simulators/in-house-app'
+    | '/app/simulators/saas-onboarding'
   id:
     | '__root__'
-    | '/'
-    | '/artifacts'
+    | '/_site'
+    | '/app'
     | '/auth'
-    | '/career-path'
-    | '/competencies'
-    | '/exams'
-    | '/flashcards'
-    | '/lab-engine'
-    | '/my-runs'
-    | '/notes'
-    | '/artifacts/$artifactId'
-    | '/exams/$examId'
-    | '/lab-engine/$labId'
-    | '/labs/$labId'
-    | '/learn/platform'
-    | '/learn/role'
-    | '/learn/scenario'
-    | '/my-runs/$runId'
-    | '/platforms/$platformId'
-    | '/roles/$roleId'
-    | '/scenarios/$scenarioId'
-    | '/scenarios/rag-ticket-agent'
-    | '/simulators/env'
-    | '/simulators/go-no-go'
-    | '/simulators/in-house-app'
-    | '/simulators/saas-onboarding'
+    | '/_site/about'
+    | '/_site/paths'
+    | '/app/artifacts'
+    | '/app/career-path'
+    | '/app/competencies'
+    | '/app/exams'
+    | '/app/flashcards'
+    | '/app/lab-engine'
+    | '/app/my-runs'
+    | '/app/notes'
+    | '/_site/'
+    | '/app/'
+    | '/_site/for/$audience'
+    | '/_site/paths/$pathId'
+    | '/app/artifacts/$artifactId'
+    | '/app/exams/$examId'
+    | '/app/lab-engine/$labId'
+    | '/app/labs/$labId'
+    | '/app/learn/platform'
+    | '/app/learn/role'
+    | '/app/learn/scenario'
+    | '/app/my-runs/$runId'
+    | '/app/platforms/$platformId'
+    | '/app/roles/$roleId'
+    | '/app/scenarios/$scenarioId'
+    | '/app/scenarios/rag-ticket-agent'
+    | '/app/simulators/env'
+    | '/app/simulators/go-no-go'
+    | '/app/simulators/in-house-app'
+    | '/app/simulators/saas-onboarding'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ArtifactsRoute: typeof ArtifactsRouteWithChildren
+  SiteRoute: typeof SiteRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
-  CareerPathRoute: typeof CareerPathRoute
-  CompetenciesRoute: typeof CompetenciesRoute
-  ExamsRoute: typeof ExamsRouteWithChildren
-  FlashcardsRoute: typeof FlashcardsRoute
-  LabEngineRoute: typeof LabEngineRouteWithChildren
-  MyRunsRoute: typeof MyRunsRouteWithChildren
-  NotesRoute: typeof NotesRoute
-  LabsLabIdRoute: typeof LabsLabIdRoute
-  LearnPlatformRoute: typeof LearnPlatformRoute
-  LearnRoleRoute: typeof LearnRoleRoute
-  LearnScenarioRoute: typeof LearnScenarioRoute
-  PlatformsPlatformIdRoute: typeof PlatformsPlatformIdRoute
-  RolesRoleIdRoute: typeof RolesRoleIdRoute
-  ScenariosScenarioIdRoute: typeof ScenariosScenarioIdRoute
-  ScenariosRagTicketAgentRoute: typeof ScenariosRagTicketAgentRoute
-  SimulatorsEnvRoute: typeof SimulatorsEnvRoute
-  SimulatorsGoNoGoRoute: typeof SimulatorsGoNoGoRoute
-  SimulatorsInHouseAppRoute: typeof SimulatorsInHouseAppRoute
-  SimulatorsSaasOnboardingRoute: typeof SimulatorsSaasOnboardingRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_site': {
+      id: '/_site'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof SiteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/artifacts': {
-      id: '/artifacts'
-      path: '/artifacts'
-      fullPath: '/artifacts'
-      preLoaderRoute: typeof ArtifactsRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -388,238 +447,349 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/career-path': {
-      id: '/career-path'
+    '/_site/': {
+      id: '/_site/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/about': {
+      id: '/_site/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof SiteAboutRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/paths': {
+      id: '/_site/paths'
+      path: '/paths'
+      fullPath: '/paths'
+      preLoaderRoute: typeof SitePathsRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/artifacts': {
+      id: '/app/artifacts'
+      path: '/artifacts'
+      fullPath: '/app/artifacts'
+      preLoaderRoute: typeof AppArtifactsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/career-path': {
+      id: '/app/career-path'
       path: '/career-path'
-      fullPath: '/career-path'
-      preLoaderRoute: typeof CareerPathRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/career-path'
+      preLoaderRoute: typeof AppCareerPathRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/competencies': {
-      id: '/competencies'
+    '/app/competencies': {
+      id: '/app/competencies'
       path: '/competencies'
-      fullPath: '/competencies'
-      preLoaderRoute: typeof CompetenciesRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/competencies'
+      preLoaderRoute: typeof AppCompetenciesRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/exams': {
-      id: '/exams'
+    '/app/exams': {
+      id: '/app/exams'
       path: '/exams'
-      fullPath: '/exams'
-      preLoaderRoute: typeof ExamsRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/exams'
+      preLoaderRoute: typeof AppExamsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/flashcards': {
-      id: '/flashcards'
+    '/app/flashcards': {
+      id: '/app/flashcards'
       path: '/flashcards'
-      fullPath: '/flashcards'
-      preLoaderRoute: typeof FlashcardsRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/flashcards'
+      preLoaderRoute: typeof AppFlashcardsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/lab-engine': {
-      id: '/lab-engine'
+    '/app/lab-engine': {
+      id: '/app/lab-engine'
       path: '/lab-engine'
-      fullPath: '/lab-engine'
-      preLoaderRoute: typeof LabEngineRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/lab-engine'
+      preLoaderRoute: typeof AppLabEngineRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/my-runs': {
-      id: '/my-runs'
+    '/app/my-runs': {
+      id: '/app/my-runs'
       path: '/my-runs'
-      fullPath: '/my-runs'
-      preLoaderRoute: typeof MyRunsRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/my-runs'
+      preLoaderRoute: typeof AppMyRunsRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/notes': {
-      id: '/notes'
+    '/app/notes': {
+      id: '/app/notes'
       path: '/notes'
-      fullPath: '/notes'
-      preLoaderRoute: typeof NotesRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/notes'
+      preLoaderRoute: typeof AppNotesRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/artifacts/$artifactId': {
-      id: '/artifacts/$artifactId'
+    '/_site/for/$audience': {
+      id: '/_site/for/$audience'
+      path: '/for/$audience'
+      fullPath: '/for/$audience'
+      preLoaderRoute: typeof SiteForAudienceRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/paths/$pathId': {
+      id: '/_site/paths/$pathId'
+      path: '/$pathId'
+      fullPath: '/paths/$pathId'
+      preLoaderRoute: typeof SitePathsPathIdRouteImport
+      parentRoute: typeof SitePathsRoute
+    }
+    '/app/artifacts/$artifactId': {
+      id: '/app/artifacts/$artifactId'
       path: '/$artifactId'
-      fullPath: '/artifacts/$artifactId'
-      preLoaderRoute: typeof ArtifactsArtifactIdRouteImport
-      parentRoute: typeof ArtifactsRoute
+      fullPath: '/app/artifacts/$artifactId'
+      preLoaderRoute: typeof AppArtifactsArtifactIdRouteImport
+      parentRoute: typeof AppArtifactsRoute
     }
-    '/exams/$examId': {
-      id: '/exams/$examId'
+    '/app/exams/$examId': {
+      id: '/app/exams/$examId'
       path: '/$examId'
-      fullPath: '/exams/$examId'
-      preLoaderRoute: typeof ExamsExamIdRouteImport
-      parentRoute: typeof ExamsRoute
+      fullPath: '/app/exams/$examId'
+      preLoaderRoute: typeof AppExamsExamIdRouteImport
+      parentRoute: typeof AppExamsRoute
     }
-    '/lab-engine/$labId': {
-      id: '/lab-engine/$labId'
+    '/app/lab-engine/$labId': {
+      id: '/app/lab-engine/$labId'
       path: '/$labId'
-      fullPath: '/lab-engine/$labId'
-      preLoaderRoute: typeof LabEngineLabIdRouteImport
-      parentRoute: typeof LabEngineRoute
+      fullPath: '/app/lab-engine/$labId'
+      preLoaderRoute: typeof AppLabEngineLabIdRouteImport
+      parentRoute: typeof AppLabEngineRoute
     }
-    '/labs/$labId': {
-      id: '/labs/$labId'
+    '/app/labs/$labId': {
+      id: '/app/labs/$labId'
       path: '/labs/$labId'
-      fullPath: '/labs/$labId'
-      preLoaderRoute: typeof LabsLabIdRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/labs/$labId'
+      preLoaderRoute: typeof AppLabsLabIdRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/learn/platform': {
-      id: '/learn/platform'
+    '/app/learn/platform': {
+      id: '/app/learn/platform'
       path: '/learn/platform'
-      fullPath: '/learn/platform'
-      preLoaderRoute: typeof LearnPlatformRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/learn/platform'
+      preLoaderRoute: typeof AppLearnPlatformRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/learn/role': {
-      id: '/learn/role'
+    '/app/learn/role': {
+      id: '/app/learn/role'
       path: '/learn/role'
-      fullPath: '/learn/role'
-      preLoaderRoute: typeof LearnRoleRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/learn/role'
+      preLoaderRoute: typeof AppLearnRoleRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/learn/scenario': {
-      id: '/learn/scenario'
+    '/app/learn/scenario': {
+      id: '/app/learn/scenario'
       path: '/learn/scenario'
-      fullPath: '/learn/scenario'
-      preLoaderRoute: typeof LearnScenarioRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/learn/scenario'
+      preLoaderRoute: typeof AppLearnScenarioRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/my-runs/$runId': {
-      id: '/my-runs/$runId'
+    '/app/my-runs/$runId': {
+      id: '/app/my-runs/$runId'
       path: '/$runId'
-      fullPath: '/my-runs/$runId'
-      preLoaderRoute: typeof MyRunsRunIdRouteImport
-      parentRoute: typeof MyRunsRoute
+      fullPath: '/app/my-runs/$runId'
+      preLoaderRoute: typeof AppMyRunsRunIdRouteImport
+      parentRoute: typeof AppMyRunsRoute
     }
-    '/platforms/$platformId': {
-      id: '/platforms/$platformId'
+    '/app/platforms/$platformId': {
+      id: '/app/platforms/$platformId'
       path: '/platforms/$platformId'
-      fullPath: '/platforms/$platformId'
-      preLoaderRoute: typeof PlatformsPlatformIdRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/platforms/$platformId'
+      preLoaderRoute: typeof AppPlatformsPlatformIdRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/roles/$roleId': {
-      id: '/roles/$roleId'
+    '/app/roles/$roleId': {
+      id: '/app/roles/$roleId'
       path: '/roles/$roleId'
-      fullPath: '/roles/$roleId'
-      preLoaderRoute: typeof RolesRoleIdRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/roles/$roleId'
+      preLoaderRoute: typeof AppRolesRoleIdRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/scenarios/$scenarioId': {
-      id: '/scenarios/$scenarioId'
+    '/app/scenarios/$scenarioId': {
+      id: '/app/scenarios/$scenarioId'
       path: '/scenarios/$scenarioId'
-      fullPath: '/scenarios/$scenarioId'
-      preLoaderRoute: typeof ScenariosScenarioIdRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/scenarios/$scenarioId'
+      preLoaderRoute: typeof AppScenariosScenarioIdRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/scenarios/rag-ticket-agent': {
-      id: '/scenarios/rag-ticket-agent'
+    '/app/scenarios/rag-ticket-agent': {
+      id: '/app/scenarios/rag-ticket-agent'
       path: '/scenarios/rag-ticket-agent'
-      fullPath: '/scenarios/rag-ticket-agent'
-      preLoaderRoute: typeof ScenariosRagTicketAgentRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/scenarios/rag-ticket-agent'
+      preLoaderRoute: typeof AppScenariosRagTicketAgentRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/simulators/env': {
-      id: '/simulators/env'
+    '/app/simulators/env': {
+      id: '/app/simulators/env'
       path: '/simulators/env'
-      fullPath: '/simulators/env'
-      preLoaderRoute: typeof SimulatorsEnvRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/simulators/env'
+      preLoaderRoute: typeof AppSimulatorsEnvRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/simulators/go-no-go': {
-      id: '/simulators/go-no-go'
+    '/app/simulators/go-no-go': {
+      id: '/app/simulators/go-no-go'
       path: '/simulators/go-no-go'
-      fullPath: '/simulators/go-no-go'
-      preLoaderRoute: typeof SimulatorsGoNoGoRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/simulators/go-no-go'
+      preLoaderRoute: typeof AppSimulatorsGoNoGoRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/simulators/in-house-app': {
-      id: '/simulators/in-house-app'
+    '/app/simulators/in-house-app': {
+      id: '/app/simulators/in-house-app'
       path: '/simulators/in-house-app'
-      fullPath: '/simulators/in-house-app'
-      preLoaderRoute: typeof SimulatorsInHouseAppRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/simulators/in-house-app'
+      preLoaderRoute: typeof AppSimulatorsInHouseAppRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/simulators/saas-onboarding': {
-      id: '/simulators/saas-onboarding'
+    '/app/simulators/saas-onboarding': {
+      id: '/app/simulators/saas-onboarding'
       path: '/simulators/saas-onboarding'
-      fullPath: '/simulators/saas-onboarding'
-      preLoaderRoute: typeof SimulatorsSaasOnboardingRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/simulators/saas-onboarding'
+      preLoaderRoute: typeof AppSimulatorsSaasOnboardingRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
-interface ArtifactsRouteChildren {
-  ArtifactsArtifactIdRoute: typeof ArtifactsArtifactIdRoute
+interface SitePathsRouteChildren {
+  SitePathsPathIdRoute: typeof SitePathsPathIdRoute
 }
 
-const ArtifactsRouteChildren: ArtifactsRouteChildren = {
-  ArtifactsArtifactIdRoute: ArtifactsArtifactIdRoute,
+const SitePathsRouteChildren: SitePathsRouteChildren = {
+  SitePathsPathIdRoute: SitePathsPathIdRoute,
 }
 
-const ArtifactsRouteWithChildren = ArtifactsRoute._addFileChildren(
-  ArtifactsRouteChildren,
+const SitePathsRouteWithChildren = SitePathsRoute._addFileChildren(
+  SitePathsRouteChildren,
 )
 
-interface ExamsRouteChildren {
-  ExamsExamIdRoute: typeof ExamsExamIdRoute
+interface SiteRouteChildren {
+  SiteAboutRoute: typeof SiteAboutRoute
+  SitePathsRoute: typeof SitePathsRouteWithChildren
+  SiteIndexRoute: typeof SiteIndexRoute
+  SiteForAudienceRoute: typeof SiteForAudienceRoute
 }
 
-const ExamsRouteChildren: ExamsRouteChildren = {
-  ExamsExamIdRoute: ExamsExamIdRoute,
+const SiteRouteChildren: SiteRouteChildren = {
+  SiteAboutRoute: SiteAboutRoute,
+  SitePathsRoute: SitePathsRouteWithChildren,
+  SiteIndexRoute: SiteIndexRoute,
+  SiteForAudienceRoute: SiteForAudienceRoute,
 }
 
-const ExamsRouteWithChildren = ExamsRoute._addFileChildren(ExamsRouteChildren)
+const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
 
-interface LabEngineRouteChildren {
-  LabEngineLabIdRoute: typeof LabEngineLabIdRoute
+interface AppArtifactsRouteChildren {
+  AppArtifactsArtifactIdRoute: typeof AppArtifactsArtifactIdRoute
 }
 
-const LabEngineRouteChildren: LabEngineRouteChildren = {
-  LabEngineLabIdRoute: LabEngineLabIdRoute,
+const AppArtifactsRouteChildren: AppArtifactsRouteChildren = {
+  AppArtifactsArtifactIdRoute: AppArtifactsArtifactIdRoute,
 }
 
-const LabEngineRouteWithChildren = LabEngineRoute._addFileChildren(
-  LabEngineRouteChildren,
+const AppArtifactsRouteWithChildren = AppArtifactsRoute._addFileChildren(
+  AppArtifactsRouteChildren,
 )
 
-interface MyRunsRouteChildren {
-  MyRunsRunIdRoute: typeof MyRunsRunIdRoute
+interface AppExamsRouteChildren {
+  AppExamsExamIdRoute: typeof AppExamsExamIdRoute
 }
 
-const MyRunsRouteChildren: MyRunsRouteChildren = {
-  MyRunsRunIdRoute: MyRunsRunIdRoute,
+const AppExamsRouteChildren: AppExamsRouteChildren = {
+  AppExamsExamIdRoute: AppExamsExamIdRoute,
 }
 
-const MyRunsRouteWithChildren =
-  MyRunsRoute._addFileChildren(MyRunsRouteChildren)
+const AppExamsRouteWithChildren = AppExamsRoute._addFileChildren(
+  AppExamsRouteChildren,
+)
+
+interface AppLabEngineRouteChildren {
+  AppLabEngineLabIdRoute: typeof AppLabEngineLabIdRoute
+}
+
+const AppLabEngineRouteChildren: AppLabEngineRouteChildren = {
+  AppLabEngineLabIdRoute: AppLabEngineLabIdRoute,
+}
+
+const AppLabEngineRouteWithChildren = AppLabEngineRoute._addFileChildren(
+  AppLabEngineRouteChildren,
+)
+
+interface AppMyRunsRouteChildren {
+  AppMyRunsRunIdRoute: typeof AppMyRunsRunIdRoute
+}
+
+const AppMyRunsRouteChildren: AppMyRunsRouteChildren = {
+  AppMyRunsRunIdRoute: AppMyRunsRunIdRoute,
+}
+
+const AppMyRunsRouteWithChildren = AppMyRunsRoute._addFileChildren(
+  AppMyRunsRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppArtifactsRoute: typeof AppArtifactsRouteWithChildren
+  AppCareerPathRoute: typeof AppCareerPathRoute
+  AppCompetenciesRoute: typeof AppCompetenciesRoute
+  AppExamsRoute: typeof AppExamsRouteWithChildren
+  AppFlashcardsRoute: typeof AppFlashcardsRoute
+  AppLabEngineRoute: typeof AppLabEngineRouteWithChildren
+  AppMyRunsRoute: typeof AppMyRunsRouteWithChildren
+  AppNotesRoute: typeof AppNotesRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppLabsLabIdRoute: typeof AppLabsLabIdRoute
+  AppLearnPlatformRoute: typeof AppLearnPlatformRoute
+  AppLearnRoleRoute: typeof AppLearnRoleRoute
+  AppLearnScenarioRoute: typeof AppLearnScenarioRoute
+  AppPlatformsPlatformIdRoute: typeof AppPlatformsPlatformIdRoute
+  AppRolesRoleIdRoute: typeof AppRolesRoleIdRoute
+  AppScenariosScenarioIdRoute: typeof AppScenariosScenarioIdRoute
+  AppScenariosRagTicketAgentRoute: typeof AppScenariosRagTicketAgentRoute
+  AppSimulatorsEnvRoute: typeof AppSimulatorsEnvRoute
+  AppSimulatorsGoNoGoRoute: typeof AppSimulatorsGoNoGoRoute
+  AppSimulatorsInHouseAppRoute: typeof AppSimulatorsInHouseAppRoute
+  AppSimulatorsSaasOnboardingRoute: typeof AppSimulatorsSaasOnboardingRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppArtifactsRoute: AppArtifactsRouteWithChildren,
+  AppCareerPathRoute: AppCareerPathRoute,
+  AppCompetenciesRoute: AppCompetenciesRoute,
+  AppExamsRoute: AppExamsRouteWithChildren,
+  AppFlashcardsRoute: AppFlashcardsRoute,
+  AppLabEngineRoute: AppLabEngineRouteWithChildren,
+  AppMyRunsRoute: AppMyRunsRouteWithChildren,
+  AppNotesRoute: AppNotesRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppLabsLabIdRoute: AppLabsLabIdRoute,
+  AppLearnPlatformRoute: AppLearnPlatformRoute,
+  AppLearnRoleRoute: AppLearnRoleRoute,
+  AppLearnScenarioRoute: AppLearnScenarioRoute,
+  AppPlatformsPlatformIdRoute: AppPlatformsPlatformIdRoute,
+  AppRolesRoleIdRoute: AppRolesRoleIdRoute,
+  AppScenariosScenarioIdRoute: AppScenariosScenarioIdRoute,
+  AppScenariosRagTicketAgentRoute: AppScenariosRagTicketAgentRoute,
+  AppSimulatorsEnvRoute: AppSimulatorsEnvRoute,
+  AppSimulatorsGoNoGoRoute: AppSimulatorsGoNoGoRoute,
+  AppSimulatorsInHouseAppRoute: AppSimulatorsInHouseAppRoute,
+  AppSimulatorsSaasOnboardingRoute: AppSimulatorsSaasOnboardingRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ArtifactsRoute: ArtifactsRouteWithChildren,
+  SiteRoute: SiteRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
-  CareerPathRoute: CareerPathRoute,
-  CompetenciesRoute: CompetenciesRoute,
-  ExamsRoute: ExamsRouteWithChildren,
-  FlashcardsRoute: FlashcardsRoute,
-  LabEngineRoute: LabEngineRouteWithChildren,
-  MyRunsRoute: MyRunsRouteWithChildren,
-  NotesRoute: NotesRoute,
-  LabsLabIdRoute: LabsLabIdRoute,
-  LearnPlatformRoute: LearnPlatformRoute,
-  LearnRoleRoute: LearnRoleRoute,
-  LearnScenarioRoute: LearnScenarioRoute,
-  PlatformsPlatformIdRoute: PlatformsPlatformIdRoute,
-  RolesRoleIdRoute: RolesRoleIdRoute,
-  ScenariosScenarioIdRoute: ScenariosScenarioIdRoute,
-  ScenariosRagTicketAgentRoute: ScenariosRagTicketAgentRoute,
-  SimulatorsEnvRoute: SimulatorsEnvRoute,
-  SimulatorsGoNoGoRoute: SimulatorsGoNoGoRoute,
-  SimulatorsInHouseAppRoute: SimulatorsInHouseAppRoute,
-  SimulatorsSaasOnboardingRoute: SimulatorsSaasOnboardingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

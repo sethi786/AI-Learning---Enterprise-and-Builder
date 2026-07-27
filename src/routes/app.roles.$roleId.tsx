@@ -8,7 +8,7 @@ import { scenariosById } from "@/content/scenarios";
 import { platformsById } from "@/content/platforms";
 import type { RoleDef } from "@/content/types";
 
-export const Route = createFileRoute("/roles/$roleId")({
+export const Route = createFileRoute("/app/roles/$roleId")({
   loader: ({ params }) => {
     const role = rolesById[params.roleId];
     if (!role) throw notFound();
@@ -95,7 +95,7 @@ function RolePage() {
               return (
                 <Link
                   key={lid}
-                  to="/labs/$labId"
+                  to="/app/labs/$labId"
                   params={{ labId: lid }}
                   className="block rounded-md border p-3 text-sm hover:border-primary/50"
                 >
@@ -117,7 +117,7 @@ function RolePage() {
               return (
                 <Link
                   key={sid}
-                  to="/scenarios/$scenarioId"
+                  to="/app/scenarios/$scenarioId"
                   params={{ scenarioId: sid }}
                   className="block rounded-md border p-3 text-sm hover:border-primary/50"
                 >
@@ -139,7 +139,7 @@ function RolePage() {
               return (
                 <Link
                   key={pid}
-                  to="/platforms/$platformId"
+                  to="/app/platforms/$platformId"
                   params={{ platformId: pid }}
                   className="block rounded-md border p-3 text-sm hover:border-primary/50"
                 >

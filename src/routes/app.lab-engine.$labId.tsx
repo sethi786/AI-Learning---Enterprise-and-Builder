@@ -6,7 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import { getLabBlueprint } from "@/content/labEngine";
 import type { LabBlueprint } from "@/content/labEngine";
 
-export const Route = createFileRoute("/lab-engine/$labId")({
+export const Route = createFileRoute("/app/lab-engine/$labId")({
   loader: ({ params }) => {
     const blueprint = getLabBlueprint(params.labId);
     if (!blueprint) throw notFound();
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/lab-engine/$labId")({
   notFoundComponent: () => (
     <div className="mx-auto max-w-2xl p-6 text-sm">
       Lab blueprint not found.{" "}
-      <Link to="/lab-engine" className="underline">
+      <Link to="/app/lab-engine" className="underline">
         Back to Lab Engine
       </Link>
       .
@@ -39,7 +39,7 @@ function LabEnginePage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <div>
         <Button asChild variant="ghost" size="sm" className="gap-1 -ml-2">
-          <Link to="/lab-engine">
+          <Link to="/app/lab-engine">
             <ChevronLeft className="h-4 w-4" /> All labs
           </Link>
         </Button>

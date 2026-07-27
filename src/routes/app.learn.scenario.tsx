@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { scenarios } from "@/content/scenarios";
 
-export const Route = createFileRoute("/learn/scenario")({
+export const Route = createFileRoute("/app/learn/scenario")({
   head: () => ({
     meta: [
       { title: "Learn by Scenario" },
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/learn/scenario")({
       />
       <div className="grid gap-3 md:grid-cols-2">
         {scenarios.map((s) => (
-          <Link key={s.id} to="/scenarios/$scenarioId" params={{ scenarioId: s.id }}>
+          <Link key={s.id} to="/app/scenarios/$scenarioId" params={{ scenarioId: s.id }}>
             <Card className="h-full transition-colors hover:border-primary/50">
               <CardHeader>
                 <div className="flex items-center justify-between gap-2">

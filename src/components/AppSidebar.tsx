@@ -62,35 +62,47 @@ type Item = {
   link: LinkProps;
 };
 
-const lab = (labId: string) => linkOptions({ to: "/labs/$labId", params: { labId } });
+const lab = (labId: string) => linkOptions({ to: "/app/labs/$labId", params: { labId } });
 
 const overview: Item[] = [
-  { title: "Home Dashboard", icon: LayoutDashboard, link: linkOptions({ to: "/" }) },
-  { title: "Career Path Map", icon: Map, link: linkOptions({ to: "/career-path" }) },
-  { title: "Competency Heatmap", icon: Activity, link: linkOptions({ to: "/competencies" }) },
+  { title: "Home Dashboard", icon: LayoutDashboard, link: linkOptions({ to: "/app" }) },
+  { title: "Career Path Map", icon: Map, link: linkOptions({ to: "/app/career-path" }) },
+  { title: "Competency Heatmap", icon: Activity, link: linkOptions({ to: "/app/competencies" }) },
 ];
 
 const learn: Item[] = [
-  { title: "Learn by Role", icon: Users, link: linkOptions({ to: "/learn/role" }) },
-  { title: "Learn by Platform", icon: Boxes, link: linkOptions({ to: "/learn/platform" }) },
-  { title: "Learn by Scenario", icon: ClipboardList, link: linkOptions({ to: "/learn/scenario" }) },
+  { title: "Learn by Role", icon: Users, link: linkOptions({ to: "/app/learn/role" }) },
+  { title: "Learn by Platform", icon: Boxes, link: linkOptions({ to: "/app/learn/platform" }) },
+  {
+    title: "Learn by Scenario",
+    icon: ClipboardList,
+    link: linkOptions({ to: "/app/learn/scenario" }),
+  },
 ];
 
 const simulators: Item[] = [
   {
     title: "RAG + Ticket Agent (vertical slice)",
     icon: Zap,
-    link: linkOptions({ to: "/scenarios/rag-ticket-agent" }),
+    link: linkOptions({ to: "/app/scenarios/rag-ticket-agent" }),
   },
   {
     title: "SaaS AI Onboarding",
     icon: Cloud,
-    link: linkOptions({ to: "/simulators/saas-onboarding" }),
+    link: linkOptions({ to: "/app/simulators/saas-onboarding" }),
   },
-  { title: "In-House AI App", icon: Server, link: linkOptions({ to: "/simulators/in-house-app" }) },
-  { title: "AI Lab → Prod", icon: FlaskConical, link: linkOptions({ to: "/simulators/env" }) },
-  { title: "Go / No-Go", icon: CheckCircle2, link: linkOptions({ to: "/simulators/go-no-go" }) },
-  { title: "Lab Engine", icon: Zap, link: linkOptions({ to: "/lab-engine" }) },
+  {
+    title: "In-House AI App",
+    icon: Server,
+    link: linkOptions({ to: "/app/simulators/in-house-app" }),
+  },
+  { title: "AI Lab → Prod", icon: FlaskConical, link: linkOptions({ to: "/app/simulators/env" }) },
+  {
+    title: "Go / No-Go",
+    icon: CheckCircle2,
+    link: linkOptions({ to: "/app/simulators/go-no-go" }),
+  },
+  { title: "Lab Engine", icon: Zap, link: linkOptions({ to: "/app/lab-engine" }) },
 ];
 
 const labs: Item[] = [
@@ -108,11 +120,11 @@ const labs: Item[] = [
 ];
 
 const practice: Item[] = [
-  { title: "Flashcards", icon: Flame, link: linkOptions({ to: "/flashcards" }) },
-  { title: "Practice Exams", icon: GraduationCap, link: linkOptions({ to: "/exams" }) },
-  { title: "Artifact Builder", icon: FileCog, link: linkOptions({ to: "/artifacts" }) },
-  { title: "My Learning Notes", icon: NotebookPen, link: linkOptions({ to: "/notes" }) },
-  { title: "My Runs (cloud)", icon: History, link: linkOptions({ to: "/my-runs" }) },
+  { title: "Flashcards", icon: Flame, link: linkOptions({ to: "/app/flashcards" }) },
+  { title: "Practice Exams", icon: GraduationCap, link: linkOptions({ to: "/app/exams" }) },
+  { title: "Artifact Builder", icon: FileCog, link: linkOptions({ to: "/app/artifacts" }) },
+  { title: "My Learning Notes", icon: NotebookPen, link: linkOptions({ to: "/app/notes" }) },
+  { title: "My Runs (cloud)", icon: History, link: linkOptions({ to: "/app/my-runs" }) },
 ];
 
 function Group({
@@ -134,9 +146,11 @@ function Group({
             // Resolve params into a real pathname; comparing against a raw `to`
             // would never match for routes carrying a `$param`.
             const href = router.buildLocation(item.link).pathname;
+            // `/app` is a prefix of every other portal route, so it only counts
+            // as active on an exact match.
             const active =
-              href === "/"
-                ? currentPath === "/"
+              href === "/app"
+                ? currentPath === "/app" || currentPath === "/app/"
                 : currentPath === href || currentPath.startsWith(href + "/");
             return (
               <SidebarMenuItem key={item.title}>
@@ -160,7 +174,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <Link to="/" className="flex items-center gap-2 px-2 py-3">
+        <Link to="/app" className="flex items-center gap-2 px-2 py-3">
           <div className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground font-black">
             E
           </div>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { exams } from "@/content/exams";
 
-export const Route = createFileRoute("/exams")({
+export const Route = createFileRoute("/app/exams")({
   head: () => ({
     meta: [
       { title: "Practice Exams" },
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/exams")({
 
 function ExamsPage() {
   const matches = useMatches();
-  const inChild = matches.some((m) => m.routeId === "/exams/$examId");
+  const inChild = matches.some((m) => m.routeId === "/app/exams/$examId");
   if (inChild) return <Outlet />;
   return (
     <div className="mx-auto max-w-4xl">
@@ -39,7 +39,7 @@ function ExamsPage() {
             </CardHeader>
             <CardContent>
               <Button asChild size="sm">
-                <Link to="/exams/$examId" params={{ examId: e.id }}>
+                <Link to="/app/exams/$examId" params={{ examId: e.id }}>
                   Start exam ({e.questions.length} q)
                 </Link>
               </Button>

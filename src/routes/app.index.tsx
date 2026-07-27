@@ -22,7 +22,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/app/")({
   component: Dashboard,
 });
 
@@ -69,7 +69,7 @@ function Dashboard() {
         subtitle="Learn to think like an AI Platform Admin, Governance Operator, Solution Architect, Security Architect, and Enterprise AI GRC Lead."
         right={
           <Button asChild>
-            <Link to="/career-path">
+            <Link to="/app/career-path">
               Open career path <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -94,7 +94,7 @@ function Dashboard() {
               <div className="mt-3 text-sm font-semibold leading-tight">{r.name}</div>
               <div className="mt-1 text-xs text-muted-foreground">{r.short}</div>
               <Button asChild variant="ghost" size="sm" className="mt-2">
-                <Link to="/roles/$roleId" params={{ roleId: r.id }}>
+                <Link to="/app/roles/$roleId" params={{ roleId: r.id }}>
                   Open
                 </Link>
               </Button>
@@ -117,12 +117,12 @@ function Dashboard() {
             <p className="text-sm text-muted-foreground line-clamp-3">{sod.context}</p>
             <div className="mt-4 flex gap-2">
               <Button asChild size="sm">
-                <Link to="/scenarios/$scenarioId" params={{ scenarioId: sod.id }}>
+                <Link to="/app/scenarios/$scenarioId" params={{ scenarioId: sod.id }}>
                   Run scenario
                 </Link>
               </Button>
               <Button asChild size="sm" variant="outline">
-                <Link to="/learn/scenario">All scenarios</Link>
+                <Link to="/app/learn/scenario">All scenarios</Link>
               </Button>
             </div>
           </CardContent>
@@ -154,7 +154,7 @@ function Dashboard() {
                 <div className="text-sm font-medium">{nextLesson.module.title}</div>
                 <div className="text-xs text-muted-foreground">{nextLesson.lab.name}</div>
                 <Button asChild size="sm" className="mt-3">
-                  <Link to="/labs/$labId" params={{ labId: nextLesson.lab.id }}>
+                  <Link to="/app/labs/$labId" params={{ labId: nextLesson.lab.id }}>
                     Open lab
                   </Link>
                 </Button>
@@ -176,7 +176,7 @@ function Dashboard() {
           </CardHeader>
           <CardContent>
             <Button asChild size="sm">
-              <Link to="/exams">Open exams</Link>
+              <Link to="/app/exams">Open exams</Link>
             </Button>
           </CardContent>
         </Card>
@@ -190,7 +190,7 @@ function Dashboard() {
           </CardHeader>
           <CardContent>
             <Button asChild size="sm">
-              <Link to="/artifacts">Open builder</Link>
+              <Link to="/app/artifacts">Open builder</Link>
             </Button>
           </CardContent>
         </Card>
@@ -231,7 +231,7 @@ function Dashboard() {
               );
             })}
             <Button asChild size="sm" variant="ghost" className="w-full">
-              <Link to="/learn/role">Browse all labs</Link>
+              <Link to="/app/learn/role">Browse all labs</Link>
             </Button>
           </CardContent>
         </Card>

@@ -5,7 +5,7 @@ import { ArrowDown } from "lucide-react";
 import { PageHeader } from "@/components/learning/Primitives";
 import { roles } from "@/content/roles";
 
-export const Route = createFileRoute("/career-path")({
+export const Route = createFileRoute("/app/career-path")({
   head: () => ({
     meta: [
       { title: "Career Path Map — EAI Career Sim" },
@@ -28,7 +28,7 @@ function CareerPathPage() {
       <div className="space-y-4">
         {roles.map((r, i) => (
           <div key={r.id}>
-            <Link to="/roles/$roleId" params={{ roleId: r.id }} className="block">
+            <Link to="/app/roles/$roleId" params={{ roleId: r.id }} className="block">
               <Card className="transition-colors hover:border-primary/50">
                 <CardHeader>
                   <div className="flex items-center justify-between">

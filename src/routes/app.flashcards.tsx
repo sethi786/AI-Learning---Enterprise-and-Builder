@@ -18,7 +18,7 @@ function build(): Card[] {
   return cards;
 }
 
-export const Route = createFileRoute("/flashcards")({
+export const Route = createFileRoute("/app/flashcards")({
   head: () => ({
     meta: [
       { title: "Flashcards" },

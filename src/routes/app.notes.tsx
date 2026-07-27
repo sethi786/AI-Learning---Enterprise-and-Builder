@@ -9,7 +9,7 @@ import { useState } from "react";
 import { progress, useProgress } from "@/lib/progress";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/notes")({
+export const Route = createFileRoute("/app/notes")({
   head: () => ({
     meta: [
       { title: "My Learning Notes" },

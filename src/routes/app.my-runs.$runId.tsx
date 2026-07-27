@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 type Data = Awaited<ReturnType<typeof getScenarioRunWithEvents>>;
 
-export const Route = createFileRoute("/my-runs/$runId")({
+export const Route = createFileRoute("/app/my-runs/$runId")({
   head: () => ({ meta: [{ title: "Run trace" }, { name: "robots", content: "noindex" }] }),
   component: RunTracePage,
 });
@@ -21,7 +21,7 @@ const sevColor: Record<string, string> = {
 };
 
 function RunTracePage() {
-  const { runId } = useParams({ from: "/my-runs/$runId" });
+  const { runId } = useParams({ from: "/app/my-runs/$runId" });
   const { user, loading } = useSession();
   const [data, setData] = useState<Data | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -59,7 +59,7 @@ function RunTracePage() {
           <div className="text-xs text-muted-foreground">Run {r.id}</div>
         </div>
         <Button asChild variant="ghost" size="sm">
-          <Link to="/my-runs">← All runs</Link>
+          <Link to="/app/my-runs">← All runs</Link>
         </Button>
       </div>
       <Card>

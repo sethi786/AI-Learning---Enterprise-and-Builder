@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { platforms } from "@/content/platforms";
 import type { PlatformDef } from "@/content/types";
 
-export const Route = createFileRoute("/learn/platform")({
+export const Route = createFileRoute("/app/learn/platform")({
   head: () => ({
     meta: [
       { title: "Learn by Platform" },
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/learn/platform")({
                 </h2>
                 <div className="grid gap-3 md:grid-cols-2">
                   {cats[c].map((p) => (
-                    <Link key={p.id} to="/platforms/$platformId" params={{ platformId: p.id }}>
+                    <Link key={p.id} to="/app/platforms/$platformId" params={{ platformId: p.id }}>
                       <Card className="h-full transition-colors hover:border-primary/50">
                         <CardHeader>
                           <div className="flex items-center justify-between">

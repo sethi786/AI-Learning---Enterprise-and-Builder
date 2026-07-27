@@ -224,3 +224,26 @@ export interface ArtifactTemplate {
   fields: ArtifactField[];
   markdown: (v: Record<string, string | string[]>) => string;
 }
+
+/** Audience tiers the marketing site segments by. */
+export type Audience = "student" | "career-changer" | "professional";
+
+/**
+ * A career track: an ordered view over existing roles, labs, and scenarios.
+ * Adding a track is a data edit, not a code change.
+ *
+ * `status: "roadmap"` means the structure exists but the underlying content
+ * is not authored yet, and the UI must say so rather than imply readiness.
+ */
+export interface PathDef {
+  id: string;
+  name: string;
+  tagline: string;
+  summary: string;
+  audiences: Audience[];
+  status: "live" | "roadmap";
+  outcomes: string[];
+  roleIds: RoleId[];
+  labIds: string[];
+  scenarioIds: string[];
+}

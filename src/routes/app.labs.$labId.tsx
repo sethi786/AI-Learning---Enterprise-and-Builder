@@ -6,7 +6,7 @@ import { labsById } from "@/content/labs";
 import { scenariosById } from "@/content/scenarios";
 import type { LabDef, LabModule } from "@/content/types";
 
-export const Route = createFileRoute("/labs/$labId")({
+export const Route = createFileRoute("/app/labs/$labId")({
   loader: ({ params }) => {
     const lab = labsById[params.labId];
     if (!lab) throw notFound();
@@ -76,7 +76,7 @@ function LabPage() {
                 </CardHeader>
                 <CardContent>
                   <Link
-                    to="/scenarios/$scenarioId"
+                    to="/app/scenarios/$scenarioId"
                     params={{ scenarioId: scenario.id }}
                     className="text-primary underline text-sm"
                   >

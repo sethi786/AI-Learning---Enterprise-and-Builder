@@ -6,7 +6,7 @@ import { useProgress } from "@/lib/progress";
 import { STATUS_COLOR, STATUS_LABEL, emptyRecord } from "@/lib/competency";
 import type { CompetencyStatus } from "@/content/types";
 
-export const Route = createFileRoute("/competencies")({
+export const Route = createFileRoute("/app/competencies")({
   head: () => ({
     meta: [
       { title: "Competency Heatmap — EAI Career Sim" },

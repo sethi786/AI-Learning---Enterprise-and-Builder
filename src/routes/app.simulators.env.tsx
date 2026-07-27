@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/simulators/env")({
+export const Route = createFileRoute("/app/simulators/env")({
   head: () => ({
     meta: [
       { title: "AI Lab → Prod Simulator" },

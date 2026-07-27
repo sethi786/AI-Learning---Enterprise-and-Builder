@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { labsById } from "@/content/labs";
 
-export const Route = createFileRoute("/simulators/saas-onboarding")({
+export const Route = createFileRoute("/app/simulators/saas-onboarding")({
   head: () => ({
     meta: [
       { title: "SaaS AI Onboarding Simulator" },
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/simulators/saas-onboarding")({
           subtitle="Onboard ChatGPT Enterprise, Copilot, Gemini, Claude, Replit, Codex — end-to-end."
           right={
             <Button asChild>
-              <Link to="/labs/$labId" params={{ labId: "saas-onboarding" }}>
+              <Link to="/app/labs/$labId" params={{ labId: "saas-onboarding" }}>
                 Open full lab
               </Link>
             </Button>
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/simulators/saas-onboarding")({
               </CardHeader>
               <CardContent>
                 <Button asChild size="sm" variant="outline">
-                  <Link to="/labs/$labId" params={{ labId: "saas-onboarding" }} hash={m.id}>
+                  <Link to="/app/labs/$labId" params={{ labId: "saas-onboarding" }} hash={m.id}>
                     Open module
                   </Link>
                 </Button>

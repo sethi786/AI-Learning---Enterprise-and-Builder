@@ -36,7 +36,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { progress } from "@/lib/progress";
 
-export const Route = createFileRoute("/scenarios/rag-ticket-agent")({
+export const Route = createFileRoute("/app/scenarios/rag-ticket-agent")({
   head: () => ({
     meta: [
       { title: "RAG + Ticket Agent Scenario — AI Career Simulator" },

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useMemo, useState } from "react";
 
-export const Route = createFileRoute("/simulators/in-house-app")({
+export const Route = createFileRoute("/app/simulators/in-house-app")({
   head: () => ({
     meta: [
       { title: "In-House AI App Simulator" },

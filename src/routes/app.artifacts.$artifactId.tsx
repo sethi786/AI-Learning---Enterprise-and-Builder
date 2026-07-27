@@ -18,7 +18,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ArtifactTemplate } from "@/content/types";
 
-export const Route = createFileRoute("/artifacts/$artifactId")({
+export const Route = createFileRoute("/app/artifacts/$artifactId")({
   loader: ({ params }) => {
     const template = artifactsById[params.artifactId];
     if (!template) throw notFound();
@@ -49,7 +49,7 @@ function Editor() {
         subtitle={template.description}
         right={
           <Button asChild variant="outline">
-            <Link to="/artifacts">Back to builder</Link>
+            <Link to="/app/artifacts">Back to builder</Link>
           </Button>
         }
       />

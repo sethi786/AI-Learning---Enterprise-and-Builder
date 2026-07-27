@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { artifactTemplates } from "@/content/artifacts";
 import { useProgress, progress } from "@/lib/progress";
 
-export const Route = createFileRoute("/artifacts")({
+export const Route = createFileRoute("/app/artifacts")({
   head: () => ({
     meta: [
       { title: "Artifact Builder" },
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/artifacts")({
 function ArtifactsPage() {
   const matches = useMatches();
   const p = useProgress();
-  const inChild = matches.some((m) => m.routeId === "/artifacts/$artifactId");
+  const inChild = matches.some((m) => m.routeId === "/app/artifacts/$artifactId");
   if (inChild) return <Outlet />;
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -33,7 +33,7 @@ function ArtifactsPage() {
       />
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {artifactTemplates.map((t) => (
-          <Link key={t.id} to="/artifacts/$artifactId" params={{ artifactId: t.id }}>
+          <Link key={t.id} to="/app/artifacts/$artifactId" params={{ artifactId: t.id }}>
             <Card className="h-full hover:border-primary/50">
               <CardHeader>
                 <div className="flex items-center justify-between">

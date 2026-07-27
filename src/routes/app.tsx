@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { progress } from "@/lib/progress";
+import { useProgressSync } from "@/lib/useProgressSync";
 
 export const Route = createFileRoute("/app")({
   component: PortalLayout,
@@ -28,6 +29,7 @@ function useVisitTracking() {
  */
 function PortalLayout() {
   useVisitTracking();
+  useProgressSync();
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">

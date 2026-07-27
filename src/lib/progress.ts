@@ -259,6 +259,15 @@ export const progress = {
   reset() {
     update(() => empty);
   },
+  /** Read the current snapshot without subscribing. Used by the cloud sync. */
+  snapshot(): ProgressState {
+    load();
+    return state;
+  },
+  /** Replace the whole state, e.g. with the result of a merge on sign-in. */
+  replaceAll(next: ProgressState) {
+    update(() => next);
+  },
   exportJson() {
     return JSON.stringify(state, null, 2);
   },

@@ -149,6 +149,14 @@ export function LessonShell({
         </div>
       </CardHeader>
       <CardContent className="space-y-6 text-sm">
+        {section.objective ? (
+          <div className="rounded-md border border-brand/25 bg-brand/5 p-3">
+            <div className="text-xs font-medium tracking-wide text-brand uppercase">
+              What you will be able to do
+            </div>
+            <p className="mt-1 leading-relaxed">{section.objective}</p>
+          </div>
+        ) : null}
         <Accordion type="multiple" defaultValue={["simple", "enterprise", "deep"]}>
           <AccordionItem value="simple">
             <AccordionTrigger>Simple explanation</AccordionTrigger>
@@ -176,6 +184,57 @@ export function LessonShell({
               </AccordionContent>
             </AccordionItem>
           ) : null}
+          {/* v2 fields. These were declared on LessonSection but never rendered,
+              which made authoring any of them invisible work. */}
+          {section.configExample ? (
+            <AccordionItem value="config">
+              <AccordionTrigger>Configuration example</AccordionTrigger>
+              <AccordionContent>
+                <DiagramBlock text={section.configExample} />
+              </AccordionContent>
+            </AccordionItem>
+          ) : null}
+          {section.insecurePattern || section.securePattern ? (
+            <AccordionItem value="patterns">
+              <AccordionTrigger>Insecure vs secure pattern</AccordionTrigger>
+              <AccordionContent className="space-y-3">
+                {section.insecurePattern ? (
+                  <div className="rounded-md border border-rose-500/40 bg-rose-500/5 p-3">
+                    <div className="mb-1 flex items-center gap-2 text-xs font-medium text-rose-700 dark:text-rose-300">
+                      <XCircle className="h-3.5 w-3.5" /> Insecure
+                    </div>
+                    <p className="leading-relaxed">{section.insecurePattern}</p>
+                  </div>
+                ) : null}
+                {section.securePattern ? (
+                  <div className="rounded-md border border-emerald-500/40 bg-emerald-500/5 p-3">
+                    <div className="mb-1 flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> Secure
+                    </div>
+                    <p className="leading-relaxed">{section.securePattern}</p>
+                  </div>
+                ) : null}
+              </AccordionContent>
+            </AccordionItem>
+          ) : null}
+          {section.attackExample ? (
+            <AccordionItem value="attack">
+              <AccordionTrigger>
+                How it gets attacked <RiskBadge level="high" />
+              </AccordionTrigger>
+              <AccordionContent className="leading-relaxed text-muted-foreground">
+                {section.attackExample}
+              </AccordionContent>
+            </AccordionItem>
+          ) : null}
+          <ListItem value="failures" label="Failure modes" items={section.failureModes} />
+          <ListItem value="controls" label="Controls that apply" items={section.controls} />
+          <ListItem value="trust" label="Trust boundaries" items={section.trustBoundaries} />
+          <ListItem
+            value="troubleshooting"
+            label="Troubleshooting"
+            items={section.troubleshooting}
+          />
           <AccordionItem value="mistakes">
             <AccordionTrigger>Common mistakes</AccordionTrigger>
             <AccordionContent>
@@ -221,9 +280,57 @@ export function LessonShell({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        {section.guidedExercise || section.independentChallenge || section.reflection ? (
+          <div className="space-y-3 rounded-md border bg-muted/30 p-4">
+            <div className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              Practice
+            </div>
+            {section.guidedExercise ? (
+              <div>
+                <div className="font-medium">Guided exercise</div>
+                <p className="mt-1 leading-relaxed text-muted-foreground">
+                  {section.guidedExercise}
+                </p>
+              </div>
+            ) : null}
+            {section.independentChallenge ? (
+              <div>
+                <div className="font-medium">On your own</div>
+                <p className="mt-1 leading-relaxed text-muted-foreground">
+                  {section.independentChallenge}
+                </p>
+              </div>
+            ) : null}
+            {section.reflection ? (
+              <div>
+                <div className="font-medium">Think it through</div>
+                <p className="mt-1 leading-relaxed text-muted-foreground">{section.reflection}</p>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
         {extras}
       </CardContent>
     </Card>
+  );
+}
+
+/** Renders an optional bullet list as an accordion item, or nothing at all. */
+function ListItem({ value, label, items }: { value: string; label: string; items?: string[] }) {
+  if (!items?.length) return null;
+  return (
+    <AccordionItem value={value}>
+      <AccordionTrigger>{label}</AccordionTrigger>
+      <AccordionContent>
+        <ul className="list-disc space-y-1 pl-5">
+          {items.map((x) => (
+            <li key={x}>{x}</li>
+          ))}
+        </ul>
+      </AccordionContent>
+    </AccordionItem>
   );
 }
 

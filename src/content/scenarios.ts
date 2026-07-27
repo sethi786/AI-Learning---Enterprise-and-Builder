@@ -200,7 +200,28 @@ export const scenarios: ScenarioDef[] = [
     roleIds: ["solution-architect", "security-architect", "governance-operator"],
     domain: "agent_rag_connector",
     difficulty: "advanced",
-    steps: stdSteps(),
+    steps: stdSteps({
+      reviewers: {
+        question: "A 200k-document SharePoint corpus is in scope. Which reviewers must engage?",
+      },
+      evidence: {
+        question: "What evidence proves the corpus is safe to index?",
+        options: [
+          { id: "a", label: "A screenshot of the search results" },
+          {
+            id: "b",
+            label:
+              "An oversharing report, a permission-trimming test, and data-owner sign-off per site",
+            ideal: true,
+          },
+          { id: "c", label: "The vendor's security whitepaper" },
+          { id: "d", label: "A sample of ten documents reviewed by hand" },
+        ],
+        ideal: "b",
+        explain:
+          "The risk is corpus-wide, so the evidence has to be corpus-wide. Hand-checking a sample says nothing about the other 199,990 documents.",
+      },
+    }),
     finalDecision: {
       prompt: "Choose the correct environment for this project today.",
       options: [
@@ -250,6 +271,39 @@ export const scenarios: ScenarioDef[] = [
     domain: "platform",
     difficulty: "intermediate",
     steps: stdSteps({
+      reviewers: {
+        question:
+          "A new SaaS assistant is being onboarded tenant-wide. Which reviewers must engage?",
+      },
+      iam: {
+        question: "What is the identity baseline before any pilot user is licensed?",
+        options: [
+          { id: "a", label: "Shared login for the pilot group" },
+          { id: "b", label: "SSO plus SCIM, with a tested deprovisioning path", ideal: true },
+          { id: "c", label: "Email invitations" },
+          { id: "d", label: "SSO only; SCIM can follow later" },
+        ],
+        ideal: "b",
+        explain:
+          "SSO alone gets people in. Without SCIM, leavers keep access, which is the failure that surfaces months later at audit.",
+      },
+      evidence: {
+        question: "What evidence closes the onboarding review?",
+        options: [
+          { id: "a", label: "The signed order form" },
+          {
+            id: "b",
+            label:
+              "SSO/SCIM configuration, a leaver test result, retention settings, and the connector allowlist",
+            ideal: true,
+          },
+          { id: "c", label: "A demo recording" },
+          { id: "d", label: "The vendor's SOC 2 report alone" },
+        ],
+        ideal: "b",
+        explain:
+          "A third-party attestation covers the vendor, not your configuration of it. The evidence must show how your tenant is set up.",
+      },
       classify: { ideal: "saas" },
       architecture: {
         ideal: "b",
@@ -319,7 +373,45 @@ export const scenarios: ScenarioDef[] = [
     roleIds: ["governance-operator", "solution-architect", "security-architect"],
     domain: "agent_rag_connector",
     difficulty: "advanced",
-    steps: stdSteps({ classify: { ideal: "agent" } }),
+    steps: stdSteps({
+      reviewers: {
+        question:
+          "A low-code HR agent will read HR content and take actions. Which reviewers must engage?",
+      },
+      iam: {
+        question: "Which authentication mode should the HR agent use?",
+        options: [
+          { id: "a", label: "A service connection so it can always reach the knowledge base" },
+          {
+            id: "b",
+            label: "Delegated user authentication, so each caller's own permissions apply",
+            ideal: true,
+          },
+          { id: "c", label: "A shared account owned by the HR team" },
+          { id: "d", label: "Anonymous access inside the tenant" },
+        ],
+        ideal: "b",
+        explain:
+          "A service connection flattens every caller into one permission set, so any employee inherits whatever the service account can read.",
+      },
+      privacy: {
+        question: "What is the privacy concern specific to an HR agent?",
+        options: [
+          { id: "a", label: "Response latency" },
+          {
+            id: "b",
+            label: "Special-category data in HR records, plus transcripts retained in Dataverse",
+            ideal: true,
+          },
+          { id: "c", label: "The agent's name" },
+          { id: "d", label: "Licence cost per user" },
+        ],
+        ideal: "b",
+        explain:
+          "HR content routinely contains special-category data, and the conversation transcripts become a second store of it that needs its own retention decision.",
+      },
+      classify: { ideal: "agent" },
+    }),
     finalDecision: {
       prompt: "Choose the correct next step.",
       options: [
@@ -349,6 +441,58 @@ export const scenarios: ScenarioDef[] = [
     domain: "security",
     difficulty: "advanced",
     steps: stdSteps({
+      reviewers: {
+        question:
+          "An active injection route has been found in a live RAG app. Who must engage first?",
+        options: [
+          { id: "a", label: "Security only" },
+          {
+            id: "b",
+            label:
+              "Security plus the application owner, with privacy on standby for exposure assessment",
+            ideal: true,
+          },
+          { id: "c", label: "The full review board before any action" },
+          { id: "d", label: "Legal only" },
+        ],
+        ideal: "b",
+        explain:
+          "Containment needs security and whoever can change the system. Convening the full board first delays containment while the route is still open.",
+      },
+      devsecops: {
+        question: "What belongs in the pipeline so this cannot silently return?",
+        options: [
+          { id: "a", label: "A manual test before each release" },
+          {
+            id: "b",
+            label:
+              "An injection-resistance eval in CI with a regression threshold that blocks the build",
+            ideal: true,
+          },
+          { id: "c", label: "More logging" },
+          { id: "d", label: "A note in the runbook" },
+        ],
+        ideal: "b",
+        explain:
+          "Manual tests and documentation decay. A failing gate in CI is the only control that survives staff turnover.",
+      },
+      evidence: {
+        question: "What evidence shows the injection is actually resolved?",
+        options: [
+          { id: "a", label: "The attack no longer appears in logs" },
+          {
+            id: "b",
+            label:
+              "A re-run of the attack against the fixed design, plus the eval result and the exposure assessment",
+            ideal: true,
+          },
+          { id: "c", label: "A statement from the vendor" },
+          { id: "d", label: "The developer's confirmation" },
+        ],
+        ideal: "b",
+        explain:
+          "Absence of the attack in logs may mean nobody tried it. Re-running it against the new design is what proves the fix works.",
+      },
       classify: { ideal: "rag" },
       security: { ideal: "b" },
       controls: {
@@ -399,6 +543,43 @@ export const scenarios: ScenarioDef[] = [
     domain: "security",
     difficulty: "advanced",
     steps: stdSteps({
+      reviewers: {
+        question:
+          "An agent holds write access to ticketing, email and payments. Which reviewers must engage?",
+      },
+      iam: {
+        question: "What identity model should this agent use?",
+        options: [
+          { id: "a", label: "The admin account of the team that built it" },
+          {
+            id: "b",
+            label:
+              "Its own least-privilege identity, with an owner recorded and write scopes separated from read",
+            ideal: true,
+          },
+          { id: "c", label: "The requesting user's credentials, cached" },
+          { id: "d", label: "A shared integration account across all agents" },
+        ],
+        ideal: "b",
+        explain:
+          "The agent is an identity. Giving it its own scoped credential bounds the blast radius and makes revocation possible without breaking everything else.",
+      },
+      devsecops: {
+        question: "What must exist before the agent is allowed to write?",
+        options: [
+          {
+            id: "a",
+            label: "A tested kill switch that revokes the credential, and an audited tool-call log",
+            ideal: true,
+          },
+          { id: "b", label: "A larger model" },
+          { id: "c", label: "A staging environment only" },
+          { id: "d", label: "A weekly review meeting" },
+        ],
+        ideal: "a",
+        explain:
+          "Containment has to be provable before autonomy is granted. A kill switch nobody has tested is a plan, not a control.",
+      },
       classify: { ideal: "agent" },
       security: {
         ideal: "b",
@@ -439,7 +620,11 @@ export const scenarios: ScenarioDef[] = [
           why: "Correct — the pattern is fine, the permissions were not.",
         },
         { id: "uat", label: "UAT", why: "Not until controls are in place." },
-        { id: "pilot", label: "Pilot", why: "No." },
+        {
+          id: "pilot",
+          label: "Pilot",
+          why: "No — an agent with unreviewed write scopes should not reach a wider audience before its tool scope and kill switch are proven.",
+        },
         { id: "production", label: "Production", why: "Absolutely not." },
         { id: "blocked", label: "Block permanently", why: "Excessive." },
       ],
@@ -456,7 +641,63 @@ export const scenarios: ScenarioDef[] = [
     roleIds: ["solution-architect", "security-architect"],
     domain: "architecture",
     difficulty: "advanced",
-    steps: stdSteps({ classify: { ideal: "rag" } }),
+    steps: stdSteps({
+      classify: { ideal: "rag" },
+      reviewers: {
+        question:
+          "Case files with mixed sensitivity are being indexed. Which reviewers must engage?",
+      },
+      data: {
+        question: "What is the data classification of a legal case corpus?",
+        options: [
+          { id: "a", label: "Public" },
+          { id: "b", label: "Internal only" },
+          {
+            id: "c",
+            label: "Confidential, with privileged material and personal data mixed in",
+            ideal: true,
+          },
+          { id: "d", label: "Unclassified until someone complains" },
+        ],
+        ideal: "c",
+        explain:
+          "Case files mix privilege and personal data at the document level, so the corpus cannot be treated as uniformly internal.",
+      },
+      legal: {
+        question: "Which legal question is specific to a case-file corpus?",
+        options: [
+          { id: "a", label: "Software licensing" },
+          {
+            id: "b",
+            label:
+              "Whether indexing waives privilege, and whether client engagement terms permit third-party AI processing",
+            ideal: true,
+          },
+          { id: "c", label: "Trademark use" },
+          { id: "d", label: "Export controls on the model" },
+        ],
+        ideal: "b",
+        explain:
+          "Privilege and client engagement restrictions bind you regardless of what the cloud provider's terms permit.",
+      },
+      evidence: {
+        question: "What evidence supports a go decision here?",
+        options: [
+          { id: "a", label: "A successful demo" },
+          {
+            id: "b",
+            label:
+              "Query-time access-control test, privilege review, and per-matter ingestion approval",
+            ideal: true,
+          },
+          { id: "c", label: "The AWS shared responsibility model" },
+          { id: "d", label: "A signed order form" },
+        ],
+        ideal: "b",
+        explain:
+          "The controlling risk is cross-matter retrieval, so the evidence has to show isolation was tested, not that the system works.",
+      },
+    }),
     finalDecision: {
       prompt: "Correct next step?",
       options: [
@@ -469,7 +710,11 @@ export const scenarios: ScenarioDef[] = [
         { id: "dev", label: "Dev with sanitized subset", why: "Only after Legal sign-off." },
         { id: "uat", label: "UAT", why: "Later stage." },
         { id: "pilot", label: "Pilot", why: "Way too early." },
-        { id: "production", label: "Production", why: "No." },
+        {
+          id: "production",
+          label: "Production",
+          why: "No — cross-matter retrieval has not been tested, so privileged material could surface to the wrong case team.",
+        },
         {
           id: "blocked",
           label: "Blocked pending client-restriction review",
@@ -490,6 +735,56 @@ export const scenarios: ScenarioDef[] = [
     domain: "platform",
     difficulty: "intermediate",
     steps: stdSteps({
+      reviewers: {
+        question:
+          "A leaver solely owned several agents and a connector. Which reviewers must engage?",
+        options: [
+          { id: "a", label: "HR only" },
+          {
+            id: "b",
+            label: "Platform admin plus IAM, with security for the connector grant",
+            ideal: true,
+          },
+          { id: "c", label: "The full review board" },
+          { id: "d", label: "The leaver's manager alone" },
+        ],
+        ideal: "b",
+        explain:
+          "Offboarding an agent owner is an entitlement problem, not an HR one. The connector grant is the piece that outlives the person.",
+      },
+      iam: {
+        question: "What must happen to the connector the leaver owned?",
+        options: [
+          { id: "a", label: "Leave it; it still works" },
+          {
+            id: "b",
+            label: "Reassign ownership, then re-consent or revoke the grant and rotate the token",
+            ideal: true,
+          },
+          { id: "c", label: "Disable the leaver's account and stop there" },
+          { id: "d", label: "Delete the agents that use it" },
+        ],
+        ideal: "b",
+        explain:
+          "Disabling the account does not revoke a durable OAuth grant. The refresh token can outlive the person unless it is explicitly revoked.",
+      },
+      evidence: {
+        question: "What evidence closes the offboarding?",
+        options: [
+          { id: "a", label: "The HR ticket marked complete" },
+          {
+            id: "b",
+            label:
+              "New owners recorded per asset, grant revocation confirmed, and a re-run of the orphaned-asset report",
+            ideal: true,
+          },
+          { id: "c", label: "A calendar reminder to check later" },
+          { id: "d", label: "The manager's confirmation" },
+        ],
+        ideal: "b",
+        explain:
+          "The orphaned-asset report re-run is what proves nothing was missed, rather than that the checklist was followed.",
+      },
       classify: {
         ideal: "saas",
         options: [
@@ -516,17 +811,37 @@ export const scenarios: ScenarioDef[] = [
     finalDecision: {
       prompt: "Correct disposition?",
       options: [
-        { id: "ai-lab", label: "AI Lab", why: "N/A" },
-        { id: "dev", label: "Dev", why: "N/A" },
-        { id: "uat", label: "UAT", why: "N/A" },
-        { id: "pilot", label: "Pilot", why: "N/A" },
+        {
+          id: "ai-lab",
+          label: "AI Lab",
+          why: "Not applicable — offboarding is an entitlement action on a live tenant, not an environment choice.",
+        },
+        {
+          id: "dev",
+          label: "Dev",
+          why: "Not applicable — there is nothing to promote; the assets already exist in production.",
+        },
+        {
+          id: "uat",
+          label: "UAT",
+          why: "Not applicable — the decision here is who owns the assets, not where they run.",
+        },
+        {
+          id: "pilot",
+          label: "Pilot",
+          why: "Not applicable — widening the audience is unrelated to an unowned connector grant.",
+        },
         {
           id: "production",
           label: "Complete offboarding after transfer of owned assets",
           ideal: true,
-          why: "Correct.",
+          why: "Correct — ownership is reassigned and the grant revoked before the account is closed.",
         },
-        { id: "blocked", label: "Blocked", why: "N/A" },
+        {
+          id: "blocked",
+          label: "Blocked",
+          why: "Blocking the tenant punishes everyone for one leaver's unreassigned assets.",
+        },
       ],
     },
     idealAnswer:
@@ -542,7 +857,47 @@ export const scenarios: ScenarioDef[] = [
     roleIds: ["grc-lead"],
     domain: "governance_grc",
     difficulty: "expert",
-    steps: stdSteps({ classify: { ideal: "saas" } }),
+    steps: stdSteps({
+      reviewers: {
+        question:
+          "An executive wants three AI tools approved at once. Which reviewers must engage?",
+      },
+      datagov: {
+        question: "What data-governance question decides whether these can be approved together?",
+        options: [
+          { id: "a", label: "Which has the nicer interface" },
+          {
+            id: "b",
+            label:
+              "Whether each tool's data sources have named owners and approved classifications",
+            ideal: true,
+          },
+          { id: "c", label: "Which is cheapest" },
+          { id: "d", label: "Which the executive prefers" },
+        ],
+        ideal: "b",
+        explain:
+          "Three tools are three separate data flows. Bundling the approval does not bundle the risk, and each source still needs an owner.",
+      },
+      evidence: {
+        question: "What evidence would let you approve one and defer two?",
+        options: [
+          { id: "a", label: "Executive sponsorship" },
+          {
+            id: "b",
+            label:
+              "A per-tool assessment showing which has complete identity, data and retention answers",
+            ideal: true,
+          },
+          { id: "c", label: "A single combined risk score" },
+          { id: "d", label: "Vendor security questionnaires alone" },
+        ],
+        ideal: "b",
+        explain:
+          "A combined score hides which tool carries the risk. Per-tool assessment is what makes a partial approval defensible.",
+      },
+      classify: { ideal: "saas" },
+    }),
     finalDecision: {
       prompt: "Recommend the sequencing.",
       options: [

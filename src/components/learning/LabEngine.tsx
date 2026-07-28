@@ -305,9 +305,12 @@ export function LabEngineRunner({ blueprint }: { blueprint: LabBlueprint }) {
     setArtifactSaved(false);
   }
 
-  // Injections that fire at the current step index.
+  // `atStep` is authored 1-based — "fires during step 3" — while `stepIdx` is a
+  // 0-based array index. Comparing them directly meant no injection authored at
+  // the final step ever fired: connector-oauth had one injection and showed
+  // none, and every other blueprint silently dropped its second incident.
   const dueInjections = useMemo(
-    () => blueprint.injections.filter((inj) => inj.atStep === stepIdx),
+    () => blueprint.injections.filter((inj) => inj.atStep === stepIdx + 1),
     [blueprint.injections, stepIdx],
   );
   const allDueAnswered = dueInjections.every((inj) => choices[inj.id]);

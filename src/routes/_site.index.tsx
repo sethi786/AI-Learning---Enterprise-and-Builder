@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/accordion";
 import { livePaths, paths } from "@/content/paths";
 import { labs } from "@/content/labs";
+import { labBlueprints } from "@/content/labEngine";
+import { goNoGoCases } from "@/content/goNoGo";
 import { scenarios } from "@/content/scenarios";
-import { artifactTemplates } from "@/content/artifacts";
 
 export const Route = createFileRoute("/_site/")({
   head: () => ({
@@ -54,10 +55,10 @@ function LandingPage() {
 function Hero() {
   // Counted from the content modules so these can't drift into fiction.
   const stats = [
-    { value: livePaths.length, label: "Career paths" },
+    { value: labBlueprints.length + goNoGoCases.length, label: "Runnable simulators" },
     { value: scenarios.length, label: "Decision scenarios" },
     { value: labs.reduce((n, l) => n + l.modules.length, 0), label: "Lab modules" },
-    { value: artifactTemplates.length, label: "Artifact templates" },
+    { value: livePaths.length, label: "Career paths" },
   ];
   return (
     <section className="surface-dark relative overflow-hidden">

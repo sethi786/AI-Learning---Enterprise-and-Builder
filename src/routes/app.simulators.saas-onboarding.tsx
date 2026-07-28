@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { BookOpen } from "lucide-react";
+
 import { PageHeader } from "@/components/learning/Primitives";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LabEngineRunner } from "@/components/learning/LabEngine";
 import { Button } from "@/components/ui/button";
-import { labsById } from "@/content/labs";
+import { getLabBlueprint } from "@/content/labEngine";
+import type { LabBlueprint } from "@/content/labEngine";
 
 export const Route = createFileRoute("/app/simulators/saas-onboarding")({
   head: () => ({
@@ -10,43 +13,32 @@ export const Route = createFileRoute("/app/simulators/saas-onboarding")({
       { title: "SaaS AI Onboarding Simulator" },
       {
         name: "description",
-        content: "Onboard SaaS AI tools with admin, security, privacy, legal, ops, and FinOps.",
+        content:
+          "Configure a SaaS AI tenant before 2,000 licences activate: connectors, retention, audit export, sharing and licence model — then handle an unreviewed connector and a 3× cost overrun.",
       },
     ],
   }),
-  component: () => {
-    const lab = labsById["saas-onboarding"]!;
-    return (
-      <div className="mx-auto max-w-4xl">
-        <PageHeader
-          title="SaaS AI Onboarding Simulator"
-          subtitle="Onboard ChatGPT Enterprise, Copilot, Gemini, Claude, Replit, Codex — end-to-end."
-          right={
-            <Button asChild>
-              <Link to="/app/labs/$labId" params={{ labId: "saas-onboarding" }}>
-                Open full lab
-              </Link>
-            </Button>
-          }
-        />
-        <div className="grid gap-3 md:grid-cols-2">
-          {lab.modules.map((m) => (
-            <Card key={m.id} className="hover:border-primary/50">
-              <CardHeader>
-                <CardTitle className="text-base">{m.title}</CardTitle>
-                <CardDescription className="line-clamp-2">{m.lesson.enterprise}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild size="sm" variant="outline">
-                  <Link to="/app/labs/$labId" params={{ labId: "saas-onboarding" }} hash={m.id}>
-                    Open module
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
-  },
+  component: SaasOnboardingSimulator,
 });
+
+function SaasOnboardingSimulator() {
+  // Resolved on the client rather than in a loader: a blueprint carries
+  // closures (rubric checks, artifact builder) that the SSR serializer strips.
+  const blueprint = getLabBlueprint("saas-tenant-onboarding") as LabBlueprint;
+  return (
+    <div className="mx-auto max-w-6xl space-y-6">
+      <PageHeader
+        title="SaaS AI Onboarding Simulator"
+        subtitle={blueprint.tagline}
+        right={
+          <Button asChild variant="outline" size="sm" className="gap-1">
+            <Link to="/app/labs/$labId" params={{ labId: "saas-onboarding" }}>
+              <BookOpen className="h-4 w-4" /> Read the lab first
+            </Link>
+          </Button>
+        }
+      />
+      <LabEngineRunner blueprint={blueprint} />
+    </div>
+  );
+}

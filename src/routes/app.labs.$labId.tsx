@@ -2,6 +2,9 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { PageHeader, LessonShell, Quiz } from "@/components/learning/Primitives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { FlaskConical } from "lucide-react";
+import { blueprintForLab } from "@/content/labEngine";
 import { labsById } from "@/content/labs";
 import { scenariosById } from "@/content/scenarios";
 import type { LabDef, LabModule } from "@/content/types";
@@ -27,6 +30,8 @@ export const Route = createFileRoute("/app/labs/$labId")({
 
 function LabPage() {
   const { lab } = Route.useLoaderData() as { lab: LabDef };
+  // Resolved on the client: a blueprint carries closures and cannot be dehydrated.
+  const blueprint = blueprintForLab(lab.id);
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader
@@ -44,6 +49,38 @@ function LabPage() {
           <CardDescription>{lab.mission}</CardDescription>
         </CardHeader>
       </Card>
+
+      {/* Every lab has a runnable blueprint. Reading is the preparation; the
+          simulator is the assessment, so it is offered before the modules. */}
+      {blueprint ? (
+        <Card className="border-brand/40 bg-brand/5">
+          <CardHeader>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <FlaskConical className="h-4 w-4 text-brand" />
+                  Run this lab
+                </CardTitle>
+                <CardDescription className="mt-1">{blueprint.tagline}</CardDescription>
+              </div>
+              <Button asChild size="sm">
+                <Link to="/app/lab-engine/$labId" params={{ labId: blueprint.id }}>
+                  Open the simulator
+                </Link>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+            <span>{blueprint.config.length} configuration decisions</span>
+            <span>·</span>
+            <span>{blueprint.injections.length} injected failures and attacks</span>
+            <span>·</span>
+            <span>{blueprint.rubric.length} scored controls</span>
+            <span>·</span>
+            <span>exports a {blueprint.artifact.name}</span>
+          </CardContent>
+        </Card>
+      ) : null}
       {lab.modules.map((m: LabModule, i: number) => {
         const scenario = m.scenarioId ? scenariosById[m.scenarioId] : undefined;
         return (

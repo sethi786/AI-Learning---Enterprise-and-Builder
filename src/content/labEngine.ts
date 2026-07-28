@@ -1,77 +1,15 @@
-import type { MasteryDomain } from "./types";
+import type { LabBlueprint } from "./labEngineTypes";
+import { extraBlueprints } from "./labBlueprints";
 
-export type CfgValue = string | number | boolean;
-export type CfgMap = Record<string, CfgValue>;
-
-export interface LabConfigField {
-  id: string;
-  label: string;
-  help?: string;
-  type: "select" | "toggle" | "number";
-  options?: { value: string; label: string }[];
-  default: CfgValue;
-}
-
-export interface RubricCheck {
-  id: string;
-  label: string;
-  weight: number;
-  /** Return true if the current config satisfies this rubric item. */
-  check: (cfg: CfgMap) => boolean;
-  remedy: string;
-}
-
-export interface LabInjection {
-  id: string;
-  /** Trigger when the learner completes / advances past this step index. */
-  atStep: number;
-  kind: "failure" | "attack" | "drift" | "policy";
-  title: string;
-  /** Log lines that stream into the console when triggered. */
-  logs: string[];
-  prompt: string;
-  choices: {
-    id: string;
-    label: string;
-    scoreDelta: number;
-    explain: string;
-    /** Extra log lines emitted after the learner picks this choice. */
-    followupLogs?: string[];
-    correct?: boolean;
-  }[];
-}
-
-export interface LabStep {
-  id: string;
-  title: string;
-  narrative: string;
-  logs: string[];
-}
-
-export interface LabBlueprint {
-  id: string;
-  name: string;
-  tagline: string;
-  domain: MasteryDomain;
-  competencyIds: string[];
-  summary: string;
-  config: LabConfigField[];
-  steps: LabStep[];
-  injections: LabInjection[];
-  rubric: RubricCheck[];
-  debrief: { section: string; body: string }[];
-  artifact: {
-    name: string;
-    build: (ctx: {
-      cfg: CfgMap;
-      choices: Record<string, string>;
-      score: number;
-      max: number;
-      passedRubric: string[];
-      failedRubric: string[];
-    }) => string;
-  };
-}
+export type {
+  CfgValue,
+  CfgMap,
+  LabConfigField,
+  RubricCheck,
+  LabInjection,
+  LabStep,
+  LabBlueprint,
+} from "./labEngineTypes";
 
 // ─────────────────────────────────────────────────────────────
 // Concrete lab blueprints (deep, technical, simulator-only).
@@ -700,8 +638,34 @@ const connectorLab: LabBlueprint = {
   },
 };
 
-export const labBlueprints: LabBlueprint[] = [ragLab, agentLab, connectorLab];
+export const labBlueprints: LabBlueprint[] = [ragLab, agentLab, connectorLab, ...extraBlueprints];
 
 export function getLabBlueprint(id: string): LabBlueprint | undefined {
   return labBlueprints.find((b) => b.id === id);
+}
+
+/**
+ * Which runnable blueprint belongs to which lab in the catalogue.
+ * Every lab has one — a lab page that only offers reading was the gap that
+ * made most of this product feel like a brochure.
+ */
+export const blueprintByLabId: Record<string, string> = {
+  rag: "rag-onboarding",
+  agent: "agent-killswitch",
+  connector: "connector-oauth",
+  "zero-trust": "zero-trust-access",
+  privacy: "privacy-impact",
+  legal: "legal-review",
+  qrm: "qrm-risk-acceptance",
+  "data-governance": "data-governance-index",
+  iam: "iam-agent-identity",
+  devsecops: "devsecops-release-gate",
+  "ai-engineering": "ai-engineering-eval",
+  "saas-onboarding": "saas-tenant-onboarding",
+  "in-house-app": "in-house-architecture",
+};
+
+export function blueprintForLab(labId: string): LabBlueprint | undefined {
+  const id = blueprintByLabId[labId];
+  return id ? getLabBlueprint(id) : undefined;
 }

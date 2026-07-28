@@ -1,5 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, DiagramBlock } from "@/components/learning/Primitives";
+import { LabEngineRunner } from "@/components/learning/LabEngine";
+import { getLabBlueprint } from "@/content/labEngine";
+import type { LabBlueprint } from "@/content/labEngine";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -65,12 +68,14 @@ function Sim() {
     [c],
   );
   const set = <K extends keyof Choices>(k: K, v: Choices[K]) => setC((p) => ({ ...p, [k]: v }));
+  // Resolved on the client: the blueprint carries closures the SSR serializer strips.
+  const blueprint = getLabBlueprint("in-house-architecture") as LabBlueprint;
   const btn = (active: boolean): "default" | "outline" => (active ? "default" : "outline");
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <PageHeader
         title="In-House AI App Simulator"
-        subtitle="Make decisions and see the technical + governance consequences."
+        subtitle="Explore the design space, then take your design through a scored architecture review."
       />
       <Card>
         <CardHeader>
@@ -201,6 +206,21 @@ function Sim() {
             </ul>
           </CardContent>
         </Card>
+      </div>
+
+      {/* The sandbox above is exploration — instant consequences, no score. The
+          runner below is the assessment: the same subject taken through a real
+          review with injected failures and a scored rubric. */}
+      <div className="border-t pt-8">
+        <h2 className="text-xl font-bold tracking-tight">Take it through architecture review</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Exploring combinations tells you what is possible. This scores what you would actually
+          submit — including what happens when the model provider degrades and whether you can
+          explain a decision six months later.
+        </p>
+        <div className="mt-6">
+          <LabEngineRunner blueprint={blueprint} />
+        </div>
       </div>
     </div>
   );

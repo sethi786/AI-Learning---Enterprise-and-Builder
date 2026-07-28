@@ -39,9 +39,10 @@ import { Route as AppRolesRoleIdRouteImport } from './routes/app.roles.$roleId'
 import { Route as AppScenariosScenarioIdRouteImport } from './routes/app.scenarios.$scenarioId'
 import { Route as AppScenariosRagTicketAgentRouteImport } from './routes/app.scenarios.rag-ticket-agent'
 import { Route as AppSimulatorsEnvRouteImport } from './routes/app.simulators.env'
-import { Route as AppSimulatorsGoNoGoRouteImport } from './routes/app.simulators.go-no-go'
 import { Route as AppSimulatorsInHouseAppRouteImport } from './routes/app.simulators.in-house-app'
 import { Route as AppSimulatorsSaasOnboardingRouteImport } from './routes/app.simulators.saas-onboarding'
+import { Route as AppSimulatorsGoNoGoIndexRouteImport } from './routes/app.simulators.go-no-go.index'
+import { Route as AppSimulatorsGoNoGoCaseIdRouteImport } from './routes/app.simulators.go-no-go.$caseId'
 
 const SiteRoute = SiteRouteImport.update({
   id: '/_site',
@@ -193,11 +194,6 @@ const AppSimulatorsEnvRoute = AppSimulatorsEnvRouteImport.update({
   path: '/simulators/env',
   getParentRoute: () => AppRoute,
 } as any)
-const AppSimulatorsGoNoGoRoute = AppSimulatorsGoNoGoRouteImport.update({
-  id: '/simulators/go-no-go',
-  path: '/simulators/go-no-go',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppSimulatorsInHouseAppRoute = AppSimulatorsInHouseAppRouteImport.update({
   id: '/simulators/in-house-app',
   path: '/simulators/in-house-app',
@@ -207,6 +203,18 @@ const AppSimulatorsSaasOnboardingRoute =
   AppSimulatorsSaasOnboardingRouteImport.update({
     id: '/simulators/saas-onboarding',
     path: '/simulators/saas-onboarding',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSimulatorsGoNoGoIndexRoute =
+  AppSimulatorsGoNoGoIndexRouteImport.update({
+    id: '/simulators/go-no-go/',
+    path: '/simulators/go-no-go/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSimulatorsGoNoGoCaseIdRoute =
+  AppSimulatorsGoNoGoCaseIdRouteImport.update({
+    id: '/simulators/go-no-go/$caseId',
+    path: '/simulators/go-no-go/$caseId',
     getParentRoute: () => AppRoute,
   } as any)
 
@@ -239,10 +247,11 @@ export interface FileRoutesByFullPath {
   '/app/scenarios/$scenarioId': typeof AppScenariosScenarioIdRoute
   '/app/scenarios/rag-ticket-agent': typeof AppScenariosRagTicketAgentRoute
   '/app/simulators/env': typeof AppSimulatorsEnvRoute
-  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
   '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
   '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
   '/paths/': typeof SitePathsIndexRoute
+  '/app/simulators/go-no-go/$caseId': typeof AppSimulatorsGoNoGoCaseIdRoute
+  '/app/simulators/go-no-go/': typeof AppSimulatorsGoNoGoIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -272,10 +281,11 @@ export interface FileRoutesByTo {
   '/app/scenarios/$scenarioId': typeof AppScenariosScenarioIdRoute
   '/app/scenarios/rag-ticket-agent': typeof AppScenariosRagTicketAgentRoute
   '/app/simulators/env': typeof AppSimulatorsEnvRoute
-  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
   '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
   '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
   '/paths': typeof SitePathsIndexRoute
+  '/app/simulators/go-no-go/$caseId': typeof AppSimulatorsGoNoGoCaseIdRoute
+  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -308,10 +318,11 @@ export interface FileRoutesById {
   '/app/scenarios/$scenarioId': typeof AppScenariosScenarioIdRoute
   '/app/scenarios/rag-ticket-agent': typeof AppScenariosRagTicketAgentRoute
   '/app/simulators/env': typeof AppSimulatorsEnvRoute
-  '/app/simulators/go-no-go': typeof AppSimulatorsGoNoGoRoute
   '/app/simulators/in-house-app': typeof AppSimulatorsInHouseAppRoute
   '/app/simulators/saas-onboarding': typeof AppSimulatorsSaasOnboardingRoute
   '/_site/paths/': typeof SitePathsIndexRoute
+  '/app/simulators/go-no-go/$caseId': typeof AppSimulatorsGoNoGoCaseIdRoute
+  '/app/simulators/go-no-go/': typeof AppSimulatorsGoNoGoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -344,10 +355,11 @@ export interface FileRouteTypes {
     | '/app/scenarios/$scenarioId'
     | '/app/scenarios/rag-ticket-agent'
     | '/app/simulators/env'
-    | '/app/simulators/go-no-go'
     | '/app/simulators/in-house-app'
     | '/app/simulators/saas-onboarding'
     | '/paths/'
+    | '/app/simulators/go-no-go/$caseId'
+    | '/app/simulators/go-no-go/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -377,10 +389,11 @@ export interface FileRouteTypes {
     | '/app/scenarios/$scenarioId'
     | '/app/scenarios/rag-ticket-agent'
     | '/app/simulators/env'
-    | '/app/simulators/go-no-go'
     | '/app/simulators/in-house-app'
     | '/app/simulators/saas-onboarding'
     | '/paths'
+    | '/app/simulators/go-no-go/$caseId'
+    | '/app/simulators/go-no-go'
   id:
     | '__root__'
     | '/_site'
@@ -412,10 +425,11 @@ export interface FileRouteTypes {
     | '/app/scenarios/$scenarioId'
     | '/app/scenarios/rag-ticket-agent'
     | '/app/simulators/env'
-    | '/app/simulators/go-no-go'
     | '/app/simulators/in-house-app'
     | '/app/simulators/saas-onboarding'
     | '/_site/paths/'
+    | '/app/simulators/go-no-go/$caseId'
+    | '/app/simulators/go-no-go/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -636,13 +650,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSimulatorsEnvRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/simulators/go-no-go': {
-      id: '/app/simulators/go-no-go'
-      path: '/simulators/go-no-go'
-      fullPath: '/app/simulators/go-no-go'
-      preLoaderRoute: typeof AppSimulatorsGoNoGoRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/simulators/in-house-app': {
       id: '/app/simulators/in-house-app'
       path: '/simulators/in-house-app'
@@ -655,6 +662,20 @@ declare module '@tanstack/react-router' {
       path: '/simulators/saas-onboarding'
       fullPath: '/app/simulators/saas-onboarding'
       preLoaderRoute: typeof AppSimulatorsSaasOnboardingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/simulators/go-no-go/': {
+      id: '/app/simulators/go-no-go/'
+      path: '/simulators/go-no-go'
+      fullPath: '/app/simulators/go-no-go/'
+      preLoaderRoute: typeof AppSimulatorsGoNoGoIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/simulators/go-no-go/$caseId': {
+      id: '/app/simulators/go-no-go/$caseId'
+      path: '/simulators/go-no-go/$caseId'
+      fullPath: '/app/simulators/go-no-go/$caseId'
+      preLoaderRoute: typeof AppSimulatorsGoNoGoCaseIdRouteImport
       parentRoute: typeof AppRoute
     }
   }
@@ -745,9 +766,10 @@ interface AppRouteChildren {
   AppScenariosScenarioIdRoute: typeof AppScenariosScenarioIdRoute
   AppScenariosRagTicketAgentRoute: typeof AppScenariosRagTicketAgentRoute
   AppSimulatorsEnvRoute: typeof AppSimulatorsEnvRoute
-  AppSimulatorsGoNoGoRoute: typeof AppSimulatorsGoNoGoRoute
   AppSimulatorsInHouseAppRoute: typeof AppSimulatorsInHouseAppRoute
   AppSimulatorsSaasOnboardingRoute: typeof AppSimulatorsSaasOnboardingRoute
+  AppSimulatorsGoNoGoCaseIdRoute: typeof AppSimulatorsGoNoGoCaseIdRoute
+  AppSimulatorsGoNoGoIndexRoute: typeof AppSimulatorsGoNoGoIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -769,9 +791,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppScenariosScenarioIdRoute: AppScenariosScenarioIdRoute,
   AppScenariosRagTicketAgentRoute: AppScenariosRagTicketAgentRoute,
   AppSimulatorsEnvRoute: AppSimulatorsEnvRoute,
-  AppSimulatorsGoNoGoRoute: AppSimulatorsGoNoGoRoute,
   AppSimulatorsInHouseAppRoute: AppSimulatorsInHouseAppRoute,
   AppSimulatorsSaasOnboardingRoute: AppSimulatorsSaasOnboardingRoute,
+  AppSimulatorsGoNoGoCaseIdRoute: AppSimulatorsGoNoGoCaseIdRoute,
+  AppSimulatorsGoNoGoIndexRoute: AppSimulatorsGoNoGoIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

@@ -39,9 +39,6 @@ function CareerPathPage() {
                       <CardTitle>{r.name}</CardTitle>
                       <CardDescription>{r.short}</CardDescription>
                     </div>
-                    <Badge variant={r.depth === "deep" ? "default" : "secondary"}>
-                      {r.depth === "deep" ? "Deep content" : "Scaffold"}
-                    </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>

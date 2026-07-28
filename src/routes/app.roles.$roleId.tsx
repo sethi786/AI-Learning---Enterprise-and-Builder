@@ -51,11 +51,7 @@ function RolePage() {
       <PageHeader
         title={role.name}
         subtitle={role.short}
-        right={
-          <Badge variant={role.depth === "deep" ? "default" : "secondary"}>
-            {role.depth === "deep" ? "Deep content" : "Scaffold"}
-          </Badge>
-        }
+        right={<Badge variant="secondary">Role {role.order} on the career map</Badge>}
       />
 
       <Card>

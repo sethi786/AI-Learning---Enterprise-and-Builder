@@ -363,7 +363,7 @@ export function Quiz({
       <Card>
         <CardHeader>
           <CardTitle>Quiz</CardTitle>
-          <CardDescription>No questions yet for this module.</CardDescription>
+          <CardDescription>This module has no quiz.</CardDescription>
         </CardHeader>
       </Card>
     );

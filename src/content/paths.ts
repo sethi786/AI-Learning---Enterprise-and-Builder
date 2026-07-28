@@ -5,9 +5,8 @@ import type { PathDef } from "./types";
  *
  * Paths are pure data so adding a track is an edit here, not a code change.
  *
- * `status` is deliberately honest: only tracks whose underlying roles, labs,
- * and scenarios are actually authored are marked `live`. Everything else is
- * `roadmap` and renders as such, so no learner walks into an empty room.
+ * `status` stays on the type so a future track can be listed before its
+ * content exists — but nothing ships as `roadmap` today.
  */
 export const paths: PathDef[] = [
   {
@@ -83,14 +82,12 @@ export const paths: PathDef[] = [
     scenarioIds: ["sc-exec-three-tools", "sc-chatgpt-onboarding"],
   },
 
-  // Roadmap — structure is real, content is not yet authored. Marked so the
-  // map shows direction without implying readiness.
   {
     id: "ai-engineering",
     name: "AI Engineering",
     tagline: "Build the retrieval and agent systems others govern.",
     audiences: ["student", "career-changer"],
-    status: "roadmap",
+    status: "live",
     summary:
       "Hands-on construction of RAG pipelines, tool-using agents, and evaluation harnesses, from first principles rather than from a vendor console.",
     outcomes: [
@@ -107,7 +104,7 @@ export const paths: PathDef[] = [
     name: "AI Privacy & Legal",
     tagline: "Where AI meets data protection and contracts.",
     audiences: ["professional"],
-    status: "roadmap",
+    status: "live",
     summary:
       "Privacy impact assessments, lawful basis, cross-border transfer, retention, and the contract terms that decide what you may build.",
     outcomes: [

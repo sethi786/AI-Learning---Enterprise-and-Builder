@@ -30,7 +30,7 @@ const check = async (url, mustContain, mustNotContain) => {
 console.log("--- content assertions (not status codes) ---");
 // Bug 1: the path detail page must render, not the listing.
 await check("/paths/ai-security-architecture", "Break a RAG system");
-await check("/paths", "Available now");
+await check("/paths", "AI Security Architecture");
 // Bug 4: direct URL load exercises the SSR serializer.
 await check("/app/lab-engine/rag-onboarding", "Live rubric");
 await check("/app/artifacts/sar", "Practice artifact");
@@ -99,6 +99,67 @@ const anchorCount = await p.$$eval(
   (e) => e.length,
 );
 console.log(anchorCount >= 3 ? "PASS" : "FAIL", `module anchors present: ${anchorCount}`);
+
+console.log("\n--- newly authored labs actually render lessons and quizzes ---");
+// A regression guard: the lab page once rendered its header and mission and
+// silently dropped every module, and a status-code check would not have caught it.
+// The phrases below come from the deep-dive layer only, so a page that renders
+// nothing but module titles fails this.
+for (const [labId, moduleId, phrase] of [
+  ["data-governance", "classification-trimming", "re-sync permissions on a schedule"],
+  ["iam", "sso-federation", "phishing-resistant mfa"],
+  ["devsecops", "secure-ai-sdlc", "unpinned package is a supply chain path"],
+]) {
+  await p.goto(B + `/app/labs/${labId}`, { waitUntil: "networkidle" });
+  await p.waitForTimeout(600);
+  const anchor = await p.$(`#${moduleId}`);
+  const quiz = (await p.$$('[role="radiogroup"]')).length > 0;
+  const body = (await p.locator("body").innerText()).toLowerCase();
+  const layers = ["simple explanation", "enterprise explanation", "technical deep dive"].every(
+    (l) => body.includes(l),
+  );
+  const ok = !!anchor && layers && quiz && body.includes(phrase);
+  console.log(
+    ok ? "PASS" : "FAIL",
+    `${labId}: anchor=${!!anchor} layers=${layers} quiz=${quiz} deepDive=${body.includes(phrase)}`,
+  );
+}
+
+console.log("\n--- an exam runs end to end to a score ---");
+await p.goto(B + "/app/exams/solution-architect", { waitUntil: "networkidle" });
+await p.waitForTimeout(600);
+// Every question is on one page and Submit only enables once all are answered,
+// so answering one and looking for "Next" would hang on a disabled button.
+const groups = p.locator('[role="radiogroup"]');
+const questionCount = await groups.count();
+for (let i = 0; i < questionCount; i++) {
+  await groups.nth(i).locator('[role="radio"]').first().click();
+}
+const submit = p.getByRole("button", { name: /^submit$/i }).first();
+const enabled = await submit.isEnabled();
+if (enabled) {
+  await submit.click();
+  await p.waitForTimeout(500);
+}
+const examBody = await p.locator("body").innerText();
+// "Score: n/10" plus a per-question rationale is what a finished exam looks like.
+const m = examBody.match(/Score:\s*(\d+)\s*\/\s*(\d+)/i);
+const examOk =
+  !!m && Number(m[2]) === questionCount && questionCount >= 10 && /Why:/.test(examBody);
+console.log(
+  examOk ? "PASS" : "FAIL",
+  `exam: ${questionCount} questions answered, submit enabled=${enabled}, result="${m ? m[0] : "none"}", rationales shown=${/Why:/.test(examBody)}`,
+);
+
+console.log("\n--- a platform page shows authored prose, not filler ---");
+await p.goto(B + "/app/platforms/azure-ai-foundry", { waitUntil: "networkidle" });
+await p.waitForTimeout(400);
+const plat = (await p.locator("body").innerText()).toLowerCase();
+const platOk =
+  !plat.includes("enterprise use cases for") &&
+  !plat.includes("fill in identity") &&
+  plat.length > 1500;
+console.log(platOk ? "PASS" : "FAIL", `platform page: ${plat.length} chars, no filler markers`);
 
 console.log("\n--- errors / dialogs ---");
 console.log("page+console errors:", errs.length ? errs.slice(0, 5) : "none");

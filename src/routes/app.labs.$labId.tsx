@@ -33,8 +33,8 @@ function LabPage() {
         title={lab.name}
         subtitle={lab.tagline}
         right={
-          <Badge variant={lab.depth === "deep" ? "default" : "secondary"}>
-            {lab.depth === "deep" ? "Deep content" : "Scaffold"}
+          <Badge variant="secondary">
+            {lab.modules.length} {lab.modules.length === 1 ? "module" : "modules"}
           </Badge>
         }
       />
@@ -44,16 +44,11 @@ function LabPage() {
           <CardDescription>{lab.mission}</CardDescription>
         </CardHeader>
       </Card>
-      {lab.modules.length === 0 ? (
-        <Card>
-          <CardContent className="p-6 text-sm text-muted-foreground">
-            No modules seeded yet. Add modules in <code>src/content/labs.ts</code>.
-          </CardContent>
-        </Card>
-      ) : null}
       {lab.modules.map((m: LabModule, i: number) => {
         const scenario = m.scenarioId ? scenariosById[m.scenarioId] : undefined;
         return (
+          // `id` is the deep-link anchor other pages jump to, so it must be the
+          // bare module id and carry scroll-mt to clear the sticky header.
           <div key={m.id} id={m.id} className="scroll-mt-20 space-y-3">
             <div className="flex items-center gap-2">
               <Badge variant="outline">Module {i + 1}</Badge>

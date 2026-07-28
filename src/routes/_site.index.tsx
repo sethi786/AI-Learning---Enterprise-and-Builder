@@ -56,7 +56,7 @@ function Hero() {
   const stats = [
     { value: livePaths.length, label: "Career paths" },
     { value: scenarios.length, label: "Decision scenarios" },
-    { value: labs.filter((l) => l.depth === "deep").length, label: "In-depth labs" },
+    { value: labs.reduce((n, l) => n + l.modules.length, 0), label: "Lab modules" },
     { value: artifactTemplates.length, label: "Artifact templates" },
   ];
   return (

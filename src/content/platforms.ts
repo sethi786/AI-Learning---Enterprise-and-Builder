@@ -1,12 +1,7 @@
 import type { PlatformDef } from "./types";
 
-const deepPlatform = (p: Omit<PlatformDef, "depth">): PlatformDef => ({
-  ...p,
-  depth: "deep",
-});
-
 export const platforms: PlatformDef[] = [
-  deepPlatform({
+  {
     id: "m365-copilot",
     name: "Microsoft 365 Copilot",
     category: "saas-productivity",
@@ -86,8 +81,8 @@ export const platforms: PlatformDef[] = [
         domain: "platform",
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "chatgpt-enterprise",
     name: "ChatGPT Enterprise",
     category: "saas-chat",
@@ -198,8 +193,8 @@ export const platforms: PlatformDef[] = [
         domain: "security",
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "azure-ai-foundry",
     name: "Azure AI Foundry",
     category: "cloud-ai",
@@ -282,8 +277,8 @@ export const platforms: PlatformDef[] = [
         domain: "security",
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "copilot-studio",
     name: "Copilot Studio",
     category: "saas-productivity",
@@ -374,8 +369,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["arch.iam", "sec.data_exfil"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "chatgpt-workspace-agents",
     name: "ChatGPT Workspace Agents",
     category: "saas-chat",
@@ -468,8 +463,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["gov.risk_classification", "sec.data_exfil"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "gemini-enterprise",
     name: "Gemini for Google Workspace",
     category: "saas-productivity",
@@ -554,8 +549,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["gov.registry", "sec.data_exfil"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "claude-enterprise",
     name: "Claude Enterprise",
     category: "saas-chat",
@@ -644,8 +639,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["gov.recertification", "plat.rbac"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "claude-code",
     name: "Claude Code",
     category: "coding-assistant",
@@ -740,8 +735,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.ssdlc", "arch.iam", "eng.cicd"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "codex",
     name: "OpenAI Codex",
     category: "coding-assistant",
@@ -819,8 +814,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.network", "eng.cicd", "sec.ssdlc"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "replit",
     name: "Replit",
     category: "coding-assistant",
@@ -909,8 +904,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["arch.inhouse", "gov.approval_workflow"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "vertex-ai",
     name: "Google Vertex AI",
     category: "cloud-ai",
@@ -1000,8 +995,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.network", "sec.data_exfil", "arch.iam"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "aws-bedrock",
     name: "AWS Bedrock",
     category: "cloud-ai",
@@ -1096,8 +1091,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.permission_trimming", "arch.rag", "sec.data_exfil"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "internal-ai-apps",
     name: "Internal AI Applications",
     category: "internal",
@@ -1184,8 +1179,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.permission_trimming", "arch.iam", "arch.inhouse"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "rag-systems",
     name: "RAG Systems",
     category: "pattern",
@@ -1270,8 +1265,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.indirect_injection", "sec.rag_poisoning", "arch.rag"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "ai-agents",
     name: "AI Agents",
     category: "pattern",
@@ -1359,8 +1354,8 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.agent_tool_misuse", "sec.blast_radius", "plr.hitl"],
       },
     ],
-  }),
-  deepPlatform({
+  },
+  {
     id: "ai-connectors",
     name: "AI Connectors",
     category: "pattern",
@@ -1456,7 +1451,7 @@ export const platforms: PlatformDef[] = [
         competencyIds: ["sec.oauth", "arch.connectors", "arch.iam"],
       },
     ],
-  }),
+  },
 ];
 
 export const platformsById: Record<string, PlatformDef> = Object.fromEntries(

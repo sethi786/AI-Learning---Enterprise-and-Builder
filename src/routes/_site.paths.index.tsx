@@ -18,9 +18,6 @@ export const Route = createFileRoute("/_site/paths/")({
 });
 
 function PathsPage() {
-  const live = paths.filter((p) => p.status === "live");
-  const roadmap = paths.filter((p) => p.status === "roadmap");
-
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
       <div className="max-w-2xl">
@@ -32,32 +29,12 @@ function PathsPage() {
       </div>
 
       <section className="mt-12">
-        <h2 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-          Available now
-        </h2>
         <div className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {live.map((p) => (
+          {paths.map((p) => (
             <PathCard key={p.id} path={p} />
           ))}
         </div>
       </section>
-
-      {roadmap.length > 0 && (
-        <section className="mt-14">
-          <h2 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-            On the roadmap
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            The structure is planned and the supporting material is being written. Listed here so
-            you can see where this is heading, not to suggest it is ready.
-          </p>
-          <div className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {roadmap.map((p) => (
-              <PathCard key={p.id} path={p} />
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }

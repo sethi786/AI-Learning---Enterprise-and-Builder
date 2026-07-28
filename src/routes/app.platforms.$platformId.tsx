@@ -60,11 +60,7 @@ function PlatformPage() {
       <PageHeader
         title={p.name}
         subtitle={p.what}
-        right={
-          <Badge variant={p.depth === "deep" ? "default" : "secondary"}>
-            {p.depth === "deep" ? "Deep content" : "Scaffold"}
-          </Badge>
-        }
+        right={<Badge variant="secondary">{p.category}</Badge>}
       />
       <Card>
         <CardHeader>

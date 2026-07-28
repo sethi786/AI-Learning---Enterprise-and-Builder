@@ -51,7 +51,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSession, signOut } from "@/lib/session";
-import { labsById } from "@/content/labs";
 import { Button } from "@/components/ui/button";
 
 // `link` carries typed router options so every destination is compile-checked.
@@ -61,8 +60,6 @@ type Item = {
   title: string;
   icon: React.ComponentType<{ className?: string }>;
   link: LinkProps;
-  /** Content is still an outline; the nav says so rather than letting a learner find out. */
-  inDevelopment?: boolean;
 };
 
 const lab = (labId: string): Item["link"] =>
@@ -72,7 +69,6 @@ const labItem = (title: string, icon: Item["icon"], labId: string): Item => ({
   title,
   icon,
   link: lab(labId),
-  inDevelopment: labsById[labId]?.depth === "scaffold",
 });
 
 const overview: Item[] = [
@@ -169,12 +165,6 @@ function Group({
                   <Link {...item.link} className="flex items-center gap-2">
                     <item.icon className="h-4 w-4" />
                     <span className="flex-1 truncate">{item.title}</span>
-                    {item.inDevelopment && (
-                      <span
-                        className="size-1.5 shrink-0 rounded-full bg-muted-foreground/40"
-                        title="Still in development"
-                      />
-                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

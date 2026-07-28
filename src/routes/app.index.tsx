@@ -242,7 +242,7 @@ function Dashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Lab progress</CardTitle>
-            <CardDescription>Deep vs scaffolded labs across domains.</CardDescription>
+            <CardDescription>Modules completed in each lab.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
             {labs.slice(0, 6).map((l) => {

@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { exams } from "@/content/exams";
-import { DepthBadge } from "@/components/learning/DepthBadge";
 
 export const Route = createFileRoute("/app/exams")({
   head: () => ({
@@ -32,7 +31,6 @@ function ExamsPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">{e.name}</CardTitle>
-                <DepthBadge depth={e.depth} deepLabel="Full exam" />
               </div>
               <CardDescription>{e.description}</CardDescription>
             </CardHeader>

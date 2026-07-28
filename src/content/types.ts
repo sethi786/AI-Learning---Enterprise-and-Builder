@@ -39,7 +39,6 @@ export interface RoleDef {
   scenarioIds: string[];
   platformIds: string[];
   stages: Record<Stage, string[]>;
-  depth: "deep" | "scaffold";
 }
 
 export interface PlatformDef {
@@ -64,7 +63,6 @@ export interface PlatformDef {
   evidence: string[];
   scenarioId?: string;
   quiz: QuizQuestion[];
-  depth: "deep" | "scaffold";
 }
 
 export type QuizType = "mc" | "find-risk" | "choose-control" | "owner" | "gate";
@@ -163,7 +161,6 @@ export interface LabDef {
   mission: string;
   domain: MasteryDomain;
   modules: LabModule[];
-  depth: "deep" | "scaffold";
 }
 
 export type EnvDecision = "ai-lab" | "dev" | "uat" | "pilot" | "production" | "blocked";
@@ -204,7 +201,6 @@ export interface ExamDef {
   roleId: RoleId;
   description: string;
   questions: ExamQuestion[];
-  depth: "deep" | "scaffold";
 }
 
 export interface ArtifactField {

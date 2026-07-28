@@ -48,11 +48,6 @@ function PathDetailPage() {
       </Link>
 
       <header className="mt-6 max-w-3xl">
-        {path.status === "roadmap" && (
-          <Badge variant="outline" className="mb-4 text-muted-foreground">
-            In development — outline only
-          </Badge>
-        )}
         <h1 className="text-4xl font-bold tracking-tight text-balance">{path.name}</h1>
         <p className="mt-3 text-lg text-brand">{path.tagline}</p>
         <p className="mt-5 leading-relaxed text-muted-foreground text-pretty">{path.summary}</p>
@@ -77,7 +72,6 @@ function PathDetailPage() {
               key={r.id}
               title={r.name}
               body={r.short}
-              scaffold={r.depth === "scaffold"}
               to="/app/roles/$roleId"
               params={{ roleId: r.id }}
             />
@@ -92,7 +86,6 @@ function PathDetailPage() {
               key={l.id}
               title={l.name}
               body={l.tagline}
-              scaffold={l.depth === "scaffold"}
               to="/app/labs/$labId"
               params={{ labId: l.id }}
             />
@@ -141,13 +134,11 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function ItemCard({
   title,
   body,
-  scaffold,
   to,
   params,
 }: {
   title: string;
   body: string;
-  scaffold?: boolean;
   to: string;
   params: Record<string, string>;
 }) {
@@ -157,11 +148,6 @@ function ItemCard({
         <CardHeader>
           <div className="flex items-start justify-between gap-3">
             <h3 className="font-semibold leading-none tracking-tight">{title}</h3>
-            {scaffold && (
-              <Badge variant="outline" className="shrink-0 text-xs text-muted-foreground">
-                Outline
-              </Badge>
-            )}
           </div>
           <CardDescription className="pt-1.5">{body}</CardDescription>
         </CardHeader>

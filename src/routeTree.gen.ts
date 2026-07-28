@@ -17,6 +17,7 @@ import { Route as SiteAboutRouteImport } from './routes/_site.about'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppArtifactsRouteImport } from './routes/app.artifacts'
 import { Route as AppCareerPathRouteImport } from './routes/app.career-path'
+import { Route as AppCareersRouteImport } from './routes/app.careers'
 import { Route as AppCompetenciesRouteImport } from './routes/app.competencies'
 import { Route as AppExamsRouteImport } from './routes/app.exams'
 import { Route as AppFlashcardsRouteImport } from './routes/app.flashcards'
@@ -24,6 +25,7 @@ import { Route as AppGlossaryRouteImport } from './routes/app.glossary'
 import { Route as AppLabEngineRouteImport } from './routes/app.lab-engine'
 import { Route as AppMyRunsRouteImport } from './routes/app.my-runs'
 import { Route as AppNotesRouteImport } from './routes/app.notes'
+import { Route as AppPortfolioRouteImport } from './routes/app.portfolio'
 import { Route as AppStartRouteImport } from './routes/app.start'
 import { Route as SiteForAudienceRouteImport } from './routes/_site.for.$audience'
 import { Route as SitePathsIndexRouteImport } from './routes/_site.paths.index'
@@ -85,6 +87,11 @@ const AppCareerPathRoute = AppCareerPathRouteImport.update({
   path: '/career-path',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCareersRoute = AppCareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCompetenciesRoute = AppCompetenciesRouteImport.update({
   id: '/competencies',
   path: '/competencies',
@@ -118,6 +125,11 @@ const AppMyRunsRoute = AppMyRunsRouteImport.update({
 const AppNotesRoute = AppNotesRouteImport.update({
   id: '/notes',
   path: '/notes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPortfolioRoute = AppPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
   getParentRoute: () => AppRoute,
 } as any)
 const AppStartRoute = AppStartRouteImport.update({
@@ -237,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof SiteAboutRoute
   '/app/artifacts': typeof AppArtifactsRouteWithChildren
   '/app/career-path': typeof AppCareerPathRoute
+  '/app/careers': typeof AppCareersRoute
   '/app/competencies': typeof AppCompetenciesRoute
   '/app/exams': typeof AppExamsRouteWithChildren
   '/app/flashcards': typeof AppFlashcardsRoute
@@ -244,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/app/lab-engine': typeof AppLabEngineRouteWithChildren
   '/app/my-runs': typeof AppMyRunsRouteWithChildren
   '/app/notes': typeof AppNotesRoute
+  '/app/portfolio': typeof AppPortfolioRoute
   '/app/start': typeof AppStartRoute
   '/app/': typeof AppIndexRoute
   '/for/$audience': typeof SiteForAudienceRoute
@@ -272,6 +286,7 @@ export interface FileRoutesByTo {
   '/about': typeof SiteAboutRoute
   '/app/artifacts': typeof AppArtifactsRouteWithChildren
   '/app/career-path': typeof AppCareerPathRoute
+  '/app/careers': typeof AppCareersRoute
   '/app/competencies': typeof AppCompetenciesRoute
   '/app/exams': typeof AppExamsRouteWithChildren
   '/app/flashcards': typeof AppFlashcardsRoute
@@ -279,6 +294,7 @@ export interface FileRoutesByTo {
   '/app/lab-engine': typeof AppLabEngineRouteWithChildren
   '/app/my-runs': typeof AppMyRunsRouteWithChildren
   '/app/notes': typeof AppNotesRoute
+  '/app/portfolio': typeof AppPortfolioRoute
   '/app/start': typeof AppStartRoute
   '/': typeof SiteIndexRoute
   '/app': typeof AppIndexRoute
@@ -311,6 +327,7 @@ export interface FileRoutesById {
   '/_site/about': typeof SiteAboutRoute
   '/app/artifacts': typeof AppArtifactsRouteWithChildren
   '/app/career-path': typeof AppCareerPathRoute
+  '/app/careers': typeof AppCareersRoute
   '/app/competencies': typeof AppCompetenciesRoute
   '/app/exams': typeof AppExamsRouteWithChildren
   '/app/flashcards': typeof AppFlashcardsRoute
@@ -318,6 +335,7 @@ export interface FileRoutesById {
   '/app/lab-engine': typeof AppLabEngineRouteWithChildren
   '/app/my-runs': typeof AppMyRunsRouteWithChildren
   '/app/notes': typeof AppNotesRoute
+  '/app/portfolio': typeof AppPortfolioRoute
   '/app/start': typeof AppStartRoute
   '/_site/': typeof SiteIndexRoute
   '/app/': typeof AppIndexRoute
@@ -351,6 +369,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/app/artifacts'
     | '/app/career-path'
+    | '/app/careers'
     | '/app/competencies'
     | '/app/exams'
     | '/app/flashcards'
@@ -358,6 +377,7 @@ export interface FileRouteTypes {
     | '/app/lab-engine'
     | '/app/my-runs'
     | '/app/notes'
+    | '/app/portfolio'
     | '/app/start'
     | '/app/'
     | '/for/$audience'
@@ -386,6 +406,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/app/artifacts'
     | '/app/career-path'
+    | '/app/careers'
     | '/app/competencies'
     | '/app/exams'
     | '/app/flashcards'
@@ -393,6 +414,7 @@ export interface FileRouteTypes {
     | '/app/lab-engine'
     | '/app/my-runs'
     | '/app/notes'
+    | '/app/portfolio'
     | '/app/start'
     | '/'
     | '/app'
@@ -424,6 +446,7 @@ export interface FileRouteTypes {
     | '/_site/about'
     | '/app/artifacts'
     | '/app/career-path'
+    | '/app/careers'
     | '/app/competencies'
     | '/app/exams'
     | '/app/flashcards'
@@ -431,6 +454,7 @@ export interface FileRouteTypes {
     | '/app/lab-engine'
     | '/app/my-runs'
     | '/app/notes'
+    | '/app/portfolio'
     | '/app/start'
     | '/_site/'
     | '/app/'
@@ -520,6 +544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCareerPathRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/careers': {
+      id: '/app/careers'
+      path: '/careers'
+      fullPath: '/app/careers'
+      preLoaderRoute: typeof AppCareersRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/competencies': {
       id: '/app/competencies'
       path: '/competencies'
@@ -567,6 +598,13 @@ declare module '@tanstack/react-router' {
       path: '/notes'
       fullPath: '/app/notes'
       preLoaderRoute: typeof AppNotesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/portfolio': {
+      id: '/app/portfolio'
+      path: '/portfolio'
+      fullPath: '/app/portfolio'
+      preLoaderRoute: typeof AppPortfolioRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/start': {
@@ -788,6 +826,7 @@ const AppMyRunsRouteWithChildren = AppMyRunsRoute._addFileChildren(
 interface AppRouteChildren {
   AppArtifactsRoute: typeof AppArtifactsRouteWithChildren
   AppCareerPathRoute: typeof AppCareerPathRoute
+  AppCareersRoute: typeof AppCareersRoute
   AppCompetenciesRoute: typeof AppCompetenciesRoute
   AppExamsRoute: typeof AppExamsRouteWithChildren
   AppFlashcardsRoute: typeof AppFlashcardsRoute
@@ -795,6 +834,7 @@ interface AppRouteChildren {
   AppLabEngineRoute: typeof AppLabEngineRouteWithChildren
   AppMyRunsRoute: typeof AppMyRunsRouteWithChildren
   AppNotesRoute: typeof AppNotesRoute
+  AppPortfolioRoute: typeof AppPortfolioRoute
   AppStartRoute: typeof AppStartRoute
   AppIndexRoute: typeof AppIndexRoute
   AppLabsLabIdRoute: typeof AppLabsLabIdRoute
@@ -815,6 +855,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppArtifactsRoute: AppArtifactsRouteWithChildren,
   AppCareerPathRoute: AppCareerPathRoute,
+  AppCareersRoute: AppCareersRoute,
   AppCompetenciesRoute: AppCompetenciesRoute,
   AppExamsRoute: AppExamsRouteWithChildren,
   AppFlashcardsRoute: AppFlashcardsRoute,
@@ -822,6 +863,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppLabEngineRoute: AppLabEngineRouteWithChildren,
   AppMyRunsRoute: AppMyRunsRouteWithChildren,
   AppNotesRoute: AppNotesRoute,
+  AppPortfolioRoute: AppPortfolioRoute,
   AppStartRoute: AppStartRoute,
   AppIndexRoute: AppIndexRoute,
   AppLabsLabIdRoute: AppLabsLabIdRoute,

@@ -38,6 +38,8 @@ import {
   LogOut,
   Compass,
   BookOpen,
+  Briefcase,
+  FileText,
 } from "lucide-react";
 
 import {
@@ -131,6 +133,15 @@ const labs: Item[] = [
   labItem("AI Engineering", Cpu, "ai-engineering"),
 ];
 
+const career: Item[] = [
+  {
+    title: "The jobs, and how to get one",
+    icon: Briefcase,
+    link: linkOptions({ to: "/app/careers" }),
+  },
+  { title: "My practice record", icon: FileText, link: linkOptions({ to: "/app/portfolio" }) },
+];
+
 const practice: Item[] = [
   { title: "Flashcards", icon: Flame, link: linkOptions({ to: "/app/flashcards" }) },
   { title: "Practice Exams", icon: GraduationCap, link: linkOptions({ to: "/app/exams" }) },
@@ -202,6 +213,7 @@ export function AppSidebar() {
         <Group label="Simulators" items={simulators} currentPath={currentPath} />
         <Group label="Labs" items={labs} currentPath={currentPath} />
         <Group label="Practice" items={practice} currentPath={currentPath} />
+        <Group label="Getting hired" items={career} currentPath={currentPath} />
       </SidebarContent>
       <SidebarFooter>
         <LevelSwitcher />

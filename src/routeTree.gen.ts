@@ -20,9 +20,11 @@ import { Route as AppCareerPathRouteImport } from './routes/app.career-path'
 import { Route as AppCompetenciesRouteImport } from './routes/app.competencies'
 import { Route as AppExamsRouteImport } from './routes/app.exams'
 import { Route as AppFlashcardsRouteImport } from './routes/app.flashcards'
+import { Route as AppGlossaryRouteImport } from './routes/app.glossary'
 import { Route as AppLabEngineRouteImport } from './routes/app.lab-engine'
 import { Route as AppMyRunsRouteImport } from './routes/app.my-runs'
 import { Route as AppNotesRouteImport } from './routes/app.notes'
+import { Route as AppStartRouteImport } from './routes/app.start'
 import { Route as SiteForAudienceRouteImport } from './routes/_site.for.$audience'
 import { Route as SitePathsIndexRouteImport } from './routes/_site.paths.index'
 import { Route as SitePathsPathIdRouteImport } from './routes/_site.paths.$pathId'
@@ -98,6 +100,11 @@ const AppFlashcardsRoute = AppFlashcardsRouteImport.update({
   path: '/flashcards',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGlossaryRoute = AppGlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLabEngineRoute = AppLabEngineRouteImport.update({
   id: '/lab-engine',
   path: '/lab-engine',
@@ -111,6 +118,11 @@ const AppMyRunsRoute = AppMyRunsRouteImport.update({
 const AppNotesRoute = AppNotesRouteImport.update({
   id: '/notes',
   path: '/notes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStartRoute = AppStartRouteImport.update({
+  id: '/start',
+  path: '/start',
   getParentRoute: () => AppRoute,
 } as any)
 const SiteForAudienceRoute = SiteForAudienceRouteImport.update({
@@ -228,9 +240,11 @@ export interface FileRoutesByFullPath {
   '/app/competencies': typeof AppCompetenciesRoute
   '/app/exams': typeof AppExamsRouteWithChildren
   '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/glossary': typeof AppGlossaryRoute
   '/app/lab-engine': typeof AppLabEngineRouteWithChildren
   '/app/my-runs': typeof AppMyRunsRouteWithChildren
   '/app/notes': typeof AppNotesRoute
+  '/app/start': typeof AppStartRoute
   '/app/': typeof AppIndexRoute
   '/for/$audience': typeof SiteForAudienceRoute
   '/paths/$pathId': typeof SitePathsPathIdRoute
@@ -261,9 +275,11 @@ export interface FileRoutesByTo {
   '/app/competencies': typeof AppCompetenciesRoute
   '/app/exams': typeof AppExamsRouteWithChildren
   '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/glossary': typeof AppGlossaryRoute
   '/app/lab-engine': typeof AppLabEngineRouteWithChildren
   '/app/my-runs': typeof AppMyRunsRouteWithChildren
   '/app/notes': typeof AppNotesRoute
+  '/app/start': typeof AppStartRoute
   '/': typeof SiteIndexRoute
   '/app': typeof AppIndexRoute
   '/for/$audience': typeof SiteForAudienceRoute
@@ -298,9 +314,11 @@ export interface FileRoutesById {
   '/app/competencies': typeof AppCompetenciesRoute
   '/app/exams': typeof AppExamsRouteWithChildren
   '/app/flashcards': typeof AppFlashcardsRoute
+  '/app/glossary': typeof AppGlossaryRoute
   '/app/lab-engine': typeof AppLabEngineRouteWithChildren
   '/app/my-runs': typeof AppMyRunsRouteWithChildren
   '/app/notes': typeof AppNotesRoute
+  '/app/start': typeof AppStartRoute
   '/_site/': typeof SiteIndexRoute
   '/app/': typeof AppIndexRoute
   '/_site/for/$audience': typeof SiteForAudienceRoute
@@ -336,9 +354,11 @@ export interface FileRouteTypes {
     | '/app/competencies'
     | '/app/exams'
     | '/app/flashcards'
+    | '/app/glossary'
     | '/app/lab-engine'
     | '/app/my-runs'
     | '/app/notes'
+    | '/app/start'
     | '/app/'
     | '/for/$audience'
     | '/paths/$pathId'
@@ -369,9 +389,11 @@ export interface FileRouteTypes {
     | '/app/competencies'
     | '/app/exams'
     | '/app/flashcards'
+    | '/app/glossary'
     | '/app/lab-engine'
     | '/app/my-runs'
     | '/app/notes'
+    | '/app/start'
     | '/'
     | '/app'
     | '/for/$audience'
@@ -405,9 +427,11 @@ export interface FileRouteTypes {
     | '/app/competencies'
     | '/app/exams'
     | '/app/flashcards'
+    | '/app/glossary'
     | '/app/lab-engine'
     | '/app/my-runs'
     | '/app/notes'
+    | '/app/start'
     | '/_site/'
     | '/app/'
     | '/_site/for/$audience'
@@ -517,6 +541,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFlashcardsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/glossary': {
+      id: '/app/glossary'
+      path: '/glossary'
+      fullPath: '/app/glossary'
+      preLoaderRoute: typeof AppGlossaryRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/lab-engine': {
       id: '/app/lab-engine'
       path: '/lab-engine'
@@ -536,6 +567,13 @@ declare module '@tanstack/react-router' {
       path: '/notes'
       fullPath: '/app/notes'
       preLoaderRoute: typeof AppNotesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/start': {
+      id: '/app/start'
+      path: '/start'
+      fullPath: '/app/start'
+      preLoaderRoute: typeof AppStartRouteImport
       parentRoute: typeof AppRoute
     }
     '/_site/for/$audience': {
@@ -753,9 +791,11 @@ interface AppRouteChildren {
   AppCompetenciesRoute: typeof AppCompetenciesRoute
   AppExamsRoute: typeof AppExamsRouteWithChildren
   AppFlashcardsRoute: typeof AppFlashcardsRoute
+  AppGlossaryRoute: typeof AppGlossaryRoute
   AppLabEngineRoute: typeof AppLabEngineRouteWithChildren
   AppMyRunsRoute: typeof AppMyRunsRouteWithChildren
   AppNotesRoute: typeof AppNotesRoute
+  AppStartRoute: typeof AppStartRoute
   AppIndexRoute: typeof AppIndexRoute
   AppLabsLabIdRoute: typeof AppLabsLabIdRoute
   AppLearnPlatformRoute: typeof AppLearnPlatformRoute
@@ -778,9 +818,11 @@ const AppRouteChildren: AppRouteChildren = {
   AppCompetenciesRoute: AppCompetenciesRoute,
   AppExamsRoute: AppExamsRouteWithChildren,
   AppFlashcardsRoute: AppFlashcardsRoute,
+  AppGlossaryRoute: AppGlossaryRoute,
   AppLabEngineRoute: AppLabEngineRouteWithChildren,
   AppMyRunsRoute: AppMyRunsRouteWithChildren,
   AppNotesRoute: AppNotesRoute,
+  AppStartRoute: AppStartRoute,
   AppIndexRoute: AppIndexRoute,
   AppLabsLabIdRoute: AppLabsLabIdRoute,
   AppLearnPlatformRoute: AppLearnPlatformRoute,

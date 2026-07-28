@@ -15,7 +15,7 @@ const saasOnboarding: LabDef = {
       lesson: {
         competencyIds: ["plat.sso", "plat.scim", "plat.rbac", "plat.saml"],
         simple:
-          "SSO logs users in with the corporate identity provider. SCIM keeps the user list in sync. RBAC controls what each user can do inside the platform.",
+          "Three separate jobs that get lumped together. One: staff sign in with their normal work login instead of yet another password — that is SSO. Two: accounts are created, changed and switched off automatically as people join, move and leave — that is SCIM. Three: what someone can do once inside depends on their job — that is RBAC. Most organisations wire up the first and skip the second, which is exactly why people who left last year still have working accounts.",
         enterprise:
           "Every enterprise SaaS AI onboarding begins with SAML/OIDC SSO enforced via IdP conditional access, SCIM provisioning tied to HR/IdP lifecycle, and platform RBAC mapped to IdP security groups. Nothing else is defensible.",
         deepDive:
@@ -117,7 +117,8 @@ const saasOnboarding: LabDef = {
       title: "Audit logs, usage, cost",
       lesson: {
         competencyIds: ["plat.audit_logs", "plat.finops", "plat.usage_analytics"],
-        simple: "You cannot govern what you cannot see. Ship logs to SIEM. Watch cost.",
+        simple:
+          "You cannot govern what you cannot see, and two things need watching from the first day. A record of who did what, sent somewhere you control rather than left in the vendor console where it expires on their schedule, not yours. And what it is costing, because AI spend rises with how much people use it rather than with how many people there are — so one badly written automation can outspend an entire department before anyone opens the invoice.",
         enterprise:
           "Configure the platform's audit API (Compliance API, Purview, Admin API), stream to SIEM, build detections for suspicious activity, and wire cost telemetry into FinOps dashboards.",
         deepDive:
@@ -204,7 +205,7 @@ const agentLab: LabDef = {
       lesson: {
         competencyIds: ["arch.agents", "arch.sequence"],
         simple:
-          "An agent is an LLM that can call tools, plan multi-step actions, and sometimes act without a human in the loop for each step.",
+          "Most AI tools write something and stop, and a person reads it and decides what to do. An agent is handed tools instead — it can send the email, update the ticket, call the payment system — and it works through several steps by itself, deciding what to do next as it goes. The moment a system acts rather than suggests, a wrong answer becomes a wrong action, and everything about how you review it has to change.",
         enterprise:
           "The moment an LLM can take actions on real systems, it inherits every permission you gave it. Design starts from identity and blast radius, not from prompts.",
         deepDive:
@@ -369,7 +370,7 @@ const ragLab: LabDef = {
       lesson: {
         competencyIds: ["arch.rag", "arch.chunking", "arch.dataflow"],
         simple:
-          "RAG retrieves relevant documents from your data and passes them to the model so answers cite your content.",
+          "Ask a model a question on its own and it answers from what it absorbed while being trained — which may be out of date and knows nothing about your organisation. So instead you search your own documents first, and hand the relevant ones to the model along with the question. The answer then comes from your material and can point at where it came from. That pattern is called RAG, and it is how very nearly every enterprise AI assistant works.",
         enterprise:
           "RAG lets you ground generic models on internal knowledge without fine-tuning, respect ACLs, cite sources, and refresh knowledge continuously.",
         deepDive:
@@ -563,7 +564,7 @@ const connectorLab: LabDef = {
       lesson: {
         competencyIds: ["sec.data_exfil", "plr.pii", "sec.monitoring"],
         simple:
-          "Connectors move data. DLP must apply on that data path. Retire connectors when unused.",
+          "A connector is a bridge that lets the AI tool reach into another system — your files, your email, your chat history. Data crosses that bridge, so whatever rules you already have for spotting sensitive information leaving the organisation have to apply on it too. And a connector nobody uses is still an open door, so unused ones get switched off rather than left running.",
         enterprise:
           "Wire DLP policies to connector data paths (Purview / Chronicle / Netskope). Track usage; a connector unused for 90 days should be reviewed for removal.",
         deepDive:
@@ -714,7 +715,7 @@ const inhouseLab: LabDef = {
       lesson: {
         competencyIds: ["arch.inhouse", "arch.dataflow", "arch.nfrs"],
         simple:
-          "An in-house AI app has frontend, API, orchestrator, model, RAG, data sources, logs.",
+          "Buying a product means the vendor already made every design decision and you are reviewing their answers. Building your own means assembling the pieces yourself: the screen people use, the service behind it, the part that decides what to do next, the model, the search over your documents, and the logs that record what happened. Every one of those is now a choice you have to defend.",
         enterprise:
           "Every arrow is a security boundary and every component is an on-call surface. Draw the identity flow before the prompt flow.",
         deepDive:

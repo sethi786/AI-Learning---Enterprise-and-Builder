@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/accordion";
 import type { LessonSection, QuizQuestion, ScenarioDef, MasteryDomain } from "@/content/types";
 import { progress as progressStore, useProgress } from "@/lib/progress";
+import { usePrefs, openLayersFor } from "@/lib/prefs";
+import { Explained } from "./Explained";
 
 export function RiskBadge({ level }: { level: "low" | "medium" | "high" | "info" }) {
   const map = {
@@ -132,6 +134,7 @@ export function LessonShell({
   domain?: MasteryDomain;
   extras?: React.ReactNode;
 }) {
+  const { level } = usePrefs();
   const p = useProgress();
   const done = !!p.completedLessons[id];
   return (
@@ -157,23 +160,27 @@ export function LessonShell({
             <p className="mt-1 leading-relaxed">{section.objective}</p>
           </div>
         ) : null}
-        <Accordion type="multiple" defaultValue={["simple", "enterprise", "deep"]}>
+        {/* Which layers start open follows the learner's chosen level. Nothing
+            is hidden — every layer is still one click away — but a newcomer no
+            longer opens on the technical deep dive. `key` forces the accordion
+            to re-read its default when the level changes mid-page. */}
+        <Accordion key={level} type="multiple" defaultValue={openLayersFor(level)}>
           <AccordionItem value="simple">
-            <AccordionTrigger>Simple explanation</AccordionTrigger>
+            <AccordionTrigger>In plain English</AccordionTrigger>
             <AccordionContent className="text-muted-foreground leading-relaxed">
-              {section.simple}
+              <Explained text={section.simple} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="enterprise">
-            <AccordionTrigger>Enterprise explanation</AccordionTrigger>
+            <AccordionTrigger>What it means in an organisation</AccordionTrigger>
             <AccordionContent className="text-muted-foreground leading-relaxed">
-              {section.enterprise}
+              <Explained text={section.enterprise} />
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="deep">
             <AccordionTrigger>Technical deep dive</AccordionTrigger>
             <AccordionContent className="text-muted-foreground leading-relaxed">
-              {section.deepDive}
+              <Explained text={section.deepDive} />
             </AccordionContent>
           </AccordionItem>
           {section.diagram ? (

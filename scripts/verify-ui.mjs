@@ -104,7 +104,12 @@ console.log("\n--- newly authored labs actually render lessons and quizzes ---")
 // A regression guard: the lab page once rendered its header and mission and
 // silently dropped every module, and a status-code check would not have caught it.
 // The phrases below come from the deep-dive layer only, so a page that renders
-// nothing but module titles fails this.
+// nothing but module titles fails this. The reading level is forced to "deep"
+// first, because at the default level that layer is collapsed and unmounted.
+await p.goto(B + "/app/labs/rag", { waitUntil: "networkidle" });
+await p.evaluate(() =>
+  localStorage.setItem("eai.prefs.v1", JSON.stringify({ level: "deep", oriented: true })),
+);
 for (const [labId, moduleId, phrase] of [
   ["data-governance", "classification-trimming", "re-sync permissions on a schedule"],
   ["iam", "sso-federation", "phishing-resistant mfa"],
@@ -115,9 +120,11 @@ for (const [labId, moduleId, phrase] of [
   const anchor = await p.$(`#${moduleId}`);
   const quiz = (await p.$$('[role="radiogroup"]')).length > 0;
   const body = (await p.locator("body").innerText()).toLowerCase();
-  const layers = ["simple explanation", "enterprise explanation", "technical deep dive"].every(
-    (l) => body.includes(l),
-  );
+  const layers = [
+    "in plain english",
+    "what it means in an organisation",
+    "technical deep dive",
+  ].every((l) => body.includes(l));
   const ok = !!anchor && layers && quiz && body.includes(phrase);
   console.log(
     ok ? "PASS" : "FAIL",

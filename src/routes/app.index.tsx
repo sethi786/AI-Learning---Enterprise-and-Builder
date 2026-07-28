@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { MasteryBar, PageHeader, ProgressRing } from "@/components/learning/Primitives";
 import { useProgress, domainScore, roleProgress } from "@/lib/progress";
 import { findResume } from "@/lib/resume";
+import { usePrefs } from "@/lib/prefs";
+import { GOALS, STEP_KIND_LABEL, nextStep, planFor, stepHref } from "@/content/plans";
 import { roles } from "@/content/roles";
 import { labs } from "@/content/labs";
 import { scenarios } from "@/content/scenarios";
@@ -26,6 +28,112 @@ import {
 export const Route = createFileRoute("/app/")({
   component: Dashboard,
 });
+
+/**
+ * The one thing to do next.
+ *
+ * A dashboard of eleven cards is a menu, and a learner who does not yet know
+ * the vocabulary cannot order from a menu. This answers the only question they
+ * actually have — what now — with a single link and the reason for it, and it
+ * is the first thing on the page.
+ */
+function NextStepCard() {
+  const p = useProgress();
+  const { level, goal, oriented } = usePrefs();
+
+  if (!oriented || !goal) {
+    return (
+      <Card className="mb-6 border-brand/40 bg-brand/5">
+        <CardHeader>
+          <CardTitle className="text-base">Not sure where to start?</CardTitle>
+          <CardDescription>
+            Two questions — how much you already know, and what is actually in front of you — and
+            this becomes an ordered plan instead of a catalogue. Nothing here can be failed.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild size="sm" className="gap-1">
+            <Link to="/app/start">
+              Start here <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const evidenceRefs = new Set<string>();
+  for (const rec of Object.values(p.competencies ?? {})) {
+    for (const e of rec.evidence ?? []) if (e.ref) evidenceRefs.add(e.ref);
+  }
+  const signals = {
+    completedLessons: p.completedLessons,
+    quizResults: p.quizResults,
+    scenarioAttempts: p.scenarioAttempts,
+    evidenceRefs,
+  };
+  const step = nextStep(goal, level, signals);
+  const all = planFor(goal, level);
+  const doneCount =
+    all.length - all.filter((s) => !s.target || nextStepIncludes(all, step, s)).length;
+
+  if (!step) {
+    return (
+      <Card className="mb-6 border-emerald-500/40 bg-emerald-500/5">
+        <CardHeader>
+          <CardTitle className="text-base">You have finished your plan</CardTitle>
+          <CardDescription>
+            {GOALS.find((g) => g.id === goal)?.label}. Pick a different situation to get a new
+            ordered path, or work the weakest areas below.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/app/start">Choose a new focus</Link>
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const href = stepHref(step.target);
+  return (
+    <Card className="mb-6 border-brand/40 bg-brand/5">
+      <CardHeader>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="secondary" className="text-[10px]">
+            Next — step {doneCount + 1} of {all.length}
+          </Badge>
+          <Badge variant="outline" className="text-[10px]">
+            {STEP_KIND_LABEL[step.target.kind]} · {step.minutes} min
+          </Badge>
+        </div>
+        <CardTitle className="mt-2 text-base">{step.title}</CardTitle>
+        <CardDescription className="leading-relaxed">{step.because}</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-wrap gap-2">
+        <Button asChild size="sm" className="gap-1">
+          <Link to={href.to} params={href.params as never}>
+            Open <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </Button>
+        <Button asChild size="sm" variant="ghost">
+          <Link to="/app/start">See the whole plan</Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+/** True while `s` sits at or after the current next step — i.e. not yet done. */
+function nextStepIncludes(
+  all: { id: string }[],
+  next: { id: string } | undefined,
+  s: { id: string },
+) {
+  if (!next) return false;
+  return all.findIndex((x) => x.id === s.id) >= all.findIndex((x) => x.id === next.id);
+}
 
 const masteryMeta: {
   id: MasteryDomain;
@@ -67,6 +175,7 @@ function Dashboard() {
 
   return (
     <div className="mx-auto max-w-7xl">
+      <NextStepCard />
       <PageHeader
         title="Home Dashboard"
         subtitle="Learn to think like an AI Platform Admin, Governance Operator, Solution Architect, Security Architect, and Enterprise AI GRC Lead."

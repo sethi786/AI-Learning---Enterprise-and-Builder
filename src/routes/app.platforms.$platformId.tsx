@@ -1,4 +1,5 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { Explained } from "@/components/learning/Explained";
 import { PageHeader, Quiz, RiskBadge } from "@/components/learning/Primitives";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -67,7 +68,10 @@ function PlatformPage() {
           <CardTitle className="text-base">Reference architecture</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground leading-relaxed">{p.architecture}</p>
+          <Explained
+            text={p.architecture}
+            className="text-sm leading-relaxed text-muted-foreground"
+          />
         </CardContent>
       </Card>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

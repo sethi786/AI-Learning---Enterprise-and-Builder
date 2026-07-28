@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { progress } from "@/lib/progress";
+import { Explained } from "./Explained";
 import type { GoNoGoCase } from "@/content/goNoGo";
 
 /**
@@ -147,7 +148,7 @@ export function GoNoGoBoard({ board }: { board: GoNoGoCase }) {
               {board.brief.map((b) => (
                 <li key={b} className="flex gap-2">
                   <ChevronRight className="mt-1 h-3.5 w-3.5 shrink-0 text-brand" />
-                  <span>{b}</span>
+                  <Explained text={b} />
                 </li>
               ))}
             </ul>
@@ -199,7 +200,10 @@ export function GoNoGoBoard({ board }: { board: GoNoGoCase }) {
                     )}
                   </div>
                   {isOpen ? (
-                    <p className="mt-2 leading-relaxed text-muted-foreground">{e.detail}</p>
+                    <Explained
+                      text={e.detail}
+                      className="mt-2 block leading-relaxed text-muted-foreground"
+                    />
                   ) : null}
                 </div>
               );

@@ -36,6 +36,8 @@ import {
   History,
   LogIn,
   LogOut,
+  Compass,
+  BookOpen,
 } from "lucide-react";
 
 import {
@@ -52,6 +54,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useSession, signOut } from "@/lib/session";
 import { Button } from "@/components/ui/button";
+import { LEVELS, prefs, usePrefs } from "@/lib/prefs";
 
 // `link` carries typed router options so every destination is compile-checked.
 // Note the lab entries: there is no `/labs/rag` route — only `labs.$labId` — so
@@ -72,9 +75,11 @@ const labItem = (title: string, icon: Item["icon"], labId: string): Item => ({
 });
 
 const overview: Item[] = [
+  { title: "Start here", icon: Compass, link: linkOptions({ to: "/app/start" }) },
   { title: "Home Dashboard", icon: LayoutDashboard, link: linkOptions({ to: "/app" }) },
   { title: "Career Path Map", icon: Map, link: linkOptions({ to: "/app/career-path" }) },
   { title: "Competency Heatmap", icon: Activity, link: linkOptions({ to: "/app/competencies" }) },
+  { title: "Plain-English glossary", icon: BookOpen, link: linkOptions({ to: "/app/glossary" }) },
 ];
 
 const learn: Item[] = [
@@ -199,9 +204,46 @@ export function AppSidebar() {
         <Group label="Practice" items={practice} currentPath={currentPath} />
       </SidebarContent>
       <SidebarFooter>
+        <LevelSwitcher />
         <AccountBlock />
       </SidebarFooter>
     </Sidebar>
+  );
+}
+
+/**
+ * Reading level, reachable from every page.
+ *
+ * Putting this only in orientation would mean a learner who picked "new" and
+ * then found it patronising has to go back through a wizard to escape it. The
+ * cost of switching has to be one click, or people put up with the wrong level
+ * instead of changing it.
+ */
+function LevelSwitcher() {
+  const { level } = usePrefs();
+  return (
+    <div className="px-2 pb-1 group-data-[collapsible=icon]:hidden">
+      <div className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+        Explain things for
+      </div>
+      <div className="mt-1.5 flex gap-1">
+        {LEVELS.map((l) => (
+          <button
+            key={l.id}
+            type="button"
+            title={l.blurb}
+            onClick={() => prefs.set({ level: l.id })}
+            className={`flex-1 rounded border px-1.5 py-1 text-[10px] leading-tight transition-colors ${
+              level === l.id
+                ? "border-brand bg-brand/10 font-medium text-brand"
+                : "text-muted-foreground hover:bg-muted"
+            }`}
+          >
+            {l.id === "new" ? "Newcomer" : l.id === "working" ? "Working" : "Deep"}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 

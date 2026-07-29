@@ -210,3 +210,54 @@ describe("the practice record never overclaims", () => {
     expect(md).not.toMatch(/<[a-z]+>/i);
   });
 });
+
+describe("the entry-level route is genuinely entry-level", () => {
+  const entry = careerProfiles.filter((c) => c.entryLevel);
+
+  it("exists, and leads the list", () => {
+    expect(entry.length).toBeGreaterThanOrEqual(2);
+    expect(careerProfiles[0].entryLevel).toBe(true);
+  });
+
+  it("names backgrounds outside technology that transfer in", () => {
+    // The whole point is reaching people who assume this is closed to them. If
+    // every transfer route is another IT job, the door has not been opened.
+    const OUTSIDE_TECH =
+      /customer service|contact centre|claims|teaching|tutor|marking|healthcare|legal|financial admin|editing|proofread|translat|retail|hospitality|research|librarian|linguist|publishing|assessment/i;
+    for (const c of entry) {
+      const outside = c.transfersFrom.filter((t) => OUTSIDE_TECH.test(t.from));
+      expect(
+        outside.length,
+        `${c.roleId} has only technology transfer routes`,
+      ).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it("says plainly that no technology background is required", () => {
+    for (const c of entry) {
+      expect(
+        /no (prior )?(technology|technical|it) background|without a technology background|does not require programming/i.test(
+          c.entryReality,
+        ),
+        c.roleId,
+      ).toBe(true);
+    }
+  });
+
+  it("is still honest about what each role demands", () => {
+    // Accessible must not mean oversold. Each entry profile has to name
+    // something the role genuinely asks of you.
+    for (const c of entry) {
+      expect(
+        /harder|requires|demand|discipline|asks more|is not|hard to fill|rarer/i.test(
+          c.entryReality,
+        ),
+        `${c.roleId} reads as pure encouragement`,
+      ).toBe(true);
+    }
+  });
+
+  it("points at a lab that teaches the work", () => {
+    for (const c of entry) expect(c.labId, c.roleId).toBeTruthy();
+  });
+});

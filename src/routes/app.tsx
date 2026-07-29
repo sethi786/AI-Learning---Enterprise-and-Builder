@@ -2,6 +2,7 @@ import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-r
 import { useEffect } from "react";
 
 import { AppSidebar } from "@/components/AppSidebar";
+import { RequireAuth } from "@/components/RequireAuth";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { progress } from "@/lib/progress";
 import { useProgressSync } from "@/lib/useProgressSync";
@@ -26,8 +27,20 @@ function useVisitTracking() {
  * Chrome for the learning portal. Lives here rather than in `__root` so the
  * marketing site and the sign-in page render without a sidebar wrapped
  * around them.
+ *
+ * `/app` is the single choke point for every portal route, so the auth gate
+ * belongs here — adding it per-route would mean every new route is unprotected
+ * until someone remembers.
  */
 function PortalLayout() {
+  return (
+    <RequireAuth>
+      <PortalChrome />
+    </RequireAuth>
+  );
+}
+
+function PortalChrome() {
   useVisitTracking();
   useProgressSync();
   return (

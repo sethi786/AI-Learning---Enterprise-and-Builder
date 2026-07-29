@@ -23,8 +23,8 @@ function PathsPage() {
       <div className="max-w-2xl">
         <h1 className="text-4xl font-bold tracking-tight text-balance">Career paths</h1>
         <p className="mt-4 text-lg text-muted-foreground text-pretty">
-          Each path threads existing roles, labs, and scenarios into one route. Start anywhere —
-          nothing is locked, and you can switch paths without losing progress.
+          Each path threads existing roles, labs, and scenarios into one route. Start anywhere — no
+          path is locked, and you can switch between them without losing progress.
         </p>
       </div>
 

@@ -95,6 +95,9 @@ function AuthPage() {
           <Wordmark />
         </Link>
         <div className="w-full max-w-md">
+          {/* A real <h1>: CardTitle renders a div, which left the sign-in page
+              with no heading for a screen reader to land on. */}
+          <h1 className="sr-only">Sign in to EAI Career Sim</h1>
           <Card className="w-full shadow-card">
             <CardHeader>
               <CardTitle>Sign in to EAI Career Sim</CardTitle>

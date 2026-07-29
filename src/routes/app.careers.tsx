@@ -50,17 +50,49 @@ function CareersPage() {
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap gap-2">
-        {careerProfiles.map((c) => (
-          <Button
-            key={c.roleId}
-            size="sm"
-            variant={openRole === c.roleId ? "default" : "outline"}
-            onClick={() => setOpenRole(c.roleId)}
-          >
-            {rolesById[c.roleId]?.name ?? c.roleId}
-          </Button>
-        ))}
+      {/* Entry-level roles are separated and put first, because the people who
+          most need this platform are the ones who assume every role on it is
+          closed to them. Burying them in one flat list loses exactly those
+          readers. */}
+      <div className="space-y-3">
+        <div>
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            No prior technology career needed
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {careerProfiles
+              .filter((c) => c.entryLevel)
+              .map((c) => (
+                <Button
+                  key={c.roleId}
+                  size="sm"
+                  variant={openRole === c.roleId ? "default" : "outline"}
+                  onClick={() => setOpenRole(c.roleId)}
+                >
+                  {rolesById[c.roleId]?.name ?? c.title ?? c.roleId}
+                </Button>
+              ))}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Building on an existing technology or risk career
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {careerProfiles
+              .filter((c) => !c.entryLevel)
+              .map((c) => (
+                <Button
+                  key={c.roleId}
+                  size="sm"
+                  variant={openRole === c.roleId ? "default" : "outline"}
+                  onClick={() => setOpenRole(c.roleId)}
+                >
+                  {rolesById[c.roleId]?.name ?? c.title ?? c.roleId}
+                </Button>
+              ))}
+          </div>
+        </div>
       </div>
 
       <RoleDetail profile={profile} />
@@ -208,27 +240,34 @@ function RoleDetail({ profile }: { profile: CareerProfile }) {
         </div>
       </section>
 
-      {role ? (
-        <Card>
-          <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4">
-            <span className="text-sm text-muted-foreground">
-              Practise the work this role does, then export it as evidence.
-            </span>
-            <div className="flex gap-2">
+      <Card>
+        <CardContent className="flex flex-wrap items-center justify-between gap-3 p-4">
+          <span className="text-sm text-muted-foreground">
+            Practise the work this role does, then export it as evidence.
+          </span>
+          <div className="flex gap-2">
+            {profile.labId ? (
+              <Button asChild size="sm" variant="outline">
+                <Link to="/app/labs/$labId" params={{ labId: profile.labId }}>
+                  Open the lab
+                </Link>
+              </Button>
+            ) : null}
+            {role ? (
               <Button asChild size="sm" variant="outline">
                 <Link to="/app/roles/$roleId" params={{ roleId: profile.roleId }}>
                   Role detail
                 </Link>
               </Button>
-              <Button asChild size="sm" className="gap-1">
-                <Link to="/app/portfolio">
-                  My practice record <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ) : null}
+            ) : null}
+            <Button asChild size="sm" className="gap-1">
+              <Link to="/app/portfolio">
+                My practice record <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

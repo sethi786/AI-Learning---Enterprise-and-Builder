@@ -27,6 +27,34 @@ const check = async (url, mustContain, mustNotContain) => {
   return ok;
 };
 
+// The portal is gated. Without a session every /app navigation lands on the
+// sign-in page, so this script would be checking the wrong thing entirely.
+async function signIn(page) {
+  await page.goto(B + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.evaluate(() => {
+    localStorage.setItem(
+      "sb-kbxeefyitsgurcldzxgs-auth-token",
+      JSON.stringify({
+        access_token: "stub",
+        token_type: "bearer",
+        expires_in: 3600,
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
+        refresh_token: "stub",
+        user: {
+          id: "00000000-0000-0000-0000-000000000001",
+          aud: "authenticated",
+          role: "authenticated",
+          email: "verifier@example.com",
+          app_metadata: {},
+          user_metadata: {},
+          created_at: new Date(0).toISOString(),
+        },
+      }),
+    );
+  });
+}
+await signIn(p);
+
 console.log("--- content assertions (not status codes) ---");
 // Bug 1: the path detail page must render, not the listing.
 await check("/paths/ai-security-architecture", "Break a RAG system");

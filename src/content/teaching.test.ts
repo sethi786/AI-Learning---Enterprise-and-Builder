@@ -132,9 +132,14 @@ describe("there is a path, not just a catalogue", () => {
     for (const g of GOALS) {
       const newPlan = planFor(g.id, "new");
       const workingPlan = planFor(g.id, "working");
-      expect(newPlan.length).toBeGreaterThan(workingPlan.length);
-      // Vocabulary first, always.
-      expect(newPlan[0].target.kind).toBe("glossary");
+      // Vocabulary first, always — whether it comes from the shared orientation
+      // prefix or from a plan that already opens with it.
+      expect(newPlan[0].target.kind, g.id).toBe("glossary");
+      expect(newPlan.length, g.id).toBeGreaterThanOrEqual(workingPlan.length);
+      // Every plan written for an experienced reader gains something.
+      if (workingPlan[0].target.kind !== "glossary") {
+        expect(newPlan.length, g.id).toBeGreaterThan(workingPlan.length);
+      }
     }
   });
 
@@ -193,6 +198,64 @@ describe("reading level changes what opens, never what exists", () => {
     const union = new Set(LEVELS.flatMap((l) => openLayersFor(l.id)));
     for (const layer of ["simple", "enterprise", "deep"]) {
       expect(union.has(layer), layer).toBe(true);
+    }
+  });
+});
+
+describe("a complete beginner has a route in", () => {
+  it("orientation offers a goal for someone outside technology", () => {
+    const g = GOALS.find((x) => x.id === "starting-out");
+    expect(g).toBeDefined();
+    expect(g!.blurb.length).toBeGreaterThan(30);
+  });
+
+  it("that plan starts with vocabulary and reaches an exportable record", () => {
+    const steps = planFor("starting-out", "new");
+    expect(steps[0].target.kind).toBe("glossary");
+    expect(steps.some((s) => s.target.kind === "careers")).toBe(true);
+    expect(steps[steps.length - 1].target.kind).toBe("portfolio");
+  });
+
+  it("teaches before it tests, and runs what it teaches", () => {
+    // Each entry-level lab must be followed by its simulator, not just read.
+    const steps = planFor("starting-out", "working");
+    const kinds = steps.map((s) =>
+      "id" in s.target ? `${s.target.kind}:${s.target.id}` : s.target.kind,
+    );
+    const opsLab = kinds.indexOf("lab:ai-operations");
+    const opsSim = kinds.indexOf("simulator:ai-operations-queue");
+    expect(opsLab).toBeGreaterThanOrEqual(0);
+    expect(opsSim).toBeGreaterThan(opsLab);
+
+    const evalLab = kinds.indexOf("lab:ai-evaluation");
+    const evalSim = kinds.indexOf("simulator:ai-evaluation-design");
+    expect(evalLab).toBeGreaterThanOrEqual(0);
+    expect(evalSim).toBeGreaterThan(evalLab);
+  });
+
+  it("does not front-load the enterprise material a newcomer cannot use", () => {
+    const steps = planFor("starting-out", "working");
+    const first = steps.slice(0, 3).map((s) => ("id" in s.target ? s.target.id : s.target.kind));
+    for (const heavy of ["zero-trust", "qrm", "legal", "devsecops"]) {
+      expect(first).not.toContain(heavy);
+    }
+  });
+});
+
+describe("plans do not repeat themselves", () => {
+  it("no plan offers the same destination twice at any level", () => {
+    // A beginner plan that already opens with vocabulary was having the shared
+    // orientation prefix bolted on in front of it, showing the glossary and the
+    // RAG lab twice in a row.
+    for (const g of GOALS) {
+      for (const level of LEVELS) {
+        const steps = planFor(g.id, level.id);
+        const keys = steps.map((s) =>
+          "id" in s.target ? `${s.target.kind}:${s.target.id}` : s.target.kind,
+        );
+        const dupes = keys.filter((k, i) => keys.indexOf(k) !== i);
+        expect(dupes, `${g.id}/${level.id}`).toEqual([]);
+      }
     }
   });
 });

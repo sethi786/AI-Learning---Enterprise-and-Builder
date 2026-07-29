@@ -29,7 +29,7 @@ const pitches: Record<string, Pitch> = {
       },
       {
         heading: "Start from zero cost and zero commitment",
-        body: "No account, no trial, no card. Open a lab and begin; progress saves in your browser.",
+        body: "Free, no trial and no card — just an account so the work you do is saved and can be exported as evidence.",
       },
     ],
   },

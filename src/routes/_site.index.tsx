@@ -97,7 +97,7 @@ function Hero() {
             </Button>
           </div>
           <p className="mt-5 text-sm text-white/50">
-            No account required. Sign in only when you want progress saved.
+            Free account, Google or email. Your work is saved so you can export it as evidence.
           </p>
         </div>
 

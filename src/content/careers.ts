@@ -1,6 +1,14 @@
 import type { RoleId } from "./types";
 
 /**
+ * Entry-level roles have no RoleDef in roles.ts — they are not simulator roles
+ * with a competency map, they are ways into the industry. The careers page
+ * falls back to the profile's own title where no RoleDef exists.
+ */
+export type EntryRoleId = "ai-operations-specialist" | "ai-evaluation-specialist";
+export type CareerRoleId = RoleId | EntryRoleId;
+
+/**
  * Career reality.
  *
  * The platform teaches five roles well and never says the obvious thing: these
@@ -34,7 +42,17 @@ export interface InterviewQuestion {
 }
 
 export interface CareerProfile {
-  roleId: RoleId;
+  roleId: CareerRoleId;
+  /** Shown when there is no RoleDef to take a name from. */
+  title?: string;
+  /**
+   * Reachable with no prior technology career. These lead the page, because
+   * the people who most need this platform are the ones who assume every role
+   * on it is closed to them.
+   */
+  entryLevel?: boolean;
+  /** The lab that teaches this role's work. */
+  labId?: string;
   /** Titles this job is actually advertised under. Searching the wrong words finds nothing. */
   alsoAdvertisedAs: string[];
   /** One paragraph a non-technical reader can follow. */
@@ -704,7 +722,293 @@ const grcLead: CareerProfile = {
   ],
 };
 
+const aiOperationsSpecialist: CareerProfile = {
+  roleId: "ai-operations-specialist",
+  title: "AI Operations Specialist",
+  entryLevel: true,
+  labId: "ai-operations",
+  alsoAdvertisedAs: [
+    "AI Operations Specialist",
+    "Human-in-the-Loop Reviewer",
+    "AI Quality Analyst",
+    "AI Content Reviewer",
+    "Trust & Safety Analyst",
+    "AI Support Escalations Analyst",
+  ],
+  whatTheJobIs:
+    "You are the person who checks what the AI produced before it reaches a customer or takes effect, handles the cases it could not, and notices when the same mistake keeps happening. Organisations put a human in that position because a regulator, a contract or an incident required one — which means the role is not going away, and the person who does it well is the only one in the building who knows how the system actually behaves against real people.",
+  typicalDay: [
+    "Working a queue of AI-drafted responses, checking each against the document it cited",
+    "Handling the escalations the assistant could not resolve, where the customer is already annoyed",
+    "Noticing the third time this week that a withdrawn policy is being quoted, and writing it up",
+    "Explaining to a team meeting why the approval rate going up is not good news",
+    "Turning the week's corrections into a short report someone can act on",
+  ],
+  transfersFrom: [
+    {
+      from: "Customer service, contact centre or claims handling",
+      why: "You already read a case, judge whether a response is right for it, and decide what to escalate. That is the entire core of this job — the only new part is that the draft came from a model rather than a colleague, and models fail in specific ways you can be taught in a week.",
+    },
+    {
+      from: "Teaching, tutoring or marking",
+      why: "Marking against a rubric consistently, when the work in front of you is plausible but subtly wrong, is exactly the skill this role is short of. Teachers spot unsupported claims faster than almost anyone, because they spend their careers reading confident writing that has not been checked.",
+    },
+    {
+      from: "Healthcare, legal or financial administration",
+      why: "You have worked somewhere that a wrong record has real consequences, so you already have the habit of checking the source rather than trusting the summary. That habit is what most new reviewers lack and what the whole control depends on.",
+    },
+    {
+      from: "Editing, proofreading or translation",
+      why: "You read for what is missing rather than for what is present, which is precisely how unsupported claims are caught. The dominant failure in AI output is fluent text that says something the source never said.",
+    },
+    {
+      from: "Retail or hospitality supervision",
+      why: "You have managed a queue under time pressure, noticed when standards slipped, and escalated things you could not fix yourself. Review queues degrade in exactly the same way and for the same reasons.",
+    },
+  ],
+  entryReality:
+    "This is genuinely open to someone with no technology background at all. It does not require programming, a degree in anything specific, or prior AI knowledge — the domain judgement matters far more than the technical vocabulary, and this platform teaches the vocabulary. What it does require is the discipline to keep actually checking when the work is repetitive and the targets are tight, which is harder than it sounds and is the reason the role is hard to fill. It is also the most common route into AI governance and evaluation work, because you finish with something no one else has: direct knowledge of how the system fails.",
+  decodeTheAd: [
+    {
+      phrase: "Review AI-generated content for accuracy and compliance",
+      means:
+        "A queue. Ask in the interview what the target time per item is and whether the source document is shown — those two answers tell you whether the review is real.",
+    },
+    {
+      phrase: "Identify trends and provide feedback to improve model performance",
+      means:
+        "This is the part that gets you promoted. They want someone who reports the pattern, not just the correction, and most candidates never mention it.",
+    },
+    {
+      phrase: "Comfortable with ambiguity",
+      means:
+        "The guidelines will not cover the case in front of you. They want to know you will make a defensible call and flag the gap, rather than freeze or guess silently.",
+    },
+    {
+      phrase: "High attention to detail in a fast-paced environment",
+      means:
+        "Volume is high and quality is still expected. In the interview, saying you would flag when those two are in conflict is a stronger answer than saying you can do both.",
+    },
+  ],
+  firstNinetyDays: [
+    "Learn the domain well enough to know what a correct answer looks like without checking every time",
+    "Establish your own failure categories and use them consistently, before anyone asks you to",
+    "Produce one written pattern report that leads to a change — that single artifact is what gets you noticed",
+    "Find out what the second-review or audit process is; if there isn't one, that is worth raising",
+  ],
+  seniority: [
+    {
+      band: "Entry",
+      looksLike: "You work the queue accurately and escalate the right things.",
+    },
+    {
+      band: "Experienced",
+      looksLike:
+        "You spot patterns rather than incidents, and your reports change what the team builds.",
+    },
+    {
+      band: "Lead / specialist",
+      looksLike:
+        "You design how the queue works — coverage, time per item, categories, routing — and you own whether the human-in-the-loop control is genuinely operating.",
+    },
+  ],
+  interview: [
+    {
+      id: "ops-i-1",
+      question:
+        "You are reviewing an AI-drafted reply. It reads well and nothing in it is contradicted by the source document. Do you approve it?",
+      testing:
+        "Whether you know that 'not contradicted' and 'supported' are different things. This single distinction separates people who will be good at this job from people who will approve everything within a month.",
+      strongAnswer: [
+        "Check whether every claim actually appears in the source, not just whether anything conflicts",
+        "A claim the source is silent about is an unsupported claim, and it is the most common failure",
+        "Check scope first — whether the system should have answered this at all",
+        "Read the source before the answer, so you are testing rather than confirming",
+      ],
+      weakAnswer:
+        "“Yes, if it reads correctly and nothing looks wrong.” Fluency is the one thing the model is guaranteed to produce, so it carries no information about correctness.",
+      difficulty: "core",
+    },
+    {
+      id: "ops-i-2",
+      question:
+        "Your team's approval rate has gone from 85% to 97% while volume doubled. Your manager is pleased. What do you say?",
+      testing:
+        "Whether you will tell a manager something they do not want to hear, and whether you understand approval rate as a control-health signal rather than a quality one.",
+      strongAnswer: [
+        "Model quality rarely moves twelve points without a release, so the likely cause is the review, not the system",
+        "Rising approval alongside rising volume is the standard signature of review becoming clicking",
+        "Propose a second-reviewer sample of approved items — it is the only way to tell the two explanations apart",
+        "Frame it as a question about the queue design rather than as a criticism of colleagues",
+      ],
+      weakAnswer:
+        "Agreeing it is good news. It might be, but nothing in the numbers distinguishes an improved model from a degraded review, and only one of those is safe to assume.",
+      difficulty: "senior",
+    },
+    {
+      id: "ops-i-3",
+      question:
+        "You have corrected the same type of mistake about fifteen times this month. What have you done about it?",
+      testing:
+        "Whether you see yourself as a corrector or as a source of signal. This is the question that decides whether you stay on the queue.",
+      strongAnswer: [
+        "Counted the occurrences, because frequency is what makes it systemic rather than unlucky",
+        "Worked out what has to change — the source content, the prompt, the access, or the policy — and routed it there",
+        "Written it up with the expected output, not only the actual one",
+        "Offered the recurring cases as test items with known correct answers, so it can be checked automatically in future",
+      ],
+      weakAnswer:
+        "“I fix them as they come up.” Correct and insufficient — fifteen corrections mean the cause is still in place and will produce a sixteenth.",
+      difficulty: "core",
+    },
+  ],
+};
+
+const aiEvaluationSpecialist: CareerProfile = {
+  roleId: "ai-evaluation-specialist",
+  title: "AI Evaluation & Data Specialist",
+  entryLevel: true,
+  labId: "ai-evaluation",
+  alsoAdvertisedAs: [
+    "AI Evaluation Specialist",
+    "Data Annotation Lead",
+    "AI Training Data Specialist",
+    "Model Quality Analyst",
+    "RLHF Data Specialist",
+    "AI Test & Evaluation Analyst",
+  ],
+  whatTheJobIs:
+    "You decide how anyone knows whether an AI system is any good, and then you prove it. That means writing criteria two people would score the same way, building a question set drawn from what users actually ask, organising the labelling behind it, and reporting results honestly — including when the answer is that a change made no difference. Without this work every argument about an AI system is opinion, which is why the role has gone from unusual to standard in a few years.",
+  typicalDay: [
+    "Arguing four teams to one written definition of what a good answer is",
+    "Sampling real queries and grouping them by what the user was actually trying to do",
+    "Checking whether two labellers agree, and rewriting the criterion that caused them not to",
+    "Explaining that a two-point movement on 200 items is not yet a result",
+    "Showing a team that their quality problem is in retrieval, not in the model they wanted to replace",
+  ],
+  transfersFrom: [
+    {
+      from: "Research of any kind, academic or market",
+      why: "Sampling, defining a measure before collecting, checking whether your instrument is reliable, and reporting a null result honestly — that is this job, in a new subject area. Research training transfers more directly here than a computing degree does.",
+    },
+    {
+      from: "Editing, publishing or librarianship",
+      why: "You already judge whether a text is supported by its sources and whether a question has actually been answered. Those are the two dimensions this role scores most often, and precision about categories is a librarian's core skill.",
+    },
+    {
+      from: "Software testing or quality assurance",
+      why: "Test case design, regression suites, and the discipline of a baseline are exactly what an evaluation set is. The novelty is that the correct answer is a judgement rather than an exact match, which is a smaller adjustment than it sounds.",
+    },
+    {
+      from: "Translation or linguistics",
+      why: "You are used to judging fidelity to a source and to disagreeing productively about what counts as accurate. Inter-rater agreement is a familiar problem rather than a surprising one.",
+    },
+    {
+      from: "Teaching and assessment design",
+      why: "Writing a rubric that different markers apply consistently is the hardest part of this role, and you have done it. Most people arriving from technical backgrounds have never had to.",
+    },
+  ],
+  entryReality:
+    "Open without a technology background, though it asks more of you analytically than the operations role — you need to be comfortable with proportions, sampling and the idea that a small movement may be noise. It does not require programming for most positions, and where it does, the requirement is usually a spreadsheet and some basic scripting rather than software engineering. The strongest candidates are frequently people from research or editing backgrounds, because the discipline of not overclaiming is the whole job and it is rarer than technical skill.",
+  decodeTheAd: [
+    {
+      phrase: "Design and maintain evaluation datasets",
+      means:
+        "They want someone who will keep the set alive. Ask how large the current set is and when it was last re-labelled — the answer tells you whether the function is real.",
+    },
+    {
+      phrase: "Work with subject-matter experts to establish ground truth",
+      means:
+        "You will be organising other people's scarce time. Being able to run a calibration session is worth more here than any tooling knowledge.",
+    },
+    {
+      phrase: "Experience with inter-annotator agreement",
+      means:
+        "They have been burned by unreliable labels. Talking about measuring agreement before scaling collection is the single strongest thing you can say.",
+    },
+    {
+      phrase: "Communicate findings to technical and non-technical stakeholders",
+      means:
+        "Someone will not like a result. They want to know you will report it anyway, and can explain why a two-point change is not yet a finding.",
+    },
+  ],
+  firstNinetyDays: [
+    "Find out whether an agreed, written definition of a good answer exists — usually it does not",
+    "Measure agreement on the existing labels before trusting any number currently being quoted",
+    "Split retrieval from generation in whatever is being measured, because it usually is not split",
+    "Publish one result that disagrees with what a team expected, and survive it",
+  ],
+  seniority: [
+    {
+      band: "Entry",
+      looksLike: "You label accurately and consistently against someone else's rubric.",
+    },
+    {
+      band: "Experienced",
+      looksLike: "You design the criteria and the sample, and you can defend both.",
+    },
+    {
+      band: "Lead / specialist",
+      looksLike:
+        "Your evaluation is how the organisation decides what to ship, and teams come to you before building rather than after.",
+    },
+  ],
+  interview: [
+    {
+      id: "eval-i-1",
+      question: "How would you build an evaluation set for a customer support assistant?",
+      testing:
+        "Whether you sample from reality or from imagination. Most candidates describe writing questions themselves, which produces a set that measures the happy path.",
+      strongAnswer: [
+        "Sample from real production traffic rather than writing the questions yourself",
+        "Stratify by intent so rare but important cases are not buried by common ones",
+        "Deliberately include multi-turn follow-ups and questions that should be refused",
+        "Keep it small enough to actually re-label — a maintained 200 beats an abandoned 2,000",
+        "Version it and hold out a portion that never informs tuning",
+      ],
+      weakAnswer:
+        "“I'd write a comprehensive list of the questions users might ask.” You would write the ones the team already handles, and quality would look excellent until launch.",
+      difficulty: "core",
+    },
+    {
+      id: "eval-i-2",
+      question: "Two of your labellers agree on only half the items. What is going on?",
+      testing:
+        "Whether you diagnose the instrument or blame the people. This is the fastest way to tell whether someone has actually run a labelling exercise.",
+      strongAnswer: [
+        "Low agreement is a property of the criteria, not of the labellers",
+        "Find the specific criterion the disagreements cluster on and redefine it observably",
+        "Re-test agreement before collecting at scale, because data gathered under ambiguous criteria is unusable",
+        "Adding a third labeller and taking a majority is a stable wrong answer, not a fix",
+      ],
+      weakAnswer:
+        "“I would retrain the labeller who is out of line.” That assumes one of them is right, and usually neither is — the question was ambiguous.",
+      difficulty: "core",
+    },
+    {
+      id: "eval-i-3",
+      question:
+        "Your evaluation shows a team's change made no measurable difference, and they ship in two weeks. What do you do?",
+      testing:
+        "Whether the function has any independence. An evaluation that only produces good news is ignored the first time it matters.",
+      strongAnswer: [
+        "Report the null result plainly, and say what would be needed to distinguish it from noise",
+        "Lead with the finding that is actionable — usually the decomposition, not the headline score",
+        "Give them something to do rather than only something to stop: name the stage where the failures actually are",
+        "Do it early enough that there is still time to act, which is the difference between useful and obstructive",
+      ],
+      weakAnswer:
+        "Softening it to a small improvement. It buys goodwill once and costs the credibility of every future result.",
+      difficulty: "senior",
+    },
+  ],
+};
+
 export const careerProfiles: CareerProfile[] = [
+  // Entry-level first: the people who most need this platform are the ones who
+  // assume every role on it is closed to them.
+  aiOperationsSpecialist,
+  aiEvaluationSpecialist,
   platformAdmin,
   governanceOperator,
   securityArchitect,

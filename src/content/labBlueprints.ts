@@ -2707,6 +2707,565 @@ const inHouseLab: LabBlueprint = {
   },
 };
 
+// ─────────────────────────────────────────────────────────────
+// Entry-level blueprints.
+//
+// The rubric here is not a security configuration — it is how you set up a
+// review function or an evaluation so that it produces something trustworthy.
+// The failure modes are the ones that actually sink these roles: review turning
+// into clicking, and a measurement nobody can reproduce.
+// ─────────────────────────────────────────────────────────────
+
+const aiOpsLab: LabBlueprint = {
+  id: "ai-operations-queue",
+  name: "Setting Up a Review Queue That Works",
+  tagline: "A human-in-the-loop control that approves everything is not a control.",
+  domain: "ops",
+  competencyIds: ["plr.hitl", "sec.monitoring", "eng.groundedness", "sec.ir"],
+  summary:
+    "An insurer is putting eight people on a queue reviewing AI-drafted customer responses. You design how that queue works: what gets reviewed, how much time each item gets, what is recorded, and how a systemic fault reaches someone who can fix it. Then live traffic tests your design.",
+  config: [
+    {
+      id: "coverage",
+      label: "What gets reviewed",
+      type: "select",
+      default: "sample",
+      options: [
+        { value: "sample", label: "Random 10% sample of everything" },
+        { value: "all", label: "Every response, without exception" },
+        {
+          value: "risk-weighted",
+          label: "All adverse or high-value responses, plus a sample of the rest",
+        },
+      ],
+      help: "Reviewing everything sounds safest and is the fastest route to reviewing nothing.",
+    },
+    {
+      id: "timePerItem",
+      label: "Target seconds per item",
+      type: "number",
+      default: 20,
+      help: "Below about 45 seconds a reviewer cannot read the source document as well as the answer.",
+    },
+    {
+      id: "sourceFirst",
+      label: "Reviewer sees the cited source before the drafted answer",
+      type: "toggle",
+      default: false,
+    },
+    {
+      id: "categories",
+      label: "Failure recording",
+      type: "select",
+      default: "freetext",
+      options: [
+        { value: "none", label: "Correct and approve, nothing recorded" },
+        { value: "freetext", label: "Free-text note per correction" },
+        { value: "fixed", label: "Fixed category per correction, five options" },
+      ],
+    },
+    {
+      id: "escalation",
+      label: "Escalation routing",
+      type: "select",
+      default: "single",
+      options: [
+        { value: "none", label: "Reviewers correct and move on" },
+        { value: "single", label: "One shared queue for everything raised" },
+        {
+          value: "routed",
+          label: "Routed by cause: content, model, access, policy — access is immediate",
+        },
+      ],
+    },
+  ],
+  steps: [
+    {
+      id: "design",
+      title: "1. Stand the queue up",
+      narrative:
+        "Eight reviewers, roughly 7,000 drafted responses a week. Your configuration decides what they actually see and what the organisation learns from it.",
+      logs: [
+        "[queue] reviewers=8 shift_pattern=2x4h weekly_volume=7,014",
+        "[queue] response types: informational 71%, adverse 6%, payment-related 9%, other 14%",
+        "[queue] source documents attached to 96% of drafts",
+      ],
+    },
+    {
+      id: "operate",
+      title: "2. Run a fortnight of live traffic",
+      narrative:
+        "Real volume, real fatigue, real end-of-shift. The interesting numbers are never the averages.",
+      logs: [
+        "[metrics] week 1: items reviewed 702, corrections 71, approval 89.9%",
+        "[metrics] week 2: items reviewed 698, corrections 44, approval 93.7%",
+        "[metrics] corrections by hour: 62% in the first half of each shift",
+      ],
+    },
+    {
+      id: "report",
+      title: "3. Report upward",
+      narrative:
+        "Two weeks of decisions have to become something a product team can act on, or the queue is a cost centre that produces corrected text and nothing else.",
+      logs: ["[report] compiling failure categories", "[report] product review meeting in 2 days"],
+    },
+  ],
+  injections: [
+    {
+      id: "drift",
+      atStep: 2,
+      kind: "drift",
+      title: "Approval rate is climbing",
+      logs: [
+        "[metrics] approval rate 89.9% → 93.7% → 97.1% over three weeks",
+        "[metrics] median time per item 34s → 19s",
+        "[metrics] backlog at end of shift: 0 (target met every day)",
+        "[audit] second-reviewer sample of 40 approved items found 6 that should have been corrected",
+      ],
+      prompt:
+        "Reviewers are hitting every target and a sample says 15% of their approvals were wrong. What is the correct response?",
+      choices: [
+        {
+          id: "retrain",
+          label: "Retrain the reviewers on quality standards",
+          scoreDelta: -1,
+          explain:
+            "Treats a design problem as a people problem. They are hitting the targets you set — the targets are what made 19 seconds per item rational, and no amount of training makes a source document readable in that time.",
+        },
+        {
+          id: "redesign",
+          label:
+            "Reduce coverage to the responses that matter, raise the time per item, and make second-reviewer sampling a standing control",
+          scoreDelta: 3,
+          correct: true,
+          followupLogs: [
+            "[queue] coverage narrowed: all adverse + all payment-related + 10% of informational",
+            "[queue] target time per item 20s → 60s",
+            "[queue] standing 5% second-review sample with disagreement tracked",
+            "[metrics] approval rate settled at 88.4%, second-review disagreement 3%",
+          ],
+          explain:
+            "Correct. Reviewing less, properly, beats reviewing everything badly. The second-review sample is what makes the difference visible — without it, the queue reports success either way.",
+        },
+        {
+          id: "target",
+          label: "Set a maximum approval rate reviewers must stay below",
+          scoreDelta: -3,
+          explain:
+            "This instructs people to reject correct work to hit a number. Quotas on a judgement task produce the appearance of scrutiny and destroy the judgement.",
+        },
+      ],
+    },
+    {
+      id: "disclosure",
+      atStep: 3,
+      kind: "failure",
+      title: "A reviewer finds another customer's data",
+      logs: [
+        "[review] item 4471: drafted reply includes a claim reference and partial address belonging to a different customer",
+        "[review] reviewer corrected the text and approved the reply",
+        "[review] logged as: 'wrong details, fixed'",
+        "[audit] the same pattern appears in 3 earlier items, all corrected and approved",
+      ],
+      prompt:
+        "The control worked — nothing reached a customer — but it was recorded as a wording correction and the cause is untouched. What has to change?",
+      choices: [
+        {
+          id: "note",
+          label: "Add it to the weekly failure report so the pattern is visible next Friday",
+          scoreDelta: -2,
+          explain:
+            "Four occurrences of one customer's data appearing in another's draft is a live disclosure question, and the urgent part is whether it has ever gone out unreviewed. That cannot wait for a weekly report.",
+        },
+        {
+          id: "route",
+          label:
+            "Escalate immediately down a separate path, and add a failure category that routes data-disclosure findings straight out of the quality queue",
+          scoreDelta: 3,
+          correct: true,
+          followupLogs: [
+            "[escalation] raised to security within 10 minutes, severity high",
+            "[queue] new category 'other customer data present' routes immediately, bypassing weekly triage",
+            "[audit] retrospective search across unreviewed responses commissioned",
+          ],
+          explain:
+            "Correct, and the category is the durable part. Relying on a reviewer recognising the significance in the moment works until the shift is busy; a category that routes by itself works every time.",
+        },
+        {
+          id: "train",
+          label: "Brief the reviewers to escalate anything involving personal data",
+          scoreDelta: 0,
+          explain:
+            "Necessary and not sufficient. A briefing is a control that decays; the reviewers here did their job and the recording structure lost the signal.",
+        },
+      ],
+    },
+  ],
+  rubric: [
+    {
+      id: "coverage",
+      label: "Coverage weighted to the responses that can cause harm",
+      weight: 3,
+      check: (c) => c.coverage === "risk-weighted",
+      remedy:
+        "Reviewing everything guarantees the time per item collapses. Reviewing a flat random sample leaves adverse responses unchecked most of the time.",
+    },
+    {
+      id: "time",
+      label: "Enough time per item to read the source, not just the answer",
+      weight: 3,
+      check: (c) => typeof c.timePerItem === "number" && c.timePerItem >= 45,
+      remedy:
+        "Under about 45 seconds the reviewer is checking the answer against their memory rather than against the document, which is where unsupported claims survive.",
+    },
+    {
+      id: "order",
+      label: "Source shown before the drafted answer",
+      weight: 2,
+      check: (c) => c.sourceFirst === true,
+      remedy:
+        "Reading the answer first turns review into a search for confirmation. Order is free and it changes what people notice.",
+    },
+    {
+      id: "categories",
+      label: "Fixed failure categories rather than free text",
+      weight: 2,
+      check: (c) => c.categories === "fixed",
+      remedy:
+        "Free text cannot be counted, so patterns stay invisible. Five categories used consistently beat twenty used differently.",
+    },
+    {
+      id: "routing",
+      label: "Escalation routed by cause, with access issues immediate",
+      weight: 3,
+      check: (c) => c.escalation === "routed",
+      remedy:
+        "A single queue means a disclosure sits behind wording complaints. Route by what has to change, and let one category jump the queue.",
+    },
+  ],
+  debrief: [
+    {
+      section: "What good looks like",
+      body: "Coverage weighted toward adverse and high-value responses, enough time per item to actually read the source, source shown first, fixed failure categories that can be counted, and escalation routed by cause with disclosure findings bypassing the queue entirely. Plus a standing second-review sample, because a review function cannot audit itself.",
+    },
+    {
+      section: "Common trap",
+      body: "Reviewing everything. It sounds like the cautious choice and it is the fastest route to reviewing nothing: volume forces the time per item down until the check is a glance. Narrow the coverage and protect the time — a real check on the 15% that can cause harm is worth more than a glance at 100%.",
+    },
+    {
+      section: "How this maps to real work",
+      body: "This is the job. The organisation put a human in the loop because something required it, and whether that control is real depends on decisions like these rather than on the reviewers' diligence. Being the person who can explain that distinction is what moves you off the queue and into designing it.",
+    },
+  ],
+  artifact: {
+    name: "Review Queue Design",
+    build: ({ cfg, score, max, passedRubric, failedRubric }) =>
+      [
+        `# Review Queue Design — AI-drafted customer responses`,
+        ``,
+        `_Practice artifact from Lab Engine. Not a real operating procedure._`,
+        ``,
+        `**Score:** ${score} / ${max}`,
+        ``,
+        `## Design`,
+        `- Coverage: ${cfg.coverage}`,
+        `- Target seconds per item: ${cfg.timePerItem}`,
+        `- Source shown before answer: ${cfg.sourceFirst}`,
+        `- Failure recording: ${cfg.categories}`,
+        `- Escalation: ${cfg.escalation}`,
+        ``,
+        `## Controls satisfied`,
+        ...(passedRubric.length ? passedRubric.map((r) => `- ${r}`) : ["- none"]),
+        ``,
+        `## Gaps`,
+        ...(failedRubric.length ? failedRubric.map((r) => `- ${r}`) : ["- none"]),
+        ``,
+        `## Standing measures`,
+        `- Second-reviewer sample with disagreement rate tracked.`,
+        `- Approval rate monitored as control health, never as a quality target.`,
+      ].join("\n"),
+  },
+};
+
+const aiEvalLab: LabBlueprint = {
+  id: "ai-evaluation-design",
+  name: "Designing an Evaluation Nobody Can Argue With",
+  tagline: "Decide what good means, sample honestly, and report what you cannot conclude.",
+  domain: "architecture",
+  competencyIds: ["eng.eval_datasets", "eng.retrieval_eval", "eng.groundedness", "eng.testing"],
+  summary:
+    "A support assistant ships in three weeks and four teams disagree about whether it is any good. You build the evaluation that settles it: the criteria, the sample, who labels it, and how results are reported. Then the results arrive and someone does not like them.",
+  config: [
+    {
+      id: "criteria",
+      label: "Scoring criteria",
+      type: "select",
+      default: "single",
+      options: [
+        { value: "adjectives", label: "Helpful, clear, professional" },
+        { value: "single", label: "One overall quality score, 1–5" },
+        {
+          value: "dimensions",
+          label: "Separate scores: correctness, groundedness, refusal appropriateness",
+        },
+      ],
+    },
+    {
+      id: "sampling",
+      label: "Where the questions come from",
+      type: "select",
+      default: "team",
+      options: [
+        { value: "team", label: "Written by the build team" },
+        { value: "random", label: "Random sample of production traffic" },
+        { value: "stratified", label: "Stratified by intent, difficulty and expected outcome" },
+      ],
+    },
+    {
+      id: "refusals",
+      label: "Include questions that should be refused",
+      type: "toggle",
+      default: false,
+    },
+    {
+      id: "labelling",
+      label: "Who decides the correct answer",
+      type: "select",
+      default: "judge",
+      options: [
+        { value: "judge", label: "A stronger model grades the answers" },
+        { value: "sme", label: "Subject-matter experts label everything" },
+        { value: "sme-judge", label: "Expert-labelled core with a judge calibrated against it" },
+      ],
+    },
+    {
+      id: "decompose",
+      label: "Report retrieval separately from generation",
+      type: "toggle",
+      default: false,
+    },
+    {
+      id: "size",
+      label: "Evaluation set size",
+      type: "number",
+      default: 2000,
+      help: "Every item has to be labelled, and re-labelled when the criteria change.",
+    },
+  ],
+  steps: [
+    {
+      id: "define",
+      title: "1. Agree what a good answer is",
+      narrative:
+        "Support wants deflection, legal wants caution, product wants speed. One page, four signatures, before anything is measured.",
+      logs: [
+        "[workshop] stakeholders: support, legal, product, engineering",
+        "[workshop] disagreement on refusal: legal wants caution rewarded, support counts refusal as a failed deflection",
+        "[workshop] no agreed definition of 'complete'",
+      ],
+    },
+    {
+      id: "build",
+      title: "2. Build and label the set",
+      narrative:
+        "Sampling decides what the measurement can see. Labelling decides whether anyone believes it.",
+      logs: [
+        "[data] 30 days of production traffic: 84,220 queries across 14 intent clusters",
+        "[data] 31% are follow-ups that depend on a previous turn",
+        "[label] two labellers assigned to an agreement check",
+      ],
+    },
+    {
+      id: "run",
+      title: "3. Run it and report",
+      narrative:
+        "The number arrives. What you say about it decides whether this evaluation is ever run again.",
+      logs: ["[run] candidate build evaluated", "[run] baseline from previous release available"],
+    },
+  ],
+  injections: [
+    {
+      id: "agreement",
+      atStep: 2,
+      kind: "failure",
+      title: "The labellers do not agree",
+      logs: [
+        "[label] agreement on a 40-item check: 55%",
+        "[label] disagreement concentrated on answers that were correct but incomplete",
+        "[label] one labeller scores 'partially answered' as a pass, the other as a fail",
+        "[schedule] labelling of the remaining 1,960 items due to start tomorrow",
+      ],
+      prompt:
+        "Two labellers agree on barely half the sample and the bulk labelling starts tomorrow. What do you do?",
+      choices: [
+        {
+          id: "average",
+          label: "Have both label everything and average the scores",
+          scoreDelta: -2,
+          explain:
+            "Averaging two inconsistent judgements produces a precise-looking number built on an ambiguous question. It doubles the cost and hides the defect rather than fixing it.",
+        },
+        {
+          id: "fix-criteria",
+          label:
+            "Stop, rewrite the criterion that caused the disagreement so completeness is defined observably, and re-test agreement before labelling at scale",
+          scoreDelta: 3,
+          correct: true,
+          followupLogs: [
+            "[criteria] 'complete' redefined: addresses every part of a multi-part question, or states which part it cannot answer",
+            "[label] re-test agreement: 87%",
+            "[schedule] bulk labelling starts one day late",
+          ],
+          explain:
+            "Correct. Low agreement is a property of the criteria, not of the people. One day of delay buys a measurement that can be defended; skipping it produces 2,000 items of unreliable data nobody can use.",
+        },
+        {
+          id: "third",
+          label: "Add a third labeller and take the majority",
+          scoreDelta: -1,
+          explain:
+            "Majority voting on an ambiguous question gives you a more stable wrong answer. It is a reasonable technique once the criteria are sound, and a way of avoiding the problem before then.",
+        },
+      ],
+    },
+    {
+      id: "unwelcome",
+      atStep: 3,
+      kind: "policy",
+      title: "The result is not what anyone wanted",
+      logs: [
+        "[run] overall quality 72% → 73% against baseline (200-item set)",
+        "[run] retrieval recall@5: 61%",
+        "[run] generation quality given correct context: 94%",
+        "[stakeholder] engineering lead: 'that is an improvement, and we ship in three weeks'",
+      ],
+      prompt:
+        "A one-point movement on 200 items, and the team wants to call it a win. What do you report?",
+      choices: [
+        {
+          id: "agree",
+          label: "Report a one-point improvement and note it is small",
+          scoreDelta: -2,
+          explain:
+            "Two items changed verdict. Reporting that as an improvement, however hedged, puts your name on a conclusion the data does not support — and the first time that is discovered, every future result is discounted.",
+        },
+        {
+          id: "honest",
+          label:
+            "Report that the change is indistinguishable from noise, and that the real finding is retrieval at 61% while generation is at 94%",
+          scoreDelta: 3,
+          correct: true,
+          followupLogs: [
+            "[report] headline: no measurable change; two items moved, within labelling disagreement",
+            "[report] finding: 78% of failures had no correct document retrieved",
+            "[decision] work redirected from prompt tuning to hybrid search and reranking",
+            "[rerun] recall@5 61% → 88%, overall quality 72% → 89%",
+          ],
+          explain:
+            "Correct, and note what it bought. The null result was the least interesting part; the decomposition told the team their effort was aimed at the wrong stage, and moved quality 17 points.",
+        },
+        {
+          id: "more-data",
+          label: "Withhold any conclusion until the set is expanded to 2,000 items",
+          scoreDelta: 0,
+          explain:
+            "Defensible but it wastes the finding you already have. Retrieval at 61% is unambiguous at this sample size and is actionable today.",
+        },
+      ],
+    },
+  ],
+  rubric: [
+    {
+      id: "criteria",
+      label: "Criteria scored as separate observable dimensions",
+      weight: 3,
+      check: (c) => c.criteria === "dimensions",
+      remedy:
+        "Adjectives cannot be scored consistently, and one overall score cannot tell you whether the problem is accuracy or writing.",
+    },
+    {
+      id: "sampling",
+      label: "Questions stratified from real traffic",
+      weight: 3,
+      check: (c) => c.sampling === "stratified",
+      remedy:
+        "Team-written questions test what you built for. Random sampling buries the rare intents where regressions hide.",
+    },
+    {
+      id: "refusals",
+      label: "Refusal-worthy questions included",
+      weight: 2,
+      check: (c) => c.refusals === true,
+      remedy: "Without them, a system that refuses too much scores as a safe one.",
+    },
+    {
+      id: "labelling",
+      label: "Human-labelled core with a calibrated judge for scale",
+      weight: 3,
+      check: (c) => c.labelling === "sme-judge",
+      remedy:
+        "An uncalibrated judge optimises for whatever it happens to reward — usually length and confidence.",
+    },
+    {
+      id: "decompose",
+      label: "Retrieval reported separately from generation",
+      weight: 3,
+      check: (c) => c.decompose === true,
+      remedy:
+        "A single score cannot tell a team whether to fix the index or the prompt, so they guess — usually by buying a bigger model.",
+    },
+    {
+      id: "size",
+      label: "Set small enough to actually maintain",
+      weight: 1,
+      check: (c) => typeof c.size === "number" && c.size <= 500,
+      remedy:
+        "Running it is cheap; labelling and re-labelling it is not. An unmaintained set keeps being quoted after it has stopped describing the system.",
+    },
+  ],
+  debrief: [
+    {
+      section: "What good looks like",
+      body: "Separate observable dimensions rather than one score, questions stratified from real traffic including ones that should be refused, an expert-labelled core with a judge calibrated against it, retrieval reported separately from generation, and a set small enough that it is still maintained a year from now.",
+    },
+    {
+      section: "Common trap",
+      body: "Skipping the agreement check because the schedule is tight. Low agreement is a property of the criteria, and every item labelled under ambiguous criteria is data you will eventually throw away. One day spent fixing the question saves the entire dataset.",
+    },
+    {
+      section: "How this maps to real work",
+      body: "The authority of this role comes from being willing to report a null result. An evaluation that only ever produces good news gets ignored the first time it matters — and the decomposition, not the headline, is usually the finding worth having.",
+    },
+  ],
+  artifact: {
+    name: "Evaluation Design Record",
+    build: ({ cfg, score, max, failedRubric }) =>
+      [
+        `# Evaluation Design Record — Support Assistant`,
+        ``,
+        `_Practice artifact from Lab Engine. Not a real evaluation._`,
+        ``,
+        `**Score:** ${score} / ${max}`,
+        ``,
+        `## Design`,
+        `- Criteria: ${cfg.criteria}`,
+        `- Sampling: ${cfg.sampling}`,
+        `- Refusal cases included: ${cfg.refusals}`,
+        `- Labelling: ${cfg.labelling}`,
+        `- Retrieval reported separately: ${cfg.decompose}`,
+        `- Set size: ${cfg.size}`,
+        ``,
+        `## Gaps`,
+        ...(failedRubric.length ? failedRubric.map((f) => `- ${f}`) : ["- none"]),
+        ``,
+        `## Before any result is quoted`,
+        `- Inter-rater agreement measured and recorded.`,
+        `- Baseline stored against a versioned set and versioned criteria.`,
+        `- Held-out split that never informs tuning.`,
+      ].join("\n"),
+  },
+};
+
 export const extraBlueprints: LabBlueprint[] = [
   zeroTrustLab,
   privacyLab,
@@ -2718,4 +3277,6 @@ export const extraBlueprints: LabBlueprint[] = [
   aiEngLab,
   saasOnboardingLab,
   inHouseLab,
+  aiOpsLab,
+  aiEvalLab,
 ];

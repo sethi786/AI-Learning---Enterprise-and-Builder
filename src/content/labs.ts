@@ -1,3 +1,4 @@
+import { entryLabs } from "./entryLabs";
 import type { LabDef, LabModule } from "./types";
 
 // ---------- DEEP LAB: SaaS AI Onboarding (Platform Admin) ----------
@@ -2163,6 +2164,7 @@ export const labs: LabDef[] = [
       },
     ],
   },
+  ...entryLabs,
 ];
 
 export const labsById: Record<string, LabDef> = Object.fromEntries(labs.map((l) => [l.id, l]));

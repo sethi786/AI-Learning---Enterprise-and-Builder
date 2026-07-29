@@ -38,6 +38,34 @@ const LABS = [
   "saas-onboarding",
   "in-house-app",
 ];
+// The portal is gated. Without a session every /app navigation lands on the
+// sign-in page, so this script would be checking the wrong thing entirely.
+async function signIn(page) {
+  await page.goto(B + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.evaluate(() => {
+    localStorage.setItem(
+      "sb-kbxeefyitsgurcldzxgs-auth-token",
+      JSON.stringify({
+        access_token: "stub",
+        token_type: "bearer",
+        expires_in: 3600,
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
+        refresh_token: "stub",
+        user: {
+          id: "00000000-0000-0000-0000-000000000001",
+          aud: "authenticated",
+          role: "authenticated",
+          email: "verifier@example.com",
+          app_metadata: {},
+          user_metadata: {},
+          created_at: new Date(0).toISOString(),
+        },
+      }),
+    );
+  });
+}
+await signIn(p);
+
 console.log("--- every lab exposes a runnable simulator ---");
 for (const labId of LABS) {
   await p.goto(`${B}/app/labs/${labId}`, { waitUntil: "networkidle" });

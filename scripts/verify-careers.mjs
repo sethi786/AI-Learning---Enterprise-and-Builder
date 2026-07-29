@@ -18,6 +18,34 @@ const ok = (c, label, extra = "") => {
 };
 
 // ── The jobs page ─────────────────────────────────────────────────────────
+// The portal is gated. Without a session every /app navigation lands on the
+// sign-in page, so this script would be checking the wrong thing entirely.
+async function signIn(page) {
+  await page.goto(B + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.evaluate(() => {
+    localStorage.setItem(
+      "sb-kbxeefyitsgurcldzxgs-auth-token",
+      JSON.stringify({
+        access_token: "stub",
+        token_type: "bearer",
+        expires_in: 3600,
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
+        refresh_token: "stub",
+        user: {
+          id: "00000000-0000-0000-0000-000000000001",
+          aud: "authenticated",
+          role: "authenticated",
+          email: "verifier@example.com",
+          app_metadata: {},
+          user_metadata: {},
+          created_at: new Date(0).toISOString(),
+        },
+      }),
+    );
+  });
+}
+await signIn(p);
+
 console.log("--- the jobs, and how to get one ---");
 await p.goto(`${B}/app/careers`, { waitUntil: "networkidle" });
 await p.waitForTimeout(500);
@@ -62,7 +90,13 @@ ok(/prompt injection/i.test(t), "security role surfaces its distinctive intervie
 // ── The practice record ───────────────────────────────────────────────────
 console.log("\n--- the practice record ---");
 await p.goto(`${B}/app/portfolio`, { waitUntil: "networkidle" });
-await p.evaluate(() => localStorage.clear());
+await p.evaluate(() => {
+  // Clear the learner's own state but keep the session — a blanket clear wipes
+  // the auth token and every later navigation lands on the sign-in page.
+  for (const k of Object.keys(localStorage)) {
+    if (k.startsWith("eai.")) localStorage.removeItem(k);
+  }
+});
 await p.reload({ waitUntil: "networkidle" });
 await p.waitForTimeout(500);
 t = await p.locator("body").innerText();

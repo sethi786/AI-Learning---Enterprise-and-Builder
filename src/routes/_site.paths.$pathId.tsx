@@ -110,7 +110,8 @@ function PathDetailPage() {
       <div className="mt-14 rounded-xl border bg-muted/30 px-6 py-10 text-center">
         <h2 className="text-2xl font-bold tracking-tight text-balance">Ready to start?</h2>
         <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground text-pretty">
-          Nothing is locked and no account is needed. Progress saves in your browser as you go.
+          Create a free account and every simulator run, decision and competency you demonstrate is
+          saved to it — that record is what you export as evidence later.
         </p>
         <Button asChild size="lg" className="mt-6">
           <Link to="/app">

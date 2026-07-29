@@ -663,6 +663,8 @@ export const blueprintByLabId: Record<string, string> = {
   "ai-engineering": "ai-engineering-eval",
   "saas-onboarding": "saas-tenant-onboarding",
   "in-house-app": "in-house-architecture",
+  "ai-operations": "ai-operations-queue",
+  "ai-evaluation": "ai-evaluation-design",
 };
 
 export function blueprintForLab(labId: string): LabBlueprint | undefined {

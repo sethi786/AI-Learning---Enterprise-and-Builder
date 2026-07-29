@@ -15,7 +15,8 @@ import type { Level } from "@/lib/prefs";
  * decides what to show" is teaching.
  */
 
-export type Goal = "evaluating" | "deploying" | "securing" | "governing" | "building";
+export type Goal =
+  "starting-out" | "evaluating" | "deploying" | "securing" | "governing" | "building";
 
 export type StepTarget =
   | { kind: "lab"; id: string }
@@ -27,6 +28,8 @@ export type StepTarget =
   | { kind: "platform"; id: string }
   | { kind: "exam"; id: string }
   | { kind: "flashcards" }
+  | { kind: "careers" }
+  | { kind: "portfolio" }
   | { kind: "glossary" };
 
 export interface PlanStep {
@@ -48,6 +51,12 @@ export interface Plan {
 }
 
 export const GOALS: { id: Goal; label: string; blurb: string }[] = [
+  {
+    id: "starting-out",
+    label: "Trying to get into AI work at all",
+    blurb:
+      "You do not work in technology and you are not sure you are allowed to want this. Start here.",
+  },
   {
     id: "evaluating",
     label: "Working out whether to use AI at all",
@@ -96,6 +105,78 @@ const orientationSteps: PlanStep[] = [
 ];
 
 const plans: Plan[] = [
+  {
+    goal: "starting-out",
+    label: "Trying to get into AI work at all",
+    situation:
+      "You have no technology background and no idea whether any of this is open to you. Some of it is, and the fastest route in is not the one people assume.",
+    steps: [
+      {
+        id: "start-vocab",
+        title: "Learn the twenty words everything else assumes",
+        because:
+          "None of this is conceptually hard. It feels hard because the first paragraph anyone writes uses six acronyms nobody defined. Fifteen minutes here changes how every other page reads.",
+        target: { kind: "glossary" },
+        minutes: 15,
+      },
+      {
+        id: "start-jobs",
+        title: "Find out which of these jobs you could already do",
+        because:
+          "Customer service, teaching, healthcare admin, editing and claims handling all transfer directly into AI operations work — and almost nobody in those jobs knows it. Read the transfer routes before you decide you are unqualified.",
+        target: { kind: "careers" },
+        minutes: 20,
+      },
+      {
+        id: "start-ops",
+        title: "Learn the work: reviewing what an AI produced",
+        because:
+          "This is the most reachable AI job there is and it teaches you how these systems actually fail, which is the knowledge every other role on this platform is built on.",
+        target: { kind: "lab", id: "ai-operations" },
+        minutes: 45,
+      },
+      {
+        id: "start-ops-sim",
+        title: "Design a review queue and watch it degrade",
+        because:
+          "Knowing the job is not the same as being able to discuss it. This puts you in charge of the decisions that determine whether the control is real, then tests them against live traffic.",
+        target: { kind: "simulator", id: "ai-operations-queue" },
+        minutes: 30,
+      },
+      {
+        id: "start-how-ai-works",
+        title: "See how an enterprise AI assistant actually works",
+        because:
+          "Everything you reviewed came out of one design: the system searches documents and hands what it finds to a model. Once that is concrete, the security and governance questions stop being arbitrary.",
+        target: { kind: "lab", id: "rag" },
+        minutes: 25,
+      },
+      {
+        id: "start-eval",
+        title: "Learn to measure whether an AI system is any good",
+        because:
+          "This is the natural step up from review work, it pays better, and research, editing and teaching backgrounds transfer into it unusually well. It is also the skill that makes you useful to an engineering team.",
+        target: { kind: "lab", id: "ai-evaluation" },
+        minutes: 45,
+      },
+      {
+        id: "start-eval-sim",
+        title: "Build an evaluation and report an unwelcome result",
+        because:
+          "The authority of this role comes from being willing to say a change did nothing. Practise that once here and you will recognise the moment when it happens for real.",
+        target: { kind: "simulator", id: "ai-evaluation-design" },
+        minutes: 30,
+      },
+      {
+        id: "start-record",
+        title: "Export what you have done",
+        because:
+          "You now have scored work in two roles. Turn it into the record you attach to an application — honestly framed as practice, which is what makes it credible.",
+        target: { kind: "portfolio" },
+        minutes: 10,
+      },
+    ],
+  },
   {
     goal: "evaluating",
     label: "Working out whether to use AI at all",
@@ -304,7 +385,16 @@ export const plansByGoal: Record<Goal, Plan> = Object.fromEntries(
 export function planFor(goal: Goal, level: Level): PlanStep[] {
   const base = plansByGoal[goal].steps;
   if (level !== "new") return base;
-  return [...orientationSteps, ...base];
+  // The starting-out plan is already written for a newcomer and opens with the
+  // same vocabulary and how-it-works steps, so prepending orientation showed
+  // both of them twice.
+  const seen = new Set(
+    base.map((s) => ("id" in s.target ? `${s.target.kind}:${s.target.id}` : s.target.kind)),
+  );
+  const prefix = orientationSteps.filter(
+    (s) => !seen.has("id" in s.target ? `${s.target.kind}:${s.target.id}` : s.target.kind),
+  );
+  return [...prefix, ...base];
 }
 
 export function stepHref(t: StepTarget): { to: string; params?: Record<string, string> } {
@@ -325,6 +415,10 @@ export function stepHref(t: StepTarget): { to: string; params?: Record<string, s
       return { to: "/app/exams/$examId", params: { examId: t.id } };
     case "flashcards":
       return { to: "/app/flashcards" };
+    case "careers":
+      return { to: "/app/careers" };
+    case "portfolio":
+      return { to: "/app/portfolio" };
     case "glossary":
       return { to: "/app/glossary" };
   }
@@ -339,6 +433,8 @@ export const STEP_KIND_LABEL: Record<StepTarget["kind"], string> = {
   platform: "Read",
   exam: "Test",
   flashcards: "Recall",
+  careers: "Read",
+  portfolio: "Export",
   glossary: "Vocabulary",
 };
 
@@ -376,6 +472,8 @@ export function isStepComplete(t: StepTarget, p: ProgressSignals): boolean {
     case "exam":
       return `exam:${t.id}` in p.quizResults;
     case "flashcards":
+    case "careers":
+    case "portfolio":
     case "glossary":
       // Reading is not measurable and pretending otherwise would put a false
       // tick next to it. Always offered, never marked done.

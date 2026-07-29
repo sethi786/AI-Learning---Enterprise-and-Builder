@@ -24,8 +24,12 @@ export interface Prefs {
   level: Level;
   /** Set once the learner has been through orientation, so we stop nudging. */
   oriented: boolean;
-  /** Chosen at orientation; drives the recommended next step. */
-  goal?: "evaluating" | "deploying" | "securing" | "governing" | "building";
+  /**
+   * Chosen at orientation; drives the recommended next step. Kept as a plain
+   * string union rather than importing Goal from content, so the preference
+   * store has no dependency on the content layer.
+   */
+  goal?: "starting-out" | "evaluating" | "deploying" | "securing" | "governing" | "building";
 }
 
 export const DEFAULT_PREFS: Prefs = { level: "working", oriented: false };

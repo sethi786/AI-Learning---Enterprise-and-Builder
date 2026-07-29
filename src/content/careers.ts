@@ -201,6 +201,54 @@ const platformAdmin: CareerProfile = {
         '"We assigned 2,000 licences and got 90% activation." Activation means someone logged in once.',
       difficulty: "opening",
     },
+    {
+      id: "pa-4",
+      question: "How do you decide whether to approve a connector request?",
+      testing:
+        "Whether you evaluate the delegated access or the vendor's marketing. Connectors are where a controlled rollout quietly stops being controlled.",
+      strongAnswer: [
+        "Read the scopes it is requesting, and compare them to what the stated purpose needs",
+        "Check the publisher: verified, a data processing agreement on file, somewhere to send a breach question",
+        "Turn off user consent entirely — approval belongs to an admin, from a reviewed allowlist",
+        "Enable it per group rather than tenant-wide, so the blast radius matches the need",
+        "Revoke tokens as well as the app when removing one, because an OAuth grant survives disabling",
+      ],
+      weakAnswer:
+        "Checking whether the vendor is well known. Plenty of unreviewed add-ins from recognisable companies ask for read-all-files.",
+      difficulty: "core",
+    },
+    {
+      id: "pa-5",
+      question: "Your AI spend is three times forecast. Walk me through what you do.",
+      testing:
+        "Whether you diagnose or apply a blanket cap. Blanket caps punish the majority to contain a problem caused by a few accounts.",
+      strongAnswer: [
+        "Break the spend down by workload and by user before changing anything",
+        "Concentration is the usual signal: a small share of accounts driving most consumption is either the best use case or a broken loop",
+        "Look for automated retries — a failing job re-running hundreds of times a day is the classic cause",
+        "Reclaim licences from accounts that never activated, which is often a large share",
+        "Put per-workload budget alerts at 70% and 90% so the next one surfaces before the invoice",
+      ],
+      weakAnswer:
+        "Applying a per-user rate limit across the tenant. It creates a support queue that costs more than the overspend and hides the actual cause.",
+      difficulty: "core",
+    },
+    {
+      id: "pa-6",
+      question: "How would you know whether your AI estate is actually under control?",
+      testing:
+        "Whether you can distinguish evidence from assertion — the question an auditor is really asking.",
+      strongAnswer: [
+        "Produce an accurate current picture of who has access to what, which most organisations cannot",
+        "Show audit logs flowing to your own retention, not the vendor's console default",
+        "Show the connector allowlist and the OAuth grants actually in place, not the policy",
+        "Disable a test account and evidence how long access really persisted",
+        "Name who approved each data source being indexed, with a date",
+      ],
+      weakAnswer:
+        "\u201cWe follow the documented process and staff are trained.\u201d That is evidence a process exists, not that it operated.",
+      difficulty: "senior",
+    },
   ],
 };
 
@@ -510,6 +558,54 @@ const governanceOperator: CareerProfile = {
         "Mandate and escalation. It produces compliance theatre and drives usage underground.",
       difficulty: "core",
     },
+    {
+      id: "go-4",
+      question: "A team says your review process is too slow. How do you respond?",
+      testing:
+        "Whether you can hear a legitimate complaint. Governance fails on friction far more often than on rules, and teams route around what is slow.",
+      strongAnswer: [
+        "Treat it as data — if low-risk work is slow, the tiering is wrong and that is yours to fix",
+        "Measure your own cycle time and publish it, so the conversation is about numbers",
+        "Give teams the questions in advance so review is preparable rather than a surprise",
+        "Concede the valid part; a function that cannot concede anything is not believed on the things that matter",
+        "Hold firm on the specific cases where the risk is real, and name them",
+      ],
+      weakAnswer:
+        "Defending the process on principle. It is usually partly true, and refusing to hear it is how shadow usage starts.",
+      difficulty: "core",
+    },
+    {
+      id: "go-5",
+      question: "How would you find the AI systems nobody told you about?",
+      testing:
+        "Whether you understand that discovery is most of the first quarter. A register built only from what was declared describes the compliant minority.",
+      strongAnswer: [
+        "Expense and procurement records — someone is paying for it",
+        "Identity logs: OAuth grants and sign-ins to AI domains show usage no form captured",
+        "Network or proxy data for traffic to model provider endpoints",
+        "Ask teams directly with amnesty rather than with a threat, or you get silence",
+        "Treat what you find as a signal about where the approved route was too slow",
+      ],
+      weakAnswer:
+        "Sending a survey and building the register from the responses. You will capture the teams who were already going to tell you.",
+      difficulty: "core",
+    },
+    {
+      id: "go-6",
+      question: "What makes a risk acceptance worth anything?",
+      testing:
+        "Whether you know who can accept risk and what makes an acceptance survive contact with time.",
+      strongAnswer: [
+        "Signed by the executive accountable for the business outcome, not by the risk team who assessed it",
+        "States the residual risk in terms the signer actually understands",
+        "Has an expiry, or it becomes permanent permission for a system that keeps changing",
+        "Has a material-change trigger, because the system will gain capability the signature never covered",
+        "Has evidence attached; without it the record is an opinion with a date on it",
+      ],
+      weakAnswer:
+        "A documented sign-off from the project owner. A project manager cannot accept risk on behalf of the business that carries it.",
+      difficulty: "senior",
+    },
   ],
 };
 
@@ -818,6 +914,53 @@ const grcLead: CareerProfile = {
         "Defending the process on principle. It is usually partly true, and refusing to hear it is how governance gets routed around.",
       difficulty: "core",
     },
+    {
+      id: "grc-4",
+      question: "How would you prepare for a client's AI due-diligence questionnaire?",
+      testing:
+        "Whether assurance is something you can evidence on demand or something you assemble in a panic. Increasingly the commercial gate on winning work.",
+      strongAnswer: [
+        "Maintain the answers continuously rather than assembling them per request",
+        "Anchor each answer to evidence a third party could re-perform, not to policy text",
+        "Be able to name, per system, the tier, the controls, the accountable owner and the review date",
+        "Answer honestly where a control is partial — an overclaim discovered later costs the relationship",
+        "Track which questions keep recurring and turn them into standing evidence",
+      ],
+      weakAnswer:
+        "Delegating it to whoever owns each system and collating the replies. It produces inconsistent claims you then have to stand behind.",
+      difficulty: "core",
+    },
+    {
+      id: "grc-5",
+      question: "Second line challenges first line. What does that mean in practice here?",
+      testing:
+        "Whether you know where your own boundary is. Assurance functions that drift into building lose the independence that made them worth having.",
+      strongAnswer: [
+        "You assure and challenge; you do not build, and you do not accept the risk",
+        "Accepting risk belongs to the accountable business owner, or the challenge is circular",
+        "Independence is what makes your sign-off mean anything to a regulator or a client",
+        "Being useful is compatible with being independent — advise on what would close a gap, then assess whether it did",
+      ],
+      weakAnswer:
+        "Describing it as collaboration without naming what you will not do. If you designed the control you cannot credibly assure it.",
+      difficulty: "senior",
+    },
+    {
+      id: "grc-6",
+      question: "How do you report AI risk to a board that wants one number?",
+      testing:
+        "Whether you can be brief without being misleading. Boards act on what you write, so precision matters more than completeness.",
+      strongAnswer: [
+        "Lead with the decision you need from them, not with the methodology",
+        "Report by tier and by trend rather than by a single composite score that hides everything",
+        "Say plainly what is not yet known, because the first surprise destroys the credibility of every later report",
+        "Attach the one or two concrete examples that make the abstraction real",
+        "Give them something to decide, not only something to note",
+      ],
+      weakAnswer:
+        "A red-amber-green dashboard with no narrative. It invites the board to act on a colour whose derivation nobody in the room could explain.",
+      difficulty: "senior",
+    },
   ],
 };
 
@@ -960,6 +1103,52 @@ const aiOperationsSpecialist: CareerProfile = {
         "“I fix them as they come up.” Correct and insufficient — fifteen corrections mean the cause is still in place and will produce a sixteenth.",
       difficulty: "core",
     },
+    {
+      id: "ops-i-4",
+      question: "How would you decide what belongs in a review queue at all?",
+      testing:
+        "Whether you understand that coverage and quality trade against each other. Most candidates say review everything, which is the fastest route to reviewing nothing.",
+      strongAnswer: [
+        "Weight coverage toward responses that can cause harm — adverse decisions, payments, anything irreversible",
+        "Reviewing everything forces the time per item down until the check is a glance",
+        "Protect enough time per item to read the cited source, not only the answer",
+        "Keep a sample of the low-risk remainder so you can still see it drifting",
+        "Add a second-reviewer sample, because a review function cannot audit itself",
+      ],
+      weakAnswer:
+        "\u201cEverything should be reviewed for safety.\u201d It sounds cautious and produces a queue where nothing is genuinely checked.",
+      difficulty: "senior",
+    },
+    {
+      id: "ops-i-5",
+      question: "You disagree with the guidance you have been given on a case. What do you do?",
+      testing:
+        "Whether you make a defensible call and flag the gap, or freeze, or quietly guess. The guidelines never cover everything.",
+      strongAnswer: [
+        "Make the call you can defend and record the reasoning, so a reviewer can follow it later",
+        "Flag that the guidance did not cover this, which is the actually useful output",
+        "Ask whether others have hit the same gap — if so it is a pattern, not a one-off",
+        "Do not silently invent a new rule, because the next reviewer will invent a different one",
+      ],
+      weakAnswer:
+        "Following the guidance anyway because it is the guidance. That produces a wrong outcome you can point at someone else for.",
+      difficulty: "core",
+    },
+    {
+      id: "ops-i-6",
+      question: "What is the difference between a wrong answer and an unsupported one?",
+      testing:
+        "The core distinction of the role. Someone who cannot draw it will approve fluent, unsupported output within a month.",
+      strongAnswer: [
+        "A wrong answer is contradicted by the source; an unsupported one is simply not addressed by it",
+        "Unsupported claims are more common and much harder to catch, because nothing looks wrong",
+        "It matters because the fix differs — one is a retrieval or content problem, the other a grounding problem",
+        "Reading the source before the answer is what makes the second one visible",
+      ],
+      weakAnswer:
+        "Treating them as the same thing. They come from different failures and get routed to different teams.",
+      difficulty: "opening",
+    },
   ],
 };
 
@@ -1098,6 +1287,53 @@ const aiEvaluationSpecialist: CareerProfile = {
       ],
       weakAnswer:
         "Softening it to a small improvement. It buys goodwill once and costs the credibility of every future result.",
+      difficulty: "senior",
+    },
+    {
+      id: "eval-i-4",
+      question: "What would you do first if you joined a team with no evaluation at all?",
+      testing:
+        "Whether you sequence sensibly under real constraints. Building a large set first is the common wrong answer.",
+      strongAnswer: [
+        "Find out whether an agreed, written definition of a good answer exists — usually it does not",
+        "Get four teams to one page before collecting anything, because that argument is the actual blocker",
+        "Start small: a stratified 100-200 items you can genuinely maintain",
+        "Measure agreement between two labellers before scaling collection",
+        "Store a baseline immediately, so the next change is comparable",
+      ],
+      weakAnswer:
+        "Assembling a large dataset first. Nobody will label or maintain it, and it drifts out of date while still being quoted.",
+      difficulty: "core",
+    },
+    {
+      id: "eval-i-5",
+      question: "How do you know whether an automated judge can be trusted?",
+      testing:
+        "Whether you treat a model judge as an instrument that needs calibration or as an oracle that scales.",
+      strongAnswer: [
+        "Measure its agreement against a human-labelled set before using it at scale",
+        "Watch for systematic bias — judges commonly reward length and confidence",
+        "Consistent is not the same as correct; a reliably biased judge selects the wrong model reliably",
+        "Recalibrate when the criteria change, because the judge was calibrated against the old ones",
+      ],
+      weakAnswer:
+        "Trusting it because it is consistent and scales. Consistency without accuracy just makes the error reproducible.",
+      difficulty: "core",
+    },
+    {
+      id: "eval-i-6",
+      question:
+        "A stakeholder asks you to change how something is scored so their feature looks better. What happens?",
+      testing:
+        "Whether the measurement has any independence. The moment criteria move to fit results, nothing you produce means anything.",
+      strongAnswer: [
+        "Distinguish a genuine criteria flaw from a request to move the goalposts — sometimes they are right",
+        "If the criterion is wrong, fix it and re-score everything including the baseline, openly",
+        "If it is not, decline and record the request rather than arguing informally",
+        "Version the criteria, so any change is visible and results across versions are never compared",
+      ],
+      weakAnswer:
+        "Adjusting the scoring quietly to keep the relationship. It works once, and every number you publish afterwards is worthless.",
       difficulty: "senior",
     },
   ],

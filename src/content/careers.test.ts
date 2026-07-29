@@ -99,9 +99,20 @@ describe("interview questions are practice, not trivia", () => {
     }
   });
 
-  it("covers more than one difficulty per role", () => {
+  it("gives every role enough questions to be preparation rather than a taste", () => {
+    // Three questions is a sample. These interviews run several rounds, and a
+    // role with fewer than six leaves the learner short exactly where it counts.
     for (const c of careerProfiles) {
-      expect(c.interview.length, c.roleId).toBeGreaterThanOrEqual(3);
+      expect(c.interview.length, c.roleId).toBeGreaterThanOrEqual(6);
+    }
+  });
+
+  it("spans difficulties rather than clustering at one level", () => {
+    for (const c of careerProfiles) {
+      const levels = new Set(c.interview.map((q) => q.difficulty));
+      expect(levels.size, `${c.roleId} only asks ${[...levels].join("/")}`).toBeGreaterThanOrEqual(
+        2,
+      );
     }
   });
 

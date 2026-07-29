@@ -1,12 +1,18 @@
 import { chromium } from "playwright";
 
 /**
- * Audit from one learner's point of view.
+ * Audit from a learner's point of view.
  *
- * Persona: someone who wants to become an Enterprise AI Architect. They arrive
- * knowing the job title and little else. This walks the journey they would
- * actually take and measures what they meet at each step, rather than checking
- * that routes return content.
+ * Runs the journey a specific persona would actually take and measures what
+ * they meet at each step, rather than checking that routes return content.
+ *
+ * Defaults to the Enterprise AI Architect. Pass a role id to walk a different
+ * one — the gaps this found for the architect turned out to be systemic, so
+ * checking only the persona that surfaced them proves nothing.
+ *
+ *   node scripts/audit-architect.mjs                     # architect
+ *   node scripts/audit-architect.mjs security-architect  # any role
+ *   node scripts/audit-architect.mjs --all               # every role
  */
 
 const B = process.env.BASE_URL ?? "http://127.0.0.1:5199";

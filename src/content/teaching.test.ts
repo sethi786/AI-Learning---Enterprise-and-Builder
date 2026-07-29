@@ -3,6 +3,16 @@ import { describe, expect, it } from "vitest";
 import { glossary, glossaryLookup } from "./glossary";
 import { labs } from "./labs";
 import { roles, rolesById } from "./roles";
+import { scenarios } from "./scenarios";
+
+/** Which orientation goal is the route into each role. */
+const GOAL_BY_ROLE = {
+  "platform-admin": "deploying",
+  "governance-operator": "governing",
+  "solution-architect": "building",
+  "security-architect": "securing",
+  "grc-lead": "governing",
+} as const;
 import { GOALS, isStepComplete, planFor, plansByGoal, stepHref } from "./plans";
 import { goNoGoCasesById } from "./goNoGo";
 import { getLabBlueprint } from "./labEngine";
@@ -304,17 +314,62 @@ describe("a role tells a learner how to progress in it", () => {
     expect(dupes).toEqual([]);
   });
 
-  it("a role's plan covers the labs that role actually needs", () => {
-    // The architect plan once stopped at four steps while the role listed four
-    // labs and two scenarios, so following the plan left most of the role
-    // untouched.
-    const archLabs = rolesById["solution-architect"].labIds;
-    const planned = new Set(
-      planFor("building", "working")
+  it("every role's plan covers the labs that role actually needs", () => {
+    // Plans once stopped at four steps while roles listed four to six labs, so
+    // following the plan faithfully left most of the role untouched. Checked
+    // for every role rather than for the one persona that surfaced it.
+    const uncovered: string[] = [];
+    for (const [roleId, goal] of Object.entries(GOAL_BY_ROLE)) {
+      const planned = new Set(
+        planFor(goal, "working")
+          .map((s) => ("id" in s.target ? s.target.id : ""))
+          .filter(Boolean),
+      );
+      for (const lab of rolesById[roleId].labIds) {
+        // ai-operations and ai-evaluation are taught by the starting-out plan.
+        if (
+          planFor("starting-out", "working").some((s) => "id" in s.target && s.target.id === lab)
+        ) {
+          continue;
+        }
+        if (!planned.has(lab)) uncovered.push(`${roleId} -> ${lab} (plan: ${goal})`);
+      }
+    }
+    expect(uncovered).toEqual([]);
+  });
+
+  it("no plan is so short it is a weekend rather than a path", () => {
+    for (const g of GOALS) {
+      const steps = planFor(g.id, "working");
+      const minutes = steps.reduce((n, s) => n + s.minutes, 0);
+      expect(steps.length, `${g.id} has only ${steps.length} steps`).toBeGreaterThanOrEqual(8);
+      expect(minutes, `${g.id} is only ${minutes} minutes`).toBeGreaterThanOrEqual(180);
+    }
+  });
+
+  it("every role reaches enough scenarios to see the work from more than one angle", () => {
+    const thin = roles
+      .filter((r) => r.scenarioIds.length < 3)
+      .map((r) => `${r.id}:${r.scenarioIds.length}`);
+    expect(thin).toEqual([]);
+  });
+
+  it("no lab or scenario is unreachable from every role", () => {
+    // Content nobody can find from a role page is content that does not exist
+    // for most learners.
+    const ownedLabs = new Set(roles.flatMap((r) => r.labIds));
+    const startingOut = new Set(
+      planFor("starting-out", "working")
         .map((s) => ("id" in s.target ? s.target.id : ""))
         .filter(Boolean),
     );
-    const uncovered = archLabs.filter((l) => !planned.has(l));
-    expect(uncovered, "labs the role needs that the plan never reaches").toEqual([]);
+    const orphanLabs = labs
+      .filter((l) => !ownedLabs.has(l.id) && !startingOut.has(l.id))
+      .map((l) => l.id);
+    expect(orphanLabs, "labs owned by no role").toEqual([]);
+
+    const usedScenarios = new Set(roles.flatMap((r) => r.scenarioIds));
+    const orphanScenarios = scenarios.filter((sc) => !usedScenarios.has(sc.id)).map((sc) => sc.id);
+    expect(orphanScenarios, "scenarios reachable from no role").toEqual([]);
   });
 });

@@ -94,8 +94,13 @@ export const roles: RoleDef[] = [
       "Offboarding isn't done until agents, GPTs, connectors, and API keys owned by the user are transferred or revoked.",
     ],
     masteryDomains: ["platform", "ops", "governance_grc"],
-    labIds: ["saas-onboarding", "connector"],
-    scenarioIds: ["sc-chatgpt-onboarding", "sc-offboarding-agent-owner"],
+    labIds: ["saas-onboarding", "connector", "iam", "ai-operations"],
+    scenarioIds: [
+      "sc-chatgpt-onboarding",
+      "sc-offboarding-agent-owner",
+      "sc-exec-three-tools",
+      "sc-agent-overprivilege",
+    ],
     platformIds: ["m365-copilot", "chatgpt-enterprise", "gemini-enterprise", "claude-enterprise"],
     stages: {
       beginner: [
@@ -203,7 +208,12 @@ export const roles: RoleDef[] = [
     ],
     masteryDomains: ["governance_grc", "ops"],
     labIds: ["privacy", "legal", "qrm", "data-governance"],
-    scenarioIds: ["sc-rag-sharepoint", "sc-copilot-studio-hr"],
+    scenarioIds: [
+      "sc-copilot-studio-hr",
+      "sc-rag-sharepoint",
+      "sc-exec-three-tools",
+      "sc-chatgpt-onboarding",
+    ],
     platformIds: ["copilot-studio", "chatgpt-enterprise"],
     stages: {
       beginner: [
@@ -305,8 +315,13 @@ export const roles: RoleDef[] = [
       "If the design has no answer for provider latency or outage, it is a prototype, not an architecture.",
     ],
     masteryDomains: ["architecture", "agent_rag_connector"],
-    labIds: ["rag", "agent", "in-house-app", "ai-engineering"],
-    scenarioIds: ["sc-rag-sharepoint", "sc-bedrock-case-assistant"],
+    labIds: ["rag", "agent", "in-house-app", "ai-engineering", "ai-evaluation"],
+    scenarioIds: [
+      "sc-rag-sharepoint",
+      "sc-bedrock-case-assistant",
+      "sc-prompt-injection-rag",
+      "sc-copilot-studio-hr",
+    ],
     platformIds: [
       "azure-ai-foundry",
       "vertex-ai",
@@ -401,8 +416,13 @@ export const roles: RoleDef[] = [
       "No kill switch, no production.",
     ],
     masteryDomains: ["security", "agent_rag_connector"],
-    labIds: ["agent", "connector", "zero-trust", "devsecops", "rag"],
-    scenarioIds: ["sc-prompt-injection-rag", "sc-agent-overprivilege"],
+    labIds: ["agent", "connector", "zero-trust", "devsecops", "rag", "iam"],
+    scenarioIds: [
+      "sc-prompt-injection-rag",
+      "sc-agent-overprivilege",
+      "sc-rag-sharepoint",
+      "sc-offboarding-agent-owner",
+    ],
     platformIds: ["azure-ai-foundry", "chatgpt-enterprise", "claude-code", "codex"],
     stages: {
       beginner: [
@@ -506,7 +526,12 @@ export const roles: RoleDef[] = [
     ],
     masteryDomains: ["governance_grc", "architecture", "ops"],
     labIds: ["qrm", "privacy", "legal"],
-    scenarioIds: ["sc-exec-three-tools"],
+    scenarioIds: [
+      "sc-exec-three-tools",
+      "sc-copilot-studio-hr",
+      "sc-bedrock-case-assistant",
+      "sc-chatgpt-onboarding",
+    ],
     platformIds: ["m365-copilot", "chatgpt-enterprise", "claude-code"],
     stages: {
       beginner: [

@@ -334,6 +334,55 @@ const securityArchitect: CareerProfile = {
         '"I would block it." Sometimes correct, but as a reflex it is why security teams get routed around.',
       difficulty: "senior",
     },
+    {
+      id: "sa-4",
+      question:
+        "A team wants to give an AI agent write access to production systems. Talk me through it.",
+      testing:
+        "Whether you reason about blast radius rather than reaching for a yes or a no. This is the fastest-growing question in these interviews.",
+      strongAnswer: [
+        "Blast radius is set by the agent's identity, so start there: one workload identity per agent, least privilege, never a shared one",
+        "Separate reversible from irreversible actions and put a human on the second",
+        "Retrieved content is untrusted input — block tool calls that originate from it",
+        "Rate limits and a kill switch someone can actually reach at 2am, not one behind three approvals",
+        "Ask what the agent does when it is uncertain, because 'proceeds confidently' is the default",
+      ],
+      weakAnswer:
+        "\u201cNo agents in production.\u201d It is a position, not an analysis, and it guarantees the work happens without you.",
+      difficulty: "core",
+    },
+    {
+      id: "sa-5",
+      question: "How do you review an AI system differently from any other application?",
+      testing:
+        "Whether you know what is genuinely new here. Candidates either say nothing is different, or treat everything as new — both are wrong.",
+      strongAnswer: [
+        "Most of it is the same: identity, network, secrets, supply chain, logging",
+        "Genuinely new: retrieved content can carry instructions, so there is a trust boundary inside the data path",
+        "Genuinely new: the system can be confidently wrong while returning success, so availability monitoring tells you nothing",
+        "Genuinely new: authorisation moves to query time against the caller, not to the ingest job",
+        "Changed in degree: a prompt is a release, and it usually has no review or rollback",
+      ],
+      weakAnswer:
+        "Listing AI-specific attack names without saying which existing controls still apply. It signals you would rebuild a review process that mostly already worked.",
+      difficulty: "core",
+    },
+    {
+      id: "sa-6",
+      question: "How would you test whether the controls you specified are actually working?",
+      testing:
+        "Whether you verify or assume. Specifying a control and never confirming it operates is the most common failure in this role.",
+      strongAnswer: [
+        "Two accounts at different clearance, same question, compare results — the only real test of permission trimming",
+        "Attempt a prompt injection through a document the system will read, and check whether a tool call fires",
+        "Disable a test account in the directory and time how long access actually persists",
+        "Try an egress destination that is not on the allowlist and confirm it is blocked, not just logged",
+        "Ask for the job run history, not the policy — evidence a control operated, rather than that it exists",
+      ],
+      weakAnswer:
+        "Reviewing the configuration and confirming it matches the design. Configuration drifts, and it tells you what was intended rather than what happens.",
+      difficulty: "senior",
+    },
   ],
 };
 
@@ -589,6 +638,56 @@ const solutionArchitect: CareerProfile = {
       weakAnswer:
         "Peer review of the prompt text. Necessary, and it will not catch a 13-point grounding drop.",
       difficulty: "core",
+    },
+    {
+      id: "sla-4",
+      question:
+        "Walk me through the architecture of a retrieval assistant over a company's internal documents.",
+      testing:
+        "Whether you can hold a whole design in your head and present it in a defensible order. Most candidates describe components; strong ones describe the decisions and where each one can go wrong.",
+      strongAnswer: [
+        "Draw the data flow first: user, app, identity, retrieval, model, logs — reviewers find more in an accurate flow than in prose",
+        "Say where authorisation happens and whose identity applies, before anything about the model",
+        "Ingestion: what may be indexed, who approved each source, how deletions propagate",
+        "Retrieval: chunking that matches document structure, hybrid search, reranking, permission trimming at query time",
+        "Serving: timeout, bulkhead and a defined degraded mode when the provider slows down",
+        "Traceability: prompt version, retrieved chunk ids, pinned model snapshot per decision",
+      ],
+      weakAnswer:
+        "Naming a vector database, an embedding model and a framework. That is a parts list, and it answers none of the questions a review will actually ask.",
+      difficulty: "core",
+    },
+    {
+      id: "sla-5",
+      question: "How would you halve the cost per request without losing quality?",
+      testing:
+        "Whether cost is something you design for or something you discover on an invoice. Also whether you will measure before optimising.",
+      strongAnswer: [
+        "Measure first: cost per resolved query, not per call, because a cheap call that fails twice is not cheap",
+        "Most spend is context — retrieve fewer, better chunks with a reranker rather than a larger top-k",
+        "Route by difficulty: a small model handles the majority, escalate only what needs it",
+        "Cache aggressively on repeated questions, which is a large share of support traffic",
+        "Re-run the evaluation after each change — cost work is where quality regressions hide",
+      ],
+      weakAnswer:
+        "Switching to a cheaper model across the board. It may work, and without an evaluation you cannot tell whether you have just degraded the product.",
+      difficulty: "senior",
+    },
+    {
+      id: "sla-6",
+      question: "Security says your design cannot go live. You disagree. What happens?",
+      testing:
+        "Whether you can be challenged without either capitulating or escalating. Architects who cannot do this get routed around by both sides.",
+      strongAnswer: [
+        "Establish what specifically fails — a named exposure is arguable, 'insufficient assurance' is not",
+        "Separate the risk that is real from the control that is habitual; ask what evidence would close it",
+        "Offer the narrowest change that removes the risk rather than defending the design as drawn",
+        "If you still disagree, put both positions in writing and let the accountable owner decide — that is their job, not yours",
+        "Concede quickly when the challenge is right; it is what makes the disagreements you keep worth listening to",
+      ],
+      weakAnswer:
+        "Escalating immediately, or quietly redesigning to whatever unblocks it. The first burns the relationship, the second teaches security that objections are free.",
+      difficulty: "senior",
     },
   ],
 };

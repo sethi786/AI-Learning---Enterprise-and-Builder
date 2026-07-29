@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { glossary, glossaryLookup } from "./glossary";
 import { labs } from "./labs";
+import { roles, rolesById } from "./roles";
 import { GOALS, isStepComplete, planFor, plansByGoal, stepHref } from "./plans";
 import { goNoGoCasesById } from "./goNoGo";
 import { getLabBlueprint } from "./labEngine";
@@ -257,5 +258,63 @@ describe("plans do not repeat themselves", () => {
         expect(dupes, `${g.id}/${level.id}`).toEqual([]);
       }
     }
+  });
+});
+
+describe("a role tells a learner how to progress in it", () => {
+  it("every stage of every role names more than one thing", () => {
+    // A four-stage ladder with one line per stage names the rungs without
+    // describing them, which is the least useful form this can take: it looks
+    // like a progression and answers nothing.
+    const thin: string[] = [];
+    for (const r of roles) {
+      for (const [stage, items] of Object.entries(r.stages)) {
+        if ((items as string[]).length < 2)
+          thin.push(`${r.id}/${stage}:${(items as string[]).length}`);
+      }
+    }
+    expect(thin).toEqual([]);
+  });
+
+  it("no role list repeats an entry", () => {
+    // Duplicates render twice and collide on their React key, which surfaces as
+    // a console error rather than as anything visible.
+    const fields = [
+      "owns",
+      "daily",
+      "meetings",
+      "documents",
+      "questions",
+      "risks",
+      "tools",
+      "technicalSkills",
+      "governanceSkills",
+      "securitySkills",
+      "artifacts",
+      "coach",
+    ] as const;
+    const dupes: string[] = [];
+    for (const r of roles) {
+      for (const f of fields) {
+        const arr = r[f] as string[];
+        const d = arr.filter((x, i) => arr.indexOf(x) !== i);
+        if (d.length) dupes.push(`${r.id}.${f}: ${d.join(", ")}`);
+      }
+    }
+    expect(dupes).toEqual([]);
+  });
+
+  it("a role's plan covers the labs that role actually needs", () => {
+    // The architect plan once stopped at four steps while the role listed four
+    // labs and two scenarios, so following the plan left most of the role
+    // untouched.
+    const archLabs = rolesById["solution-architect"].labIds;
+    const planned = new Set(
+      planFor("building", "working")
+        .map((s) => ("id" in s.target ? s.target.id : ""))
+        .filter(Boolean),
+    );
+    const uncovered = archLabs.filter((l) => !planned.has(l));
+    expect(uncovered, "labs the role needs that the plan never reaches").toEqual([]);
   });
 });

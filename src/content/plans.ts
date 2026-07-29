@@ -342,16 +342,48 @@ const plans: Plan[] = [
         id: "build-rag",
         title: "Get the retrieval design right",
         because:
-          "Most quality complaints about AI systems are retrieval failures wearing a model costume. Chunking, hybrid search and reranking move quality further than any model upgrade.",
+          "Most quality complaints about AI systems are retrieval failures wearing a model costume. Chunking, hybrid search and reranking move quality further than any model upgrade, and this is where the whole architecture starts.",
         target: { kind: "lab", id: "rag" },
+        minutes: 25,
+      },
+      {
+        id: "build-rag-sim",
+        title: "Stand up a retrieval system over confidential documents",
+        because:
+          "Reading about permission trimming is not the same as deciding, under a rubric, whether to enforce it at ingest or at query time. This is the decision a reviewer will ask you about first.",
+        target: { kind: "simulator", id: "rag-onboarding" },
         minutes: 25,
       },
       {
         id: "build-eval",
         title: "Build the evaluation before you tune anything",
         because:
-          "Without a fixed set and a stored baseline, 'is this better?' is unanswerable, and every release after this one is a guess.",
+          "Without a fixed set and a stored baseline, 'is this better?' is unanswerable and every release after this one is a guess. Nothing else on this list can be argued properly until this exists.",
         target: { kind: "simulator", id: "ai-engineering-eval" },
+        minutes: 30,
+      },
+      {
+        id: "build-eval-lab",
+        title: "Go deeper on measurement",
+        because:
+          "The simulator makes you choose; the lab explains why those choices are the ones that matter, including how retrieval and generation get measured apart. Architects are expected to set this for other teams.",
+        target: { kind: "lab", id: "ai-engineering" },
+        minutes: 30,
+      },
+      {
+        id: "build-agents",
+        title: "Understand what changes when the system can act",
+        because:
+          "Agents turn a wrong answer into a wrong action, and the blast radius is set by the identity you gave it. Enterprise architecture reviews increasingly open with this question.",
+        target: { kind: "lab", id: "agent" },
+        minutes: 30,
+      },
+      {
+        id: "build-inhouse",
+        title: "Assemble the whole in-house design",
+        because:
+          "Six components, each a choice you now have to defend: the app, the orchestrator, identity, the model, retrieval, and the logs. This is the shape of the document you will be asked to produce.",
+        target: { kind: "lab", id: "in-house-app" },
         minutes: 30,
       },
       {
@@ -363,12 +395,36 @@ const plans: Plan[] = [
         minutes: 30,
       },
       {
+        id: "build-slice",
+        title: "Run the full vertical slice end to end",
+        because:
+          "Individual controls are easy to agree with in isolation. Sixteen stages where each decision constrains the next is how architecture actually feels, and it is the closest thing here to a real engagement.",
+        target: { kind: "flagship" },
+        minutes: 45,
+      },
+      {
         id: "build-ship",
         title: "Put a gate on the release",
         because:
-          "A prompt change with no code change is the release that skips review, and it is the one most likely to quietly break grounding.",
+          "A prompt change with no code change is the release that skips review, and it is the one most likely to quietly break grounding. Owning the gate is part of owning the architecture.",
         target: { kind: "simulator", id: "devsecops-release-gate" },
         minutes: 25,
+      },
+      {
+        id: "build-exam",
+        title: "Test yourself against the role",
+        because:
+          "Ten questions with written rationales. Getting one wrong and reading why is worth more than getting nine right, and it tells you which of the above to revisit.",
+        target: { kind: "exam", id: "solution-architect" },
+        minutes: 20,
+      },
+      {
+        id: "build-record",
+        title: "Export what you have done",
+        because:
+          "You now have scored runs across retrieval, evaluation, architecture review and release. Turn it into the record you attach to an application — framed honestly as practice, which is what makes it credible.",
+        target: { kind: "portfolio" },
+        minutes: 10,
       },
     ],
   },

@@ -98,10 +98,29 @@ export const roles: RoleDef[] = [
     scenarioIds: ["sc-chatgpt-onboarding", "sc-offboarding-agent-owner"],
     platformIds: ["m365-copilot", "chatgpt-enterprise", "gemini-enterprise", "claude-enterprise"],
     stages: {
-      beginner: ["Understand SSO/SCIM/RBAC basics", "Read admin runbooks"],
-      intermediate: ["Configure a workspace end-to-end", "Handle offboarding"],
-      advanced: ["Design multi-platform admin operating model", "Automate access review"],
-      expert: ["Own admin standards across 5+ AI platforms with audit-ready evidence"],
+      beginner: [
+        "Action licence and access requests correctly, and know which need judgement",
+        "Find a setting in the admin console without being told where it is",
+        "Explain to a user why a connector was not approved",
+      ],
+      intermediate: [
+        "Own the configuration baseline and defend each choice in a review",
+        "Wire identity end to end, including deactivation for leavers",
+        "Read the bill and say which workload caused a change",
+        "Run a pilot cohort and expand on evidence rather than enthusiasm",
+      ],
+      advanced: [
+        "Design the connector review route so it is used rather than avoided",
+        "Get audit logs into your own retention and prove they are complete",
+        "Reclaim unused licences and show the saving",
+        "Hold a control against a senior exception request, with an alternative",
+      ],
+      expert: [
+        "Set the standard other administrators follow",
+        "Be consulted by security and privacy before policy is written, not after",
+        "Run a multi-tenant or multi-product estate without the baselines drifting apart",
+        "Own the commercial relationship with the vendor on technical terms",
+      ],
     },
   },
   {
@@ -187,10 +206,29 @@ export const roles: RoleDef[] = [
     scenarioIds: ["sc-rag-sharepoint", "sc-copilot-studio-hr"],
     platformIds: ["copilot-studio", "chatgpt-enterprise"],
     stages: {
-      beginner: ["Classify request types", "Populate registry"],
-      intermediate: ["Route to correct reviewers", "Manage evidence"],
-      advanced: ["Design governance workflow", "Handle exceptions"],
-      expert: ["Run committee, defend decisions to executives"],
+      beginner: [
+        "Run intake accurately and keep the register true",
+        "Recognise which use cases need more than the baseline",
+        "Chase a referral until it is answered rather than logged",
+      ],
+      intermediate: [
+        "Tier independently and defend the tier to the requesting team",
+        "Produce a pack that is complete before it reaches a board",
+        "Spot the question a submission has quietly left open",
+        "Turn a vague request into an assessable description",
+      ],
+      advanced: [
+        "Design intake so it takes minutes and teams stop routing around it",
+        "Run a review meeting to a decision rather than to another meeting",
+        "Reduce autonomy as an alternative to blocking, and argue it",
+        "Track exceptions to expiry and reopen them",
+      ],
+      expert: [
+        "Own the framework, and change it when it stops fitting",
+        "Be the person teams come to before building, because it is faster",
+        "Report to an executive audience without losing the substance",
+        "Bring a regulator's expectation into the process before it is mandatory",
+      ],
     },
   },
   {
@@ -221,7 +259,7 @@ export const roles: RoleDef[] = [
       "Architecture review board",
       "Design workshops",
       "SAR partnership",
-      "Architecture review board",
+      "Vendor and platform selection reviews",
       "Design pairing with security architecture",
     ],
     documents: [
@@ -278,10 +316,29 @@ export const roles: RoleDef[] = [
       "ai-agents",
     ],
     stages: {
-      beginner: ["Read reference patterns"],
-      intermediate: ["Produce a TAD for a RAG app"],
-      advanced: ["Design multi-agent systems with HITL"],
-      expert: ["Own the enterprise AI pattern library"],
+      beginner: [
+        "Read the reference patterns and be able to redraw one from memory",
+        "Explain where authorisation happens in a retrieval system, and whose it is",
+        "Follow an existing design without needing it re-explained",
+      ],
+      intermediate: [
+        "Produce a technical architecture document for a retrieval application",
+        "Build an evaluation set and establish a baseline before tuning anything",
+        "Choose a model on measured task performance and cost rather than on rank",
+        "Defend a design in review, and change it when the challenge is right",
+      ],
+      advanced: [
+        "Design multi-agent systems with human oversight on the irreversible paths",
+        "Make the system fail without taking the product down: timeouts, bulkheads, degraded mode",
+        "Make any decision reconstructable months later — prompt version, sources, pinned model",
+        "Halve cost per resolved query without losing measured quality",
+      ],
+      expert: [
+        "Own the enterprise AI pattern library other teams build from",
+        "Say what should not be built, and be listened to",
+        "Set the evaluation approach the organisation measures everything against",
+        "Take a design through regulatory or client scrutiny and have it hold",
+      ],
     },
   },
   {
@@ -348,10 +405,29 @@ export const roles: RoleDef[] = [
     scenarioIds: ["sc-prompt-injection-rag", "sc-agent-overprivilege"],
     platformIds: ["azure-ai-foundry", "chatgpt-enterprise", "claude-code", "codex"],
     stages: {
-      beginner: ["Learn OWASP LLM Top 10"],
-      intermediate: ["Threat-model a RAG app"],
-      advanced: ["Design agent action boundaries and HITL"],
-      expert: ["Own the AI security control catalog for the enterprise"],
+      beginner: [
+        "Run a review against a checklist and know which answers need escalating",
+        "Name the common LLM risk classes and give a real mitigation for each",
+        "Trace one request end to end and write down which identity touches what",
+      ],
+      intermediate: [
+        "Threat model a system you have never seen, live, and defend the findings",
+        "Tell the difference between a control and a compensating disclaimer",
+        "Distinguish where a risk is concentrated from where it is merely present",
+        "Write findings engineers act on rather than argue with",
+      ],
+      advanced: [
+        "Contain a compromised agent and reason about blast radius under pressure",
+        "Design the trust boundary between retrieved content and tool authority",
+        "Negotiate what blocks a launch and what becomes a verifiable condition",
+        "Know when a condition cannot be verified in time, and say so",
+      ],
+      expert: [
+        "Change how systems get built, because teams design differently knowing what you ask",
+        "Set the review standard other architects apply",
+        "Hold a position against commercial pressure and keep the relationship",
+        "Be the person the board asks when something has gone wrong",
+      ],
     },
   },
   {
@@ -415,7 +491,7 @@ export const roles: RoleDef[] = [
       "GRC platform",
       "Executive dashboards",
       "Policy library",
-      "GRC platform",
+      "Evidence repository",
       "Regulatory mapping matrix",
     ],
     technicalSkills: ["Systems thinking", "Reference architecture literacy"],
@@ -433,10 +509,29 @@ export const roles: RoleDef[] = [
     scenarioIds: ["sc-exec-three-tools"],
     platformIds: ["m365-copilot", "chatgpt-enterprise", "claude-code"],
     stages: {
-      beginner: ["Understand governance domains"],
-      intermediate: ["Design a single control area end-to-end"],
-      advanced: ["Author the operating model"],
-      expert: ["Lead enterprise AI strategy and governance"],
+      beginner: [
+        "Run assurance against an existing framework and report reliably",
+        "Tell evidence that a control operated from evidence that it merely exists",
+        "Keep the register true, including the systems nobody declared",
+      ],
+      intermediate: [
+        "Tier by harm and autonomy, and defend the tiering to the business",
+        "Decide what evidence is sufficient, and say why, in writing",
+        "Run an approval route people use because it is faster than avoiding it",
+        "Close a long-open referral rather than logging it again",
+      ],
+      advanced: [
+        "Design the assurance framework and defend it to a regulator",
+        "Set expiry and material-change triggers so no acceptance becomes permanent",
+        "Report honestly to a board, including what is not yet known",
+        "Concede a fair challenge without losing the position that matters",
+      ],
+      expert: [
+        "Set risk appetite for AI where no baseline exists",
+        "Translate incoming regulation into what has to change here, before it is mandatory",
+        "Be accountable when it goes publicly wrong",
+        "Build a function the business brings problems to early",
+      ],
     },
   },
 ];

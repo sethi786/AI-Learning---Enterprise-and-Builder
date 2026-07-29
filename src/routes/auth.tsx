@@ -2,9 +2,9 @@ import { Link, createFileRoute, useNavigate, useSearch } from "@tanstack/react-r
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { useSession } from "@/lib/session";
 import { Wordmark } from "@/components/site/Logo";
+import { AuthDiagnostic } from "@/components/AuthDiagnostic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -46,6 +46,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [err, setErr] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const target = safePath(next);
 
@@ -53,36 +54,126 @@ function AuthPage() {
     if (!loading && user) navigate({ to: target, replace: true });
   }, [loading, user, navigate, target]);
 
+  // Supabase returns terse strings for the two failures people actually hit.
+  // Left as-is they read as "your password is wrong" when the real problem is
+  // an unconfirmed address or a provider nobody enabled.
+  function explain(message: string): string {
+    const m = message.toLowerCase();
+    if (m.includes("email not confirmed")) {
+      return "That account exists but the email address has not been confirmed yet. Use the confirmation link below, or sign in with a one-time link instead.";
+    }
+    if (m.includes("invalid login credentials")) {
+      return "Email or password not recognised. If you signed up with Google, use the Google button — an account created that way has no password.";
+    }
+    if (m.includes("provider is not enabled")) {
+      return "Google sign-in is not switched on for this project yet. Enable the Google provider in Supabase → Authentication → Providers, then try again. Email sign-in below works regardless.";
+    }
+    if (m.includes("redirect") || m.includes("not allowed")) {
+      return `This address (${window.location.origin}) is not on the project's allowed redirect list. Add it in Supabase → Authentication → URL Configuration.`;
+    }
+    if (m.includes("rate limit") || m.includes("too many")) {
+      return "Too many attempts for now. Supabase's built-in email sender is heavily rate limited on the free tier — wait a few minutes, or configure your own SMTP.";
+    }
+    return message;
+  }
+
   async function signIn() {
     setErr(null);
+    setNotice(null);
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
-    if (error) setErr(error.message);
+    if (error) setErr(explain(error.message));
   }
 
   async function signUp() {
     setErr(null);
+    setNotice(null);
     setBusy(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}${target}`,
+        emailRedirectTo: `${window.location.origin}/auth`,
         data: { display_name: displayName || email.split("@")[0] },
       },
     });
     setBusy(false);
-    if (error) setErr(error.message);
-    else setErr("Check your email to confirm the account, then sign in.");
+    if (error) {
+      setErr(explain(error.message));
+      return;
+    }
+    // When confirmation is switched off the session arrives immediately and the
+    // redirect effect takes over. Telling that user to check their email would
+    // send them looking for a message that is never sent.
+    if (data.session) return;
+    setNotice(
+      `Account created. Check ${email} for a confirmation link — it may take a minute, and it is worth checking spam. If nothing arrives, use the one-time sign-in link instead.`,
+    );
   }
 
+  /**
+   * Passwordless sign-in.
+   *
+   * The most reliable way in, and the reason it is offered first: no password
+   * to forget, and it doubles as the escape hatch when a confirmation email was
+   * never delivered — the same link confirms the address and signs you in.
+   */
+  async function magicLink() {
+    setErr(null);
+    setNotice(null);
+    if (!email) {
+      setErr("Enter your email address first.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}${target}` },
+    });
+    setBusy(false);
+    if (error) setErr(explain(error.message));
+    else
+      setNotice(
+        `Sign-in link sent to ${email}. It signs you in and confirms the address at the same time.`,
+      );
+  }
+
+  async function resendConfirmation() {
+    setErr(null);
+    setNotice(null);
+    if (!email) {
+      setErr("Enter your email address first.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/auth` },
+    });
+    setBusy(false);
+    if (error) setErr(explain(error.message));
+    else setNotice(`Confirmation email resent to ${email}.`);
+  }
+
+  /**
+   * Google, through Supabase rather than through the Lovable broker.
+   *
+   * The generated shim routes OAuth via Lovable's own service, which only
+   * accepts redirects back to a Lovable-hosted origin. On Vercel or on
+   * localhost it fails, which is why the button did nothing outside Lovable.
+   * Supabase's own OAuth works from any origin listed in the project's URL
+   * configuration.
+   */
   async function google() {
     setErr(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/auth",
+    setNotice(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}${target}` },
     });
-    if (result.error) setErr(String((result.error as Error).message ?? result.error));
+    if (error) setErr(explain(error.message));
   }
 
   return (
@@ -143,6 +234,25 @@ function AuthPage() {
                   >
                     Sign in
                   </Button>
+                  {/* Offered on equal footing rather than as a fallback: it is
+                      the route that works when a confirmation email never
+                      arrived, and it needs no password at all. */}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={magicLink}
+                    disabled={busy || !email}
+                  >
+                    Email me a one-time sign-in link
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={resendConfirmation}
+                    disabled={busy || !email}
+                    className="w-full text-xs text-muted-foreground underline-offset-4 hover:underline disabled:opacity-50"
+                  >
+                    Never got the confirmation email? Resend it
+                  </button>
                 </TabsContent>
                 <TabsContent value="signup" className="space-y-3">
                   <div className="space-y-1">
@@ -173,22 +283,41 @@ function AuthPage() {
                   >
                     Create account
                   </Button>
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    Prefer not to set a password? Enter your email above and use the one-time link
+                    on the Sign in tab — it creates the account and signs you in.
+                  </p>
                 </TabsContent>
               </Tabs>
+              {notice && (
+                <Alert className="border-brand/40 bg-brand/5">
+                  <AlertDescription>{notice}</AlertDescription>
+                </Alert>
+              )}
               {err && (
-                <Alert>
+                <Alert variant="destructive">
                   <AlertDescription>{err}</AlertDescription>
                 </Alert>
               )}
             </CardContent>
           </Card>
-          <p className="mt-6 text-sm text-muted-foreground">
-            You do not need an account to learn.{" "}
-            <Link to="/app" className="font-medium text-brand hover:underline">
-              Continue without signing in
+          {/* This used to offer "continue without signing in", pointing at /app.
+              Once the portal was gated that link bounced straight back here,
+              which reads exactly like a broken login. The public pages are the
+              honest version of the same offer. */}
+          <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+            An account is free and it exists so your work is saved — every simulator run and
+            decision becomes the record you export later. Want to look around first?{" "}
+            <Link to="/paths" className="font-medium text-brand hover:underline">
+              Browse the career paths
+            </Link>{" "}
+            or{" "}
+            <Link to="/about" className="font-medium text-brand hover:underline">
+              read what this is
             </Link>
-            .
+            , no account needed.
           </p>
+          <AuthDiagnostic />
         </div>
       </div>
 
@@ -211,12 +340,13 @@ function AuthPage() {
               ["8", "rubric dimensions"],
               ["82", "competencies tracked"],
             ].map(([v, l]) => (
-              <div key={l}>
-                <dt className="sr-only">{l}</dt>
-                <dd>
-                  <div className="text-2xl font-semibold tabular-nums text-white">{v}</div>
-                  <div className="mt-1 text-xs text-white/50">{l}</div>
-                </dd>
+              // dt IS the label. It was previously duplicated — once sr-only and
+              // once visibly — so a screen reader announced "graded stages, 16,
+              // graded stages". Order is reversed with flex so the number still
+              // reads first visually.
+              <div key={l} className="flex flex-col-reverse">
+                <dt className="mt-1 text-xs text-white/50">{l}</dt>
+                <dd className="text-2xl font-semibold tabular-nums text-white">{v}</dd>
               </div>
             ))}
           </dl>

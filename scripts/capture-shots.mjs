@@ -21,11 +21,55 @@ const page = await browser.newPage({
   deviceScaleFactor: 2, // retina — these get displayed at ~700px wide
 });
 
+// The portal is gated. Without a session every capture below redirects to the
+// sign-in page — which is exactly what happened once: five "product
+// screenshots" shipped to the landing page as five byte-identical pictures of
+// a login form.
+await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+await page.evaluate(() => {
+  localStorage.setItem(
+    "sb-kbxeefyitsgurcldzxgs-auth-token",
+    JSON.stringify({
+      access_token: "stub",
+      token_type: "bearer",
+      expires_in: 3600,
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      refresh_token: "stub",
+      user: {
+        id: "00000000-0000-0000-0000-000000000001",
+        aud: "authenticated",
+        role: "authenticated",
+        email: "demo@example.com",
+        app_metadata: {},
+        user_metadata: {},
+        created_at: new Date(0).toISOString(),
+      },
+    }),
+  );
+  // Deep level so lesson content is expanded rather than collapsed.
+  localStorage.setItem("eai.prefs.v1", JSON.stringify({ level: "deep", oriented: true }));
+});
+
 // Viewport-sized crops, not full-page: several of these surfaces are 7000px+
 // tall, which is unusable as an inline marketing image.
+const seen = new Map();
 const shoot = async (name) => {
-  await page.screenshot({ path: `${OUT}/${name}.png` });
-  console.log("captured", name);
+  const url = new URL(page.url()).pathname;
+  if (url === "/auth") {
+    throw new Error(
+      `capture "${name}" landed on /auth — the session stub is not being picked up, and shipping this would put a login form on the marketing page.`,
+    );
+  }
+  const buf = await page.screenshot({ path: `${OUT}/${name}.png` });
+  // Byte-identical captures mean the walk is not actually navigating.
+  const key = buf.length;
+  if (seen.has(key)) {
+    throw new Error(
+      `capture "${name}" is byte-identical to "${seen.get(key)}" — the page did not change between shots.`,
+    );
+  }
+  seen.set(key, name);
+  console.log("captured", name, `(${url}, ${(buf.length / 1024).toFixed(0)}kB)`);
 };
 
 // 1. The flagship simulator, canvas populated so the topology is legible.

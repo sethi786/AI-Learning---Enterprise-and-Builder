@@ -112,12 +112,11 @@ function Hero() {
 
         <dl className="mx-auto mt-14 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-4">
           {stats.map((s) => (
-            <div key={s.label} className="surface-dark px-4 py-6 text-center">
-              <dt className="sr-only">{s.label}</dt>
-              <dd>
-                <div className="text-3xl font-semibold tabular-nums text-white">{s.value}</div>
-                <div className="mt-1 text-xs text-white/55">{s.label}</div>
-              </dd>
+            // dt IS the label rather than a hidden copy of it — the sr-only
+            // version meant every figure was announced with its label twice.
+            <div key={s.label} className="surface-dark flex flex-col-reverse px-4 py-6 text-center">
+              <dt className="mt-1 text-xs text-white/55">{s.label}</dt>
+              <dd className="text-3xl font-semibold tabular-nums text-white">{s.value}</dd>
             </div>
           ))}
         </dl>
